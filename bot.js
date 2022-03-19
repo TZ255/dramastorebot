@@ -38,7 +38,7 @@ const dt = {
     naomy: 1006615854,
     jacky: 1937862156,
     loading: 1076477335,
-    link: 't.me/localohmychbot?start='
+    link: process.env.BOT_LINK
 }
 
 
