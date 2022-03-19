@@ -1,0 +1,26 @@
+{
+  "name": "dramastorebot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "test": "nodemon bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gshemdoe/pts-dramastorebot.git"
+  },
+  "author": "shemdoe",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gshemdoe/pts-dramastorebot/issues"
+  },
+  "homepage": "https://github.com/gshemdoe/pts-dramastorebot#readme",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "mongoose": "^6.2.4",
+    "nodemon": "^2.0.15",
+    "telegraf": "^4.7.0",
+    "telegraph-node": "^1.0.4"
+  }
+}
