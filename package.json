@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gshemdoe/pts-dramastorebot.git"
+    "url": "git+https://github.com/gshemdoe/dramastorebot.git"
   },
   "author": "shemdoe",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gshemdoe/pts-dramastorebot/issues"
+    "url": "https://github.com/gshemdoe/dramastorebot/issues"
   },
-  "homepage": "https://github.com/gshemdoe/pts-dramastorebot#readme",
+  "homepage": "https://github.com/gshemdoe/dramastorebot#readme",
   "dependencies": {
     "dotenv": "^16.0.0",
     "mongoose": "^6.2.4",
