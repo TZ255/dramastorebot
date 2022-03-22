@@ -44,8 +44,13 @@ module.exports = (bot, dt, anyErr) => {
                             let epMsgId = data[5].substring(5)
                             let chatId = ctx.channelPost.chat.id
                             let idToDelete = ctx.channelPost.message_id
+                            let quality = '540p HDTV'
 
-                            await bot.telegram.sendPoll(chatId, `Episode ${ep} | 540p HDTV | Muxed English Subtitles`, [
+                            if(txt.includes('WEBDL')) {
+                                quality = '540p WEBDL'
+                            }
+
+                            await bot.telegram.sendPoll(chatId, `Episode ${ep} | ${quality} | Muxed English Subtitles`, [
                                 '👍 Like',
                                 '👎 Dislike'
                             ], {
