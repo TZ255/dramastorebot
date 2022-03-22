@@ -69,7 +69,7 @@ module.exports = (bot, dt, anyErr) => {
                                 inline_keyboard: [ closeKybd ]
                             }
                         })
-                    }, 500)
+                    }, 1000)
 
                 }
                 if (user && user.points >= 2) {
@@ -80,13 +80,16 @@ module.exports = (bot, dt, anyErr) => {
                     })
 
                     await user.updateOne({ $inc: { points: -2, downloaded: 1 } })
-
-                    ctx.reply(`You get the file and 2 points were deducted from your points balance.\n\nYou remain with <b>${user.points - 2} points.</b>`, { 
+                    
+                    setTimeout(()=>{
+                       ctx.reply(`You get the file and 2 points were deducted from your points balance.\n\nYou remain with <b>${user.points - 2} points.</b>`, { 
                         parse_mode: 'HTML',
                         reply_markup: {
                             inline_keyboard: [ closeKybd ]
                         }
-                    })
+                    }) 
+                    }, 1000)
+                    
                 }
                 if (user && user.points < 2) {
                     await ctx.reply(`You don't have enough points to get the file (you need at least 2 pts)\n\nYou have <b>${user.points}</b> points... Click <b>"➕ Add points"</b> button below to increase your points, alternatively you can follow this link ${url}`, {

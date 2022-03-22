@@ -14,9 +14,11 @@ module.exports = (bot, dt, anyErr) => {
 
                 replyMarkup.inline_keyboard.pop()
                 
-                bot.telegram.copyMessage(dt.ds, ctx.chat.id, callbackMsgId, {
+                await bot.telegram.copyMessage(dt.ds, ctx.chat.id, callbackMsgId, {
                     reply_markup: replyMarkup
                 })
+
+                bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId)
             } 
 
             else if (ctx.callbackQuery.data.includes('getEp')) {
