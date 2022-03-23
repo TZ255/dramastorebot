@@ -46,7 +46,7 @@ module.exports = (bot, dt, anyErr) => {
                             let idToDelete = ctx.channelPost.message_id
                             let quality = '540p HDTV'
 
-                            if(txt.includes('WEBDL')) {
+                            if(txt.includes('540p_WEBDL')) {
                                 quality = '540p WEBDL'
                             }
                             else if(txt.includes('720p_WEBDL')) {
