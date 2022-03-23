@@ -49,8 +49,19 @@ module.exports = (bot, dt, anyErr) => {
                             if(txt.includes('WEBDL')) {
                                 quality = '540p WEBDL'
                             }
+                            else if(txt.includes('720p_WEBDL')) {
+                                quality = '720p WEBDL'
+                            }
 
-                            await bot.telegram.sendPoll(chatId, `Episode ${ep} | ${quality} | Muxed English Subtitles`, [
+                            else if(txt.includes('720p_HDTV')) {
+                                quality = '720p HDTV'
+                            }
+
+                            else if(txt.includes('1080p_WEDDL')) {
+                                quality = '1080p WEBDL'
+                            }
+
+                            await bot.telegram.sendPoll(chatId, `▶ Episode ${ep} | ${quality} | Muxed English Subtitles`, [
                                 '👍 Like',
                                 '👎 Dislike'
                             ], {
