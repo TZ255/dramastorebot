@@ -49,6 +49,9 @@ module.exports = (bot, dt, anyErr) => {
                             if(txt.includes('540p_WEBDL')) {
                                 quality = '540p WEBDL'
                             }
+                            else if(txt.includes('480p_WEBDL')) {
+                                quality = '480p WEBDL'
+                            }
                             else if(txt.includes('720p_WEBDL')) {
                                 quality = '720p WEBDL'
                             }
