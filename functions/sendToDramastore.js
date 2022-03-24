@@ -18,7 +18,13 @@ module.exports = (bot, dt, anyErr) => {
                     reply_markup: replyMarkup
                 })
 
-                bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId)
+                bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId).catch((err)=> {
+                    if(err.message.includes(`delete`)) {
+                        ctx.answerCbQuery(`Can't close this message.... It's too old, delete it instead.`,{
+                            show_alert: true
+                        })
+                    }
+                })
             } 
 
             else if (ctx.callbackQuery.data.includes('getEp')) {
@@ -49,7 +55,13 @@ module.exports = (bot, dt, anyErr) => {
                 })
             }
             else if (ctx.callbackQuery.data.includes('closePtsMsg')) {
-                bot.telegram.deleteMessage(ctx.callbackQuery.message.chat.id, ctx.callbackQuery.message.message_id)
+                bot.telegram.deleteMessage(ctx.callbackQuery.message.chat.id, ctx.callbackQuery.message.message_id).catch((err)=> {
+                    if(err.message.includes('delete')) {
+                        ctx.answerCbQuery(`Can't close this message.... It's too old, delete it instead.`, {
+                            show_alert: true
+                        })
+                    }
+                })
                 
             }
 
