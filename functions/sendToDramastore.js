@@ -52,6 +52,27 @@ module.exports = (bot, dt, anyErr) => {
                 bot.telegram.deleteMessage(ctx.callbackQuery.message.chat.id, ctx.callbackQuery.message.message_id)
                 
             }
+
+            else if (ctx.callbackQuery.data.includes('help')) {
+                let msg = `THIS IS HOW TO DOWNLOAD\n\nStep 1. Click "⬇ DOWNLOAD NOW BUTTON" to open chat with [BOT]\n\nStep 2. At the bottom of [BOT] click "START" and it'll send you the file.`
+
+                ctx.answerCbQuery(msg, {
+                    show_alert: true,
+                    cache_time: 14400 //4 hours
+                })
+            }
+
+            else if (ctx.callbackQuery.data.includes('epinfo')) {
+                let data = ctx.callbackQuery.data.split('_')
+                let epno = data[0].split('epinfo')[1]
+                let msg = `Info About This Episode\n\n▶ Ep. No: E${epno}\n\n💾 Size: ${data[1]}\n\n📸 Quality: ${data[2]}`
+
+                ctx.answerCbQuery(msg, {
+                    show_alert: true,
+                    cache_time: 14400 //4 hours
+                })
+            }
+
             else {
                 let id = ctx.callbackQuery.id
                 let chatId = ctx.callbackQuery.from.id
