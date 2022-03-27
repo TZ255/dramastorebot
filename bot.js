@@ -16,6 +16,7 @@ const if_function_for_buttons = require('./functions/buttons')
 const postEpisodesInChannel = require('./functions/postEpisodeInChannel')
 const sendToDramastore = require('./functions/sendToDramastore')
 const startBot = require('./functions/start')
+const naomymatusi = require('./functions/naomymatusi')
 
 mongoose.connect(`mongodb+srv://${process.env.DUSER}:${process.env.DPASS}@nodetuts.ngo9k.mongodb.net/dramastore?retryWrites=true&w=majority`).then(() => {
     console.log('Connection is successfully')
@@ -60,6 +61,8 @@ sendToDramastore(bot, dt, anyErr)
 //posting episodes
 // sendPoll
 postEpisodesInChannel(bot, dt, anyErr);
+
+naomymatusi(bot, dt, anyErr)
 
 
 bot.launch()

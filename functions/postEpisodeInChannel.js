@@ -1,5 +1,5 @@
 module.exports = (bot, dt, anyErr) => {
-    bot.use(async (ctx) => {
+    bot.use(async (ctx, next) => {
         try {
             // check if it is used in channel
             if (ctx.update.channel_post) {
@@ -86,6 +86,9 @@ module.exports = (bot, dt, anyErr) => {
 
                 }
             }
+
+            // if is not channel
+            else { next()}
         }
         catch (err) {
             console.log(err)
