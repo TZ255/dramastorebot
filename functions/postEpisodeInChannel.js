@@ -28,7 +28,7 @@ module.exports = (bot, dt, anyErr) => {
                             noEp = fileName.toLowerCase().substring(0, 3).toUpperCase()
                         }
 
-                        ctx.reply(`Copy\n\n<code>uploading_new_episode_${noEp}_S${netSize}_msgId${msgId}</code>`, { parse_mode: 'HTML' })
+                        ctx.reply(`Copy -> <code>uploading_new_episode_${noEp}_S${netSize}_msgId${msgId}</code>`, { parse_mode: 'HTML' })
                     }
                 }
 
