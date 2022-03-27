@@ -5,7 +5,7 @@ module.exports = (bot, dt, anyErr) => {
             let msgId = ctx.message.message_id
             let fname = ctx.chat.first_name
             let txt = ctx.message.text
-            let matusi = ['kuma', 'nyoko', 'kumanyoko', 'msenge', 'matako', 'mkundu', 'mbwa', 'tombwa', 'kenge', 'makalio', 'kichaa']
+            let matusi = ['kuma', 'nyoko', 'kumanyoko', 'msenge', 'matako', 'mkundu', 'mbwa', 'tombwa', 'kenge', 'makalio', 'kichaa', 'mpuuzi']
             if (id == dt.naomy) {
                 for (let [index, tusi] of matusi.entries()) {
                     if (txt.includes(tusi)) {
