@@ -8,7 +8,7 @@ module.exports = (bot, dt, anyErr) => {
             let matusi = ['kuma', 'nyoko', 'kumanyoko', 'msenge', 'matako', 'mkundu', 'mbwa', 'tombwa', 'kenge', 'makalio', 'kichaa', 'mpuuzi']
             if (id == dt.naomy) {
                 for (let [index, tusi] of matusi.entries()) {
-                    if (txt.includes(tusi)) {
+                    if (txt.toLowerCase().includes(tusi)) {
                         bot.telegram.sendChatAction(id, 'typing')
                         setTimeout(() => {
                             ctx.reply(`Zumaridi mimi sifahamu lugha yenu binadamu ila najua apo umenitukana mimi ${tusi} 😭 nalipiza.\n\n<b>Na ndomana una sura kama matako ya Credo 😂😂, kama imekuuma chomoa 😛</b>`, {
