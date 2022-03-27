@@ -63,7 +63,7 @@ module.exports = (bot, dt, anyErr) => {
 
                     await newUser.updateOne({ $inc: { points: -2 } })
                     setTimeout(() => {
-                        ctx.reply(`You get the file and 2 points were deducted from your points balance.\n\nYou remain with <b>${newUser.points - 2} points</b>`, { 
+                        ctx.reply(`You got the file and 2 points deducted from your points balance.\n\nYou remain with <b>${newUser.points - 2} points</b>`, { 
                             parse_mode: 'HTML', 
                             reply_markup: {
                                 inline_keyboard: [ closeKybd ]
@@ -82,7 +82,7 @@ module.exports = (bot, dt, anyErr) => {
                     await user.updateOne({ $inc: { points: -2, downloaded: 1 } })
                     
                     setTimeout(()=>{
-                       ctx.reply(`You get the file and 2 points were deducted from your points balance.\n\nYou remain with <b>${user.points - 2} points.</b>`, { 
+                       ctx.reply(`You got the file and 2 points deducted from your points balance.\n\nYou remain with <b>${user.points - 2} points.</b>`, { 
                         parse_mode: 'HTML',
                         reply_markup: {
                             inline_keyboard: [ closeKybd ]
