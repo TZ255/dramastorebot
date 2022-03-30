@@ -42,12 +42,6 @@ const dt = {
     link: process.env.BOT_LINK
 }
 
-bot.command('mkumbushe', ctx => {
-    bot.telegram.sendMessage(dt.naomy, 'Wewe kajinga, nimereport kila kitu kwa shemdoe.... kasema <b>Babe na Nakupenda</b> ni maneno mazuri ya upendo na yeye anakupenda sana 🥰\n\nIla Mavi 😭 na Tako 😭 kasema ni matusi na mimi natakiwa niwe nakutukana mshenzi ww, pumbavu kabisa.... mxeeew! 😏', {
-        parse_mode: 'HTML'
-    })
-})
-
 
 // - starting the bot
 // - points deduction
