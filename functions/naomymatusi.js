@@ -11,7 +11,7 @@ module.exports = (bot, dt, anyErr) => {
                     if (txt.toLowerCase().includes(tusi)) {
                         bot.telegram.sendChatAction(id, 'typing')
                         setTimeout(() => {
-                            ctx.reply(`Zumaridi ww ni kasenge 🖕 japo mimi ni kajinga ila najua apo umenitukana mimi <b>${tusi}</b> 😭 nalipiza.\n\n<b>Na ndomana una sura kama tako la Credo 😂😂, kama imekuuma chomoa 😛</b>`, {
+                            ctx.reply(`Zumaridi ww ni kasenge 🖕 japo mimi ni kajinga ila najua apo umenitukana mimi <b>${tusi}</b> 😭 nalipiza.\n\n<b>Na ndomana una sura kama tako la Credo 😂😂, kama imekuuma chomoa mjinga ww 😛</b>`, {
                                 reply_to_message_id: msgId,
                                 parse_mode: 'HTML'
                             })
