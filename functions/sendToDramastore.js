@@ -66,7 +66,7 @@ module.exports = (bot, dt, anyErr) => {
             }
 
             else if (ctx.callbackQuery.data.includes('help')) {
-                let msg = `THIS IS HOW TO DOWNLOAD\n\nStep 1. Click "⬇ DOWNLOAD NOW BUTTON" to open chat with [BOT]\n\nStep 2. At the bottom of [BOT] click "START" and it'll send you the file.`
+                let msg = `THIS IS HOW TO DOWNLOAD\n\nStep 1. Click "⬇ DOWNLOAD NOW BUTTON" to open chat with [BOT]\n\nStep 2. At the bottom of [BOT] click "START" and it'll send you the file.\n\n\n📞 Any problem contact @shemdoe`
 
                 ctx.answerCbQuery(msg, {
                     show_alert: true,
