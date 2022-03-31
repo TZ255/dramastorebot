@@ -48,7 +48,7 @@ const dt = {
 startBot(bot, dt, anyErr)
 
 //help command
-bot.help(ctx=> {
+bot.help(ctx => {
     ctx.reply(`If you have issues regarding using me please contact my developer @shemdoe\n\nIf you run out of points open this link https://www.dramastore.net/user/${ctx.chat.id}/boost to increase your points.`)
 })
 
@@ -71,17 +71,17 @@ bot.launch()
 
 process.once('SIGINT', () => bot.stop('SIGINT'))
 process.once('SIGTERM', () => bot.stop('SIGTERM'))
-    
+
 process.on('unhandledRejection', (reason, promise) => {
-        bot.telegram.sendMessage(1473393723, reason + ' It is an unhandled rejection.')
-        console.log(reason)
+    bot.telegram.sendMessage(1473393723, reason + ' It is an unhandled rejection.')
+    console.log(reason)
 })
-    
-    //caught any exception
-    // we removed process.exit() because we dont want bot to terminate the process
+
+//caught any exception
+// we removed process.exit() because we dont want bot to terminate the process
 process.on('uncaughtException', (err) => {
-        console.log(err.message)
-        bot.telegram.sendMessage(741815228, err.message + ' - It is ana uncaught exception.')
+    console.log(err.message)
+    bot.telegram.sendMessage(741815228, err.message + ' - It is ana uncaught exception.')
 })
 
 

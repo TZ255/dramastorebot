@@ -85,6 +85,18 @@ module.exports = (bot, dt, anyErr) => {
                 })
             }
 
+            else if (ctx.callbackQuery.data.includes('niupendo')) {
+                let callbackMsgId = ctx.callbackQuery.message.message_id
+                bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId)
+                ctx.reply('Nakupenda pia Zumaridi 😍 zaidi ata ya shemdoe')
+            }
+
+            else if (ctx.callbackQuery.data.includes('nimekutukana')) {
+                let callbackMsgId = ctx.callbackQuery.message.message_id
+                bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId)
+                ctx.reply('😏 Mxeeew! Lione na domo lako kama la Mr. Paul 😭😂😂')
+            }
+
             else {
                 let id = ctx.callbackQuery.id
                 let chatId = ctx.callbackQuery.from.id
