@@ -71,7 +71,7 @@ module.exports = (bot, dt, anyErr) => {
                                 reply_markup: {
                                     inline_keyboard: [
                                         [
-                                            { text: `⬇ DOWNLOAD NOW E${ep} (${size})`, callback_data: `getEp${epMsgId}` }
+                                            { text: `⬇ DOWNLOAD NOW (${size})`, callback_data: `getEp${epMsgId}` }
                                         ],
                                         [
                                             { text: '💡 Help', callback_data: 'help' },
