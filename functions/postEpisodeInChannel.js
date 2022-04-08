@@ -64,7 +64,7 @@ module.exports = (bot, dt, anyErr) => {
                                 quality = '1080p WEBDL'
                             }
 
-                            await bot.telegram.sendPoll(chatId, `▶ Episode ${ep} | ${quality} | Muxed English Subtitles`, [
+                            await bot.telegram.sendPoll(chatId, `📺 Episode ${ep} | ${quality} | Muxed English Subtitles`, [
                                 '👍 Like',
                                 '👎 Dislike'
                             ], {
