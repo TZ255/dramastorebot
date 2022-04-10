@@ -7,7 +7,7 @@ module.exports = (bot, dt, anyErr) => {
     bot.start(async (ctx) => {
         let name = ctx.chat.first_name
         let msg = `
-    Welcome ${name}, Please Join Drama Store channel to download Korean Dramas
+    Welcome ${name}, Visit Drama Store Website For Korean Series
     `
         try {
             if (!ctx.startPayload) {
@@ -16,7 +16,7 @@ module.exports = (bot, dt, anyErr) => {
                     reply_markup: {
                         inline_keyboard: [
                             [
-                                { text: 'Join Drama Store', url: 'https://t.me/+mTx_t-6TBx9hNTc8' }
+                                { text: '🌎 Visit Drama Store', url: 'www.dramastore.net' }
                             ]
                         ]
                     }
