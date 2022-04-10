@@ -45,6 +45,8 @@ module.exports = (bot, dt, anyErr) => {
                             let chatId = ctx.channelPost.chat.id
                             let idToDelete = ctx.channelPost.message_id
                             let quality = '540p HDTV'
+                            let subs = 'Muxed English Subtitles'
+                            let enc = 'H.264'
 
                             if(txt.includes('540p_WEBDL')) {
                                 quality = '540p WEBDL'
@@ -64,7 +66,17 @@ module.exports = (bot, dt, anyErr) => {
                                 quality = '1080p WEBDL'
                             }
 
-                            await bot.telegram.sendPoll(chatId, `📺 Episode ${ep} | ${quality} | Muxed English Subtitles`, [
+                            else if(txt.includes('nkiri')) {
+                                subs = 'English Hardsubbed'
+                                enc = 'H.265'
+                            }
+
+                            else if(txt.includes('enc')) {
+                                subs = 'Muxed English Subtitles'
+                                enc = 'H.265'
+                            }
+
+                            await bot.telegram.sendPoll(chatId, `📺 Episode ${ep} | ${quality} ${enc} | ${subs}`, [
                                 '👍 Like',
                                 '👎 Dislike'
                             ], {
