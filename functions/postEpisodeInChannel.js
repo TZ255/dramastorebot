@@ -48,16 +48,6 @@ module.exports = (bot, dt, anyErr) => {
                             let subs = 'Muxed English Subtitles'
                             let enc = 'H.264'
 
-                            if(txt.includes('nkiri')) {
-                                subs = 'English Hardsubbed'
-                                enc = 'H.265'
-                            }
-
-                            if(txt.includes('enc')) {
-                                subs = 'Muxed English Subtitles'
-                                enc = 'H.265'
-                            }
-
                             if(txt.includes('540p_WEBDL')) {
                                 quality = '540p WEBDL'
                             }
@@ -74,6 +64,16 @@ module.exports = (bot, dt, anyErr) => {
 
                             else if(txt.includes('1080p_WEDDL')) {
                                 quality = '1080p WEBDL'
+                            }
+
+                            else if(txt.includes('nkiri')) {
+                                subs = 'English Hardsubbed'
+                                enc = 'H.265'
+                            }
+
+                            else if(txt.includes('enc')) {
+                                subs = 'Muxed English Subtitles'
+                                enc = 'H.265'
                             }
 
                             await bot.telegram.sendPoll(chatId, `📺 Episode ${ep} | ${quality} ${enc} | ${subs}`, [
