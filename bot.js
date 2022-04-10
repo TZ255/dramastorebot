@@ -5,6 +5,7 @@ const dramaModel = require('./models/botdramas')
 const episodesModel = require('./models/botepisodes')
 const nextEpModel = require('./models/botnextEp')
 const usersModel = require('./models/botusers')
+const dramasModel = require('./models/vue-new-drama')
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
 //TELEGRAPH
@@ -39,8 +40,35 @@ const dt = {
     naomy: 1006615854,
     jacky: 1937862156,
     loading: 1076477335,
+    divineCh: process.env.divineCh,
     link: process.env.BOT_LINK
 }
+
+//divine
+bot.command('todivine', async ctx => {
+    let dramas = await dramasModel.find({ 'telegraph': { '$exists': true } }).sort('createdAt').sort('year')
+    dramas.forEach((drama, index) => {
+        let txt = `<a href="${drama.telegraph}">🇰🇷 </a><b><u>${drama.newDramaName}</u></b>`
+        let link = `https://t.me/+${drama.tgChannel.split('tg://join?invite=')[1]}`
+        setTimeout(() => {
+            bot.telegram.sendMessage(dt.divineCh, txt, {
+                parse_mode: 'HTML',
+                disable_notification: true,
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            { text: '⬇ DOWNLOAD THIS DRAMA', url: link }
+                        ],
+                        [
+                            { text: '📞 Admin', url: 'https://t.me/Itzbabie' },
+                            { text: '🔍 Find drama', url: 'http://www.dramastore.net/list-of-dramastore-dramas' }
+                        ]
+                    ]
+                }
+            })
+        }, 10000 * index)
+    })
+})
 
 
 // - starting the bot

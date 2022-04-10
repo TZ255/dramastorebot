@@ -10,22 +10,39 @@ module.exports = (bot, dt, anyErr) => {
             // check if is callbackquery for updating drama
             if (ctx.callbackQuery.data.includes('push')) {
                 let callbackMsgId = ctx.callbackQuery.message.message_id
-                let replyMarkup = ctx.callbackQuery.message.reply_markup
-
-                replyMarkup.inline_keyboard.pop()
+                let shemdoeReplyMarkup = ctx.callbackQuery.message.reply_markup
                 
+                let tgLink = shemdoeReplyMarkup.inline_keyboard[0][0].url
+
+                let divineRM = [
+                        [
+                            { text: '⬇ DOWNLOAD THIS DRAMA', url: `${tgLink}` }
+                        ],
+                        [
+                            { text: '📞 Admin', url: 'https://t.me/Itzbabie' },
+                            { text: '🔍 Find drama', url: 'http://www.dramastore.net/list-of-dramastore-dramas' }
+                        ]
+                ]
+
+                shemdoeReplyMarkup.inline_keyboard.pop()
+
                 await bot.telegram.copyMessage(dt.ds, ctx.chat.id, callbackMsgId, {
-                    reply_markup: replyMarkup
+                    reply_markup: shemdoeReplyMarkup
+                })
+                await bot.telegram.copyMessage(dt.divineCh, ctx.chat.id, callbackMsgId, {
+                    reply_markup: {
+                        inline_keyboard: divineRM
+                    }
                 })
 
-                bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId).catch((err)=> {
-                    if(err.message.includes(`delete`)) {
-                        ctx.answerCbQuery(`Can't close this message.... It's too old, delete it instead.`,{
+                bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId).catch((err) => {
+                    if (err.message.includes(`delete`)) {
+                        ctx.answerCbQuery(`Can't close this message.... It's too old, delete it instead.`, {
                             show_alert: true
                         })
                     }
                 })
-            } 
+            }
 
             else if (ctx.callbackQuery.data.includes('getEp')) {
                 let epnoMsgId = ctx.callbackQuery.data.split('getEp')[1].trim()
@@ -40,7 +57,7 @@ module.exports = (bot, dt, anyErr) => {
 
                 let txt = ''
                 let user = await usersModel.findOne({ userId: chatId })
-                
+
                 // for spellings, if remain one remove s
                 if (user.points == 1) {
                     txt = `${user.fname}\n\nTotal downloaded episodes: ${user.downloaded}\n\nYou have ${user.points} point.\n\nClick "➕ Add points button" to increase your points.`
@@ -48,21 +65,21 @@ module.exports = (bot, dt, anyErr) => {
                     txt = `${user.fname}\n\nTotal downloaded episodes: ${user.downloaded}\n\nYou have ${user.points} points.\n\nClick "➕ Add points button" to increase your points.`
                 }
 
-                
+
                 ctx.answerCbQuery(txt, {
                     show_alert: true,
                     cache_time: 2
                 })
             }
             else if (ctx.callbackQuery.data.includes('closePtsMsg')) {
-                bot.telegram.deleteMessage(ctx.callbackQuery.message.chat.id, ctx.callbackQuery.message.message_id).catch((err)=> {
-                    if(err.message.includes('delete')) {
+                bot.telegram.deleteMessage(ctx.callbackQuery.message.chat.id, ctx.callbackQuery.message.message_id).catch((err) => {
+                    if (err.message.includes('delete')) {
                         ctx.answerCbQuery(`Can't close this message.... It's too old, delete it instead.`, {
                             show_alert: true
                         })
                     }
                 })
-                
+
             }
 
             else if (ctx.callbackQuery.data.includes('help')) {
@@ -102,7 +119,7 @@ module.exports = (bot, dt, anyErr) => {
                 let chatId = ctx.callbackQuery.from.id
                 let fname = ctx.callbackQuery.from.first_name
                 let txt = ''
-    
+
                 if (chatId == dt.naomy) {
                     txt = 'Hii ni dramastore\nKaribu Zumaridi 😂, @shemdoe anakupenda sana'
                 }
@@ -111,7 +128,7 @@ module.exports = (bot, dt, anyErr) => {
                 } else {
                     txt = "Korean Drama Store (@dramastore1)"
                 }
-                ctx.answerCbQuery(txt, {show_alert: false})
+                ctx.answerCbQuery(txt, { show_alert: false })
             }
         } catch (err) {
             anyErr(err)
