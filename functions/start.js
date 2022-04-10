@@ -16,7 +16,7 @@ module.exports = (bot, dt, anyErr) => {
                     reply_markup: {
                         inline_keyboard: [
                             [
-                                { text: '🌎 Visit Drama Store', url: 'www.dramastore.net' }
+                                { text: '🌎 OPEN DRAMA STORE', url: 'www.dramastore.net' }
                             ]
                         ]
                     }
