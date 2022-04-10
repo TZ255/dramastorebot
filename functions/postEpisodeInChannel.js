@@ -80,6 +80,10 @@ module.exports = (bot, dt, anyErr) => {
                                 enc = 'H.265'
                             }
 
+                            else if(txt.includes('dual')) {
+                                ep = ep + ' - ' + ('0' + (Number(ep) + 1)).slice(-2)
+                            }
+
                             await bot.telegram.sendPoll(chatId, `📺 Episode ${ep} | ${quality} ${enc} | ${subs}`, [
                                 '👍 Like',
                                 '👎 Dislike'
