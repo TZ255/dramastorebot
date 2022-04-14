@@ -13,6 +13,8 @@ module.exports = (bot, dt, anyErr) => {
                         let SizeInMB = (fileZize / (1024 * 1024))
                         let netSize = Math.round(SizeInMB * 10) / 10 //round to 1 dp
                         let noEp = ''
+                        let capQty = '540P HDTV H.264'
+                        let extraParams = ''
 
                         //document spillited with dramastore
                         if (fileName.includes('dramastore.xyz')) {
@@ -27,8 +29,21 @@ module.exports = (bot, dt, anyErr) => {
                         else if (fileName.toLowerCase().startsWith('e')) {
                             noEp = fileName.toLowerCase().substring(0, 3).toUpperCase()
                         }
+                    
+                        if (fileName.toLowerCase().includes('480p')) {
+                            capQty = '480P WEBDL'
+                            extraParams = '480p_WEBDL'
+                        }
+                        else if (fileName.toLowerCase().includes('540p') && fileName.toLowerCase().includes('web')) {
+                            capQty = '540P WEBDL'
+                            extraParams = '540p_WEBDL'
+                        }
 
-                        ctx.reply(`Copy -> <code>uploading_new_episode_${noEp}_S${netSize}_msgId${msgId}</code>`, { parse_mode: 'HTML' })
+                        let cap = `<b>Ep. ${noEp} | ${capQty} | #Eng Muxed Subtitles\n▬▬▬▬▬▬▬▬▬▬▬▬\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>`
+
+                        await bot.telegram.editMessageCaption(ctx.channelPost.chat.id, msgId, '', cap, { parse_mode: 'HTML'})
+
+                        ctx.reply(`Copy -> <code>uploading_new_episode_${noEp}_S${netSize}_msgId${msgId}_${extraParams}</code>`, { parse_mode: 'HTML' })
                     }
                 }
 
