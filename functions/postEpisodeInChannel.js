@@ -39,7 +39,7 @@ module.exports = (bot, dt, anyErr) => {
                             extraParams = '540p_WEBDL'
                         }
 
-                        let cap = `<b>Ep. ${noEp} | ${capQty} | #Eng Muxed Subtitles\n▬▬▬▬▬▬▬▬▬▬▬▬\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>`
+                        let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty} | #Eng Muxed Subtitles\n▬▬▬▬▬▬▬▬▬▬▬▬\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>`
 
                         await bot.telegram.editMessageCaption(ctx.channelPost.chat.id, msgId, '', cap, { parse_mode: 'HTML'})
 
