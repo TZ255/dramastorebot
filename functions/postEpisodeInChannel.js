@@ -14,6 +14,7 @@ module.exports = (bot, dt, anyErr) => {
                         let netSize = Math.round(SizeInMB * 10) / 10 //round to 1 dp
                         let noEp = ''
                         let capQty = '540P HDTV H.264'
+                        let muxed = '#Eng. Muxed Subtitles'
                         let extraParams = ''
 
                         //document spillited with dramastore
@@ -39,7 +40,13 @@ module.exports = (bot, dt, anyErr) => {
                             extraParams = '540p_WEBDL'
                         }
 
-                        let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty} | #Eng Muxed Subtitles\n▬▬▬▬▬▬▬▬▬▬▬▬\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>`
+                        else if (fileName.toLowerCase().includes('540p') && fileName.toLowerCase().includes('.nk.')) {
+                            capQty = '540P HDTV H.265'
+                            extraParams = 'nkiri'
+                            muxed = '#English Hardsubbed'
+                        }
+
+                        let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty} | ${muxed}\n▬▬▬▬▬▬▬▬▬▬▬▬\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>`
 
                         await bot.telegram.editMessageCaption(ctx.channelPost.chat.id, msgId, '', cap, { parse_mode: 'HTML'})
 
