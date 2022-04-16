@@ -25,7 +25,7 @@ module.exports = (bot, dt, anyErr) => {
             else {
                 let startPayload = ctx.startPayload
                 let epMsgId = startPayload.split('shemdoe')[1].trim()
-                let url = `https://www.dramastore.net/user/${ctx.chat.id}/boost`
+                let url = `http://www.dramastore.net/user/${ctx.chat.id}/boost`
                 let ptsKeybd = [
                     { text: '🥇 My Points', callback_data: 'mypoints' },
                     { text: '➕ Add points', url: url }
