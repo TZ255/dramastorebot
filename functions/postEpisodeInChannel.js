@@ -67,7 +67,7 @@ module.exports = (bot, dt, anyErr) => {
                             let chatId = ctx.channelPost.chat.id
                             let idToDelete = ctx.channelPost.message_id
                             let quality = '540p HDTV'
-                            let subs = 'Muxed English Subtitles'
+                            let subs = 'With English Subtitles'
                             let enc = 'H.264'
 
                             if(txt.includes('540p_WEBDL')) {
@@ -93,12 +93,10 @@ module.exports = (bot, dt, anyErr) => {
                             }
 
                             else if(txt.includes('nkiri')) {
-                                subs = 'English Hardsubbed'
                                 enc = 'H.265'
                             }
 
                             else if(txt.includes('enc')) {
-                                subs = 'Muxed English Subtitles'
                                 enc = 'H.265'
                             }
 
