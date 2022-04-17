@@ -80,7 +80,6 @@ module.exports = (bot, dt, anyErr) => {
                                 let drama = await vueNewDramaModel.findOne({ newDramaName: dname})
                                 if(drama) {
                                     totalEps = `/${drama.noOfEpisodes}`
-                                    console.log(drama.noOfEpisodes)
                                 }
                             }
 
