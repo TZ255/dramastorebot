@@ -1,3 +1,5 @@
+const vueNewDramaModel = require('../models/vue-new-drama')
+
 module.exports = (bot, dt, anyErr) => {
     bot.use(async (ctx, next) => {
         try {
@@ -30,7 +32,7 @@ module.exports = (bot, dt, anyErr) => {
                         else if (fileName.toLowerCase().startsWith('e')) {
                             noEp = fileName.toLowerCase().substring(0, 3).toUpperCase()
                         }
-                    
+
                         if (fileName.toLowerCase().includes('480p')) {
                             capQty = '480P WEBDL'
                             extraParams = '480p_WEBDL'
@@ -42,12 +44,15 @@ module.exports = (bot, dt, anyErr) => {
 
                         else if (fileName.toLowerCase().includes('540p') && fileName.toLowerCase().includes('.nk.')) {
                             capQty = '540P HDTV H.265'
-                            extraParams = 'nkiri'
+                        }
+
+                        if (Number(SizeInMB) < 150) {
+                            capQty = '540P HDTV H.265'
                         }
 
                         let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty} | ${muxed}\n▬▬▬▬▬▬▬▬▬▬▬▬\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>`
 
-                        await bot.telegram.editMessageCaption(ctx.channelPost.chat.id, msgId, '', cap, { parse_mode: 'HTML'})
+                        await bot.telegram.editMessageCaption(ctx.channelPost.chat.id, msgId, '', cap, { parse_mode: 'HTML' })
 
                         ctx.reply(`Copy -> <code>uploading_new_episode_${noEp}_S${netSize}_msgId${msgId}_${extraParams}</code>`, { parse_mode: 'HTML' })
                     }
@@ -67,43 +72,42 @@ module.exports = (bot, dt, anyErr) => {
                             let idToDelete = ctx.channelPost.message_id
                             let quality = '540p HDTV'
                             let subs = 'With English Subtitles'
-                            let enc = 'H.264'
+                            let totalEps = ''
 
-                            if(txt.includes('540p_WEBDL')) {
-                                quality = '540p WEBDL'
-                                enc = ''
+                            let cname = ctx.channelPost.sender_chat.title
+                            if (cname.includes('Official -')) {
+                                let dname = cname.split('Official - ')[1].trim()
+                                let drama = await vueNewDramaModel.findOne({ newDramaName: dname})
+                                if(drama) {
+                                    totalEps = `/${drama.noOfEpisodes}`
+                                    console.log(drama.noOfEpisodes)
+                                }
                             }
-                            else if(txt.includes('480p_WEBDL')) {
+
+                            if (txt.includes('540p_WEBDL')) {
+                                quality = '540p WEBDL'
+                            }
+                            else if (txt.includes('480p_WEBDL')) {
                                 quality = '480p WEBDL'
                                 enc = ''
                             }
-                            else if(txt.includes('720p_WEBDL')) {
+                            else if (txt.includes('720p_WEBDL')) {
                                 quality = '720p WEBDL'
-                                enc = ''
                             }
 
-                            else if(txt.includes('720p_HDTV')) {
+                            else if (txt.includes('720p_HDTV')) {
                                 quality = '720p HDTV'
-                                enc = 'H.265'
                             }
 
-                            else if(txt.includes('1080p_WEDDL')) {
+                            else if (txt.includes('1080p_WEDDL')) {
                                 quality = '1080p WEBDL'
                             }
 
-                            else if(txt.includes('nkiri')) {
-                                enc = 'H.265'
-                            }
-
-                            else if(txt.includes('enc')) {
-                                enc = 'H.265'
-                            }
-
-                            else if(txt.includes('dual')) {
+                            else if (txt.includes('dual')) {
                                 ep = ep + '-' + ('0' + (Number(ep) + 1)).slice(-2)
                             }
 
-                            await bot.telegram.sendPoll(chatId, `📺 Episode ${ep} | ${quality} ${enc} | ${subs}`, [
+                            await bot.telegram.sendPoll(chatId, `📺 Ep. ${ep}${totalEps} | ${quality} | ${subs}`, [
                                 '👍 Like',
                                 '👎 Dislike'
                             ], {
@@ -114,7 +118,7 @@ module.exports = (bot, dt, anyErr) => {
                                         ],
                                         [
                                             { text: '💡 Help', callback_data: 'help' },
-                                            { text: '🗞 Info', callback_data: `epinfo${ep}_${size}_${quality}`}
+                                            { text: '🗞 Info', callback_data: `epinfo${ep}_${size}_${quality}` }
                                         ]
                                     ]
                                 }
@@ -127,7 +131,7 @@ module.exports = (bot, dt, anyErr) => {
             }
 
             // if is not channel
-            else { next()}
+            else { next() }
         }
         catch (err) {
             console.log(err)
