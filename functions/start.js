@@ -83,10 +83,15 @@ module.exports = (bot, dt, anyErr) => {
                     
                     setTimeout(()=>{
                        ctx.reply(`You got the file and 2 points deducted from your points balance.\n\nYou remain with <b>${user.points - 2} points.</b>`, { 
-                        parse_mode: 'HTML',
-                        reply_markup: {
-                            inline_keyboard: [ closeKybd ]
-                        }
+                        parse_mode: 'HTML'}).then((yohave)=> {
+                        setTimeout(()=>{
+                            bot.telegram.deleteMessage(ctx.chat.id, yohave.message_id)
+                            .catch((err)=> {
+                                if (err.description.includes('delete')) {
+                                    bot.telegram.sendMessage(dt.shd, err.description)
+                                }
+                            })
+                        }, 10000)
                     }) 
                     }, 1000)
                     
