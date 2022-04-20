@@ -29,6 +29,9 @@ module.exports = (bot, dt, anyErr) => {
                 await bot.telegram.copyMessage(dt.ds, ctx.chat.id, callbackMsgId, {
                     reply_markup: shemdoeReplyMarkup
                 })
+                await bot.telegram.copyMessage(dt.whats, ctx.chat.id, callbackMsgId, {
+                    reply_markup: shemdoeReplyMarkup
+                })
                 await bot.telegram.copyMessage(dt.divineCh, ctx.chat.id, callbackMsgId, {
                     reply_markup: {
                         inline_keyboard: divineRM
