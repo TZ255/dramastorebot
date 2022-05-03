@@ -72,7 +72,7 @@ module.exports = (bot, dt, anyErr) => {
                     }, 1000)
 
                 }
-                if (user && user.points >= 2) {
+                if (user && user.points >= 1) {
                     await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, { 
                         reply_markup: {
                             inline_keyboard: [ptsKeybd]
@@ -96,7 +96,7 @@ module.exports = (bot, dt, anyErr) => {
                     }, 1000)
                     
                 }
-                if (user && user.points < 2) {
+                if (user && user.points < 1) {
                     await ctx.reply(`You don't have enough points to get the file (you need at least 1 point)\n\nYou have <b>${user.points}</b> points... Click <b>"➕ Add points"</b> button below to increase your points, alternatively you can follow this link ${url}`, {
                         parse_mode: 'HTML',
                         reply_markup: {
