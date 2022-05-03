@@ -55,21 +55,6 @@ bot.help(ctx => {
     ctx.reply(`If you have issues regarding using me please contact my developer @shemdoe\n\nIf you run out of points open this link https://www.dramastore.net/user/${ctx.chat.id}/boost to increase your points.`)
 })
 
-bot.command('/notify', async ctx=> {
-    let users = await usersModel.find()
-    users.forEach((user, index) => {
-        setTimeout(()=>{
-            bot.telegram.sendMessage(user.userId, `Hello <b>${user.fname}</b>, dramastore wishes you and your loved ones a very happy Eid al-Fitr.\n\nI have this for you, from now on I'll only deduct one point per file, and I also know that it's quite disturbing to get files through me but it's the only option dramastore got to get around Telegram copyright infringement strikes.\n\nEid Mubarak 👋`, {parse_mode: 'HTML'}).then(()=> console.log('message sent'))
-            .catch((err)=> {
-                console.log(`Couldn't send`)
-            })
-        }, index * 100)
-        if(index == (users.length - 1)) {
-            bot.telegram.sendMessage(dt.shd, "Done sending bulk messages")
-        } 
-    })
-})
-
 
 // -post to dramastore callback action
 // -check points balance
