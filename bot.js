@@ -55,7 +55,7 @@ bot.help(ctx => {
     ctx.reply(`If you have issues regarding using me please contact my developer @shemdoe\n\nIf you run out of points open this link https://www.dramastore.net/user/${ctx.chat.id}/boost to increase your points.`)
 })
 
-bot.command('/notify', ctx=> {
+bot.command('/notify', async ctx=> {
     let users = await usersModel.find()
     users.forEach((user, index) => {
         setTimeout(()=>{
