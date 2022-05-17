@@ -39,7 +39,7 @@ module.exports = (bot, dt, anyErr) => {
                         }
 
                         if (fileName.toLowerCase().includes('480p.hdtv')) {
-                            capQty = '480P HDTV'
+                            capQty = '480P HDTV H.264'
                             extraParams = '480p_HDTV'
                         }
 
