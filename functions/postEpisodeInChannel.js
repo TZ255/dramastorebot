@@ -52,7 +52,7 @@ module.exports = (bot, dt, anyErr) => {
                             capQty = '540P HDTV H.265'
                         }
 
-                        if (Number(SizeInMB) < 150) {
+                        if (Number(SizeInMB) < 150 && !fileName.toLowerCase().includes('480p.hdtv')) {
                             capQty = '540P HDTV H.265'
                         }
 
