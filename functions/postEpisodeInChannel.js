@@ -37,6 +37,12 @@ module.exports = (bot, dt, anyErr) => {
                             capQty = '480P WEBDL'
                             extraParams = '480p_WEBDL'
                         }
+
+                        if (fileName.toLowerCase().includes('480p.hdtv')) {
+                            capQty = '480P HDTV'
+                            extraParams = '480p_HDTV'
+                        }
+
                         else if (fileName.toLowerCase().includes('540p') && fileName.toLowerCase().includes('web')) {
                             capQty = '540P WEBDL'
                             extraParams = '540p_WEBDL'
@@ -88,6 +94,10 @@ module.exports = (bot, dt, anyErr) => {
                             }
                             else if (txt.includes('480p_WEBDL')) {
                                 quality = '480p WEBDL'
+                                enc = ''
+                            }
+                            else if (txt.includes('480p_HDTV')) {
+                                quality = '480p HDTV (kissasian)'
                                 enc = ''
                             }
                             else if (txt.includes('720p_WEBDL')) {
