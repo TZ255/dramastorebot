@@ -94,7 +94,7 @@ module.exports = (bot, dt, anyErr) => {
                 })
             }
 
-            else if (ctx.callbackQuery.data.includes('helpNew')) {
+            else if (ctx.callbackQuery.data.includes('newHbtn')) {
                 let msg = `HOW TO DOWNLOAD\n\n✨ Tap "⬇ DOWNLOAD NOW" to open chat with BOT\n\n✨ At the bottom of BOT click "START" to get the file.\n\n✨Use "OPTION 2" to download without points\n\n📞 Any problem contact @shemdoe`
 
                 ctx.answerCbQuery(msg, {

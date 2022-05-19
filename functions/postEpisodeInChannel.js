@@ -128,7 +128,7 @@ module.exports = (bot, dt, anyErr) => {
                                         ],
                                         [
                                             { text: '⬇ OPTION 2', url: `font5.net/pages/telegram?msgid=777shemdoe${epMsgId}777shemdoe${sizeWeb}777shemdoe${ep}`},
-                                            { text: '💡 Help', callback_data: 'helpNew' }
+                                            { text: '💡 Help', callback_data: 'newHbtn' }
                                         ]
                                     ]
                                 }
