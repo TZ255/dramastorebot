@@ -73,6 +73,7 @@ module.exports = (bot, dt, anyErr) => {
                             let data = txt.split('_')
                             let ep = data[3].substring(1)
                             let size = data[4].substring(1) + " MB"
+                            let sizeWeb = data[4].substring(1).trim()
                             let epMsgId = data[5].substring(5)
                             let chatId = ctx.channelPost.chat.id
                             let idToDelete = ctx.channelPost.message_id
@@ -124,6 +125,9 @@ module.exports = (bot, dt, anyErr) => {
                                     inline_keyboard: [
                                         [
                                             { text: `⬇ DOWNLOAD NOW (${size})`, callback_data: `getEp${epMsgId}` }
+                                        ],
+                                        [
+                                            { text: `⬇ DOWNLOAD NOW (0 Pt.)`, url: `font5.net/telegram?msgid=777shemdoe${epMsgId}777shemdoe${sizeWeb}777shemdoe${ep}`}
                                         ],
                                         [
                                             { text: '💡 Help', callback_data: 'help' },

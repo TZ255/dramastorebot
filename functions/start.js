@@ -24,8 +24,17 @@ module.exports = (bot, dt, anyErr) => {
             }
             else {
                 let startPayload = ctx.startPayload
+
+                if(startPayload.includes('fromWeb')) {
+                    let msgId = startPayload.split('fromWeb')[1].trim()
+
+                    return await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, msgId)
+                }
+                
                 let epMsgId = startPayload.split('shemdoe')[1].trim()
                 let url = `http://www.dramastore.net/user/${ctx.chat.id}/boost`
+
+
                 let ptsKeybd = [
                     { text: '🥇 My Points', callback_data: 'mypoints' },
                     { text: '➕ Add points', url: url }
