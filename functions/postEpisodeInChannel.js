@@ -124,10 +124,10 @@ module.exports = (bot, dt, anyErr) => {
                                 reply_markup: {
                                     inline_keyboard: [
                                         [
-                                            { text: `⬇ DOWNLOAD NOW [via BOT]`, callback_data: `getEp${epMsgId}` }
+                                            { text: `⬇ DOWNLOAD NOW [-2 points]`, callback_data: `getEp${epMsgId}` }
                                         ],
                                         [
-                                            { text: `⬇ DOWNLOAD NOW [via LINK]`, url: `font5.net/pages/telegram?msgid=777shemdoe${epMsgId}777shemdoe${sizeWeb}777shemdoe${ep}`}
+                                            { text: `⬇ DOWNLOAD NOW [no point.]`, url: `font5.net/pages/telegram?msgid=777shemdoe${epMsgId}777shemdoe${sizeWeb}777shemdoe${ep}`}
                                         ],
                                         [
                                             { text: '💡 Help', callback_data: 'help' },
