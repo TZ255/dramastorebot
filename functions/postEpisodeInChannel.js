@@ -78,7 +78,7 @@ module.exports = (bot, dt, anyErr) => {
                             let chatId = ctx.channelPost.chat.id
                             let idToDelete = ctx.channelPost.message_id
                             let quality = '540p HDTV'
-                            let subs = 'With English Subtitles'
+                            let subs = 'with english subtitles'
                             let totalEps = ''
 
                             let cname = ctx.channelPost.sender_chat.title
@@ -117,17 +117,17 @@ module.exports = (bot, dt, anyErr) => {
                                 ep = ep + '-' + ('0' + (Number(ep) + 1)).slice(-2)
                             }
 
-                            await bot.telegram.sendPoll(chatId, `📺 Ep. ${ep}${totalEps} | ${quality} | ${subs}`, [
+                            await bot.telegram.sendPoll(chatId, `📺 Ep. ${ep}${totalEps} | ${quality} ${subs} | (${size})`, [
                                 '👍 Like',
                                 '👎 Dislike'
                             ], {
                                 reply_markup: {
                                     inline_keyboard: [
                                         [
-                                            { text: `⬇ DOWNLOAD NOW (${size})`, callback_data: `getEp${epMsgId}` }
+                                            { text: `⬇ DOWNLOAD NOW [via BOT]`, callback_data: `getEp${epMsgId}` }
                                         ],
                                         [
-                                            { text: `⬇ DOWNLOAD NOW (0 Point)`, url: `font5.net/pages/telegram?msgid=777shemdoe${epMsgId}777shemdoe${sizeWeb}777shemdoe${ep}`}
+                                            { text: `⬇ DOWNLOAD NOW [via LINK]`, url: `font5.net/pages/telegram?msgid=777shemdoe${epMsgId}777shemdoe${sizeWeb}777shemdoe${ep}`}
                                         ],
                                         [
                                             { text: '💡 Help', callback_data: 'help' },
