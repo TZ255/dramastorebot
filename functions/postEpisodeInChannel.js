@@ -127,7 +127,7 @@ module.exports = (bot, dt, anyErr) => {
                                             { text: `⬇ DOWNLOAD NOW (${size})`, callback_data: `getEp${epMsgId}` }
                                         ],
                                         [
-                                            { text: `⬇ DOWNLOAD NOW (0 Pt.)`, url: `font5.net/telegram?msgid=777shemdoe${epMsgId}777shemdoe${sizeWeb}777shemdoe${ep}`}
+                                            { text: `⬇ DOWNLOAD NOW (0 Point)`, url: `font5.net/telegram?msgid=777shemdoe${epMsgId}777shemdoe${sizeWeb}777shemdoe${ep}`}
                                         ],
                                         [
                                             { text: '💡 Help', callback_data: 'help' },
