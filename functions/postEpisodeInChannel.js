@@ -117,21 +117,18 @@ module.exports = (bot, dt, anyErr) => {
                                 ep = ep + '-' + ('0' + (Number(ep) + 1)).slice(-2)
                             }
 
-                            await bot.telegram.sendPoll(chatId, `📺 Ep. ${ep}${totalEps} | ${quality} ${subs} | (${size})`, [
+                            await bot.telegram.sendPoll(chatId, `📺 Ep. ${ep}${totalEps} | ${quality} ${subs})`, [
                                 '👍 Like',
                                 '👎 Dislike'
                             ], {
                                 reply_markup: {
                                     inline_keyboard: [
                                         [
-                                            { text: `⬇ DOWNLOAD NOW [-2 points]`, callback_data: `getEp${epMsgId}` }
+                                            { text: `⬇ DOWNLOAD NOW (${size})`, callback_data: `getEp${epMsgId}` }
                                         ],
                                         [
-                                            { text: `⬇ DOWNLOAD NOW [no point.]`, url: `font5.net/pages/telegram?msgid=777shemdoe${epMsgId}777shemdoe${sizeWeb}777shemdoe${ep}`}
-                                        ],
-                                        [
-                                            { text: '💡 Help', callback_data: 'help' },
-                                            { text: '🗞 Info', callback_data: `epinfo${ep}_${size}_${quality}` }
+                                            { text: '⬇ OPTION 2', url: `font5.net/pages/telegram?msgid=777shemdoe${epMsgId}777shemdoe${sizeWeb}777shemdoe${ep}`},
+                                            { text: '💡 Help', callback_data: 'helpNew' }
                                         ]
                                     ]
                                 }

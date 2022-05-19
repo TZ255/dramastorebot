@@ -94,10 +94,19 @@ module.exports = (bot, dt, anyErr) => {
                 })
             }
 
+            else if (ctx.callbackQuery.data.includes('helpNew')) {
+                let msg = `HOW TO DOWNLOAD\n\n✨ Tap "⬇ DOWNLOAD NOW" to open chat with BOT\n\n✨ At the bottom of BOT click "START" to get the file.\n\n✨Use "OPTION 2" to download without points\n\n📞 Any problem contact @shemdoe`
+
+                ctx.answerCbQuery(msg, {
+                    show_alert: true,
+                    cache_time: 14400 //4 hours
+                })
+            }
+
             else if (ctx.callbackQuery.data.includes('epinfo')) {
                 let data = ctx.callbackQuery.data.split('_')
                 let epno = data[0].split('epinfo')[1]
-                let msg = `Info About This Episode\n\n▶ Ep. No: E${epno}\n\n💾 Size: ${data[1]}\n\n📸 Quality: ${data[2]}`
+                let msg = `Info About This Episode\n\n▶ Ep. No: ${epno}\n\n💾 Size: ${data[1]}\n\n📸 Quality: ${data[2]}`
 
                 ctx.answerCbQuery(msg, {
                     show_alert: true,
