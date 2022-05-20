@@ -51,7 +51,7 @@ module.exports = (bot, dt, anyErr) => {
                 let epnoMsgId = ctx.callbackQuery.data.split('getEp')[1].trim()
 
                 ctx.answerCbQuery('dramastore', {
-                    url: `${dt.link}shemdoe${epnoMsgId}`,
+                    url: `${dt.link}2shemdoe${epnoMsgId}`,
                     cache_time: 14400 //4 hours
                 })
             }

@@ -24,6 +24,11 @@ module.exports = (bot, dt, anyErr) => {
             }
             else {
                 let startPayload = ctx.startPayload
+                let pt = 1
+
+                if(startPayload.includes('2shemdoe')) {
+                    pt = 2
+                }
 
                 if(startPayload.includes('fromWeb')) {
                     let msgId = startPayload.split('fromWeb')[1].trim()
@@ -61,7 +66,7 @@ module.exports = (bot, dt, anyErr) => {
                     else if (ctx.chat.id == dt.jacky) {
                         txt = `Karibu <b>Jacky</b> 😊 rafiki yake shemdoe\nUmepata points 10 za bure.\n- Kila episode nitakayokupa nitakukata points 2.\n- Pia ili nikutumie episode unatakiwa uwe na angalau points 2, chini ya hapo itakupasa kuziongeza kwa kubofya button ya "➕ Add Points."`
                     } else {
-                        txt = `Welcome <b>${ctx.chat.first_name}</b>, this is Drama Store Bot, you were provided with 10 free points\n\n- To get episode file you need to have at least 1 point.\n- Each episode you get will cost you 1 point.\n- You can easily increase your points through the "➕ Add points" button`
+                        txt = `Welcome <b>${ctx.chat.first_name}</b>, this is Drama Store Bot, you were provided with 10 free points\n\n- To get episode file you need to have at least 2 points.\n- Each episode you get will cost you 2 points.\n- You can easily add your points through the "➕ Add points" button`
                     }
                     await ctx.reply(txt, { parse_mode: 'HTML' })
                     bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, {
@@ -70,9 +75,9 @@ module.exports = (bot, dt, anyErr) => {
                         }
                     }) 
 
-                    await newUser.updateOne({ $inc: { points: -1 } })
+                    await newUser.updateOne({ $inc: { points: -pt } })
                     setTimeout(() => {
-                        ctx.reply(`You got the file and 1 point deducted from your points balance.\n\nYou remain with <b>${newUser.points - 1} points</b>`, { 
+                        ctx.reply(`You got the file and ${pt} point(s) deducted from your points balance.\n\nYou remain with <b>${newUser.points - pt} points</b>`, { 
                             parse_mode: 'HTML', 
                             reply_markup: {
                                 inline_keyboard: [ closeKybd ]
@@ -81,17 +86,17 @@ module.exports = (bot, dt, anyErr) => {
                     }, 1000)
 
                 }
-                if (user && user.points >= 1) {
+                if (user && user.points >= 2) {
                     await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, { 
                         reply_markup: {
                             inline_keyboard: [ptsKeybd]
                         }
                     })
 
-                    await user.updateOne({ $inc: { points: -1, downloaded: 1 } })
+                    await user.updateOne({ $inc: { points: -pt, downloaded: 1 } })
                     
                     setTimeout(()=>{
-                       ctx.reply(`You got the file and 1 point deducted from your points balance.\n\nYou remain with <b>${user.points - 1} points.</b>`, { 
+                       ctx.reply(`You got the file and ${pt} point(s) deducted from your points balance.\n\nYou remain with <b>${user.points - pt} points.</b>`, { 
                         parse_mode: 'HTML'}).then((yohave)=> {
                         setTimeout(()=>{
                             bot.telegram.deleteMessage(ctx.chat.id, yohave.message_id)
@@ -105,8 +110,8 @@ module.exports = (bot, dt, anyErr) => {
                     }, 1000)
                     
                 }
-                if (user && user.points < 1) {
-                    await ctx.reply(`You don't have enough points to get the file (you need at least 1 point)\n\nYou have <b>${user.points}</b> points... Click <b>"➕ Add points"</b> button below to increase your points, alternatively you can follow this link ${url}`, {
+                if (user && user.points < 2) {
+                    await ctx.reply(`You don't have enough points to get the file (you need at least 2 points)\n\nYou have <b>${user.points}</b> points... Click <b>"➕ Add points"</b> button below to increase your points, alternatively you can follow this link ${url}`, {
                         parse_mode: 'HTML',
                         reply_markup: {
                             inline_keyboard: [ptsKeybd]
