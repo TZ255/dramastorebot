@@ -94,6 +94,7 @@ module.exports = (bot, dt, anyErr) => {
                     })
 
                     await user.updateOne({ $inc: { points: -pt, downloaded: 1 } })
+                    console.log('Episode sent')
                     
                     setTimeout(()=>{
                        ctx.reply(`You got the file and ${pt} point(s) deducted from your points balance.\n\nYou remain with <b>${user.points - pt} points.</b>`, { 
