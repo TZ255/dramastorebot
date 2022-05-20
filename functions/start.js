@@ -26,16 +26,31 @@ module.exports = (bot, dt, anyErr) => {
                 let startPayload = ctx.startPayload
                 let pt = 1
 
-                if(startPayload.includes('2shemdoe')) {
+                if (startPayload.includes('2shemdoe')) {
                     pt = 2
                 }
 
-                if(startPayload.includes('fromWeb')) {
+                if (startPayload.includes('fromWeb')) {
                     let msgId = startPayload.split('fromWeb')[1].trim()
 
-                    return await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, msgId)
+                    await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, msgId)
+                    setTimeout(() => {
+                        ctx.reply(`Option 2 used... no point deducted`, {
+                            parse_mode: 'HTML'
+                        }).then((yohave) => {
+                            setTimeout(() => {
+                                bot.telegram.deleteMessage(ctx.chat.id, yohave.message_id)
+                                    .catch((err) => {
+                                        if (err.description.includes('delete')) {
+                                            bot.telegram.sendMessage(dt.shd, err.description)
+                                        }
+                                    })
+                            }, 5000)
+                        })
+                    }, 1000)
+                    return console.log(`Episode sent to ${name} by OPTION 2`)
                 }
-                
+
                 let epMsgId = startPayload.split('shemdoe')[1].trim()
                 let url = `http://www.dramastore.net/user/${ctx.chat.id}/boost`
 
@@ -45,7 +60,7 @@ module.exports = (bot, dt, anyErr) => {
                     { text: '➕ Add points', url: url }
                 ]
                 let closeKybd = [
-                    { text: '👌 Ok, I understand', callback_data: 'closePtsMsg'}
+                    { text: '👌 Ok, I understand', callback_data: 'closePtsMsg' }
                 ]
 
                 // add user to database
@@ -73,21 +88,21 @@ module.exports = (bot, dt, anyErr) => {
                         reply_markup: {
                             inline_keyboard: [ptsKeybd]
                         }
-                    }) 
+                    })
 
                     await newUser.updateOne({ $inc: { points: -pt } })
                     setTimeout(() => {
-                        ctx.reply(`You got the file and ${pt} point(s) deducted from your points balance.\n\nYou remain with <b>${newUser.points - pt} points</b>`, { 
-                            parse_mode: 'HTML', 
+                        ctx.reply(`You got the file and ${pt} point(s) deducted from your points balance.\n\nYou remain with <b>${newUser.points - pt} points</b>`, {
+                            parse_mode: 'HTML',
                             reply_markup: {
-                                inline_keyboard: [ closeKybd ]
+                                inline_keyboard: [closeKybd]
                             }
                         })
                     }, 1000)
 
                 }
                 if (user && user.points >= 2) {
-                    await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, { 
+                    await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, {
                         reply_markup: {
                             inline_keyboard: [ptsKeybd]
                         }
@@ -95,21 +110,22 @@ module.exports = (bot, dt, anyErr) => {
 
                     await user.updateOne({ $inc: { points: -pt, downloaded: 1 } })
                     console.log(`Episode sent to ${user.fname}`)
-                    
-                    setTimeout(()=>{
-                       ctx.reply(`You got the file and ${pt} point(s) deducted from your points balance.\n\nYou remain with <b>${user.points - pt} points.</b>`, { 
-                        parse_mode: 'HTML'}).then((yohave)=> {
-                        setTimeout(()=>{
-                            bot.telegram.deleteMessage(ctx.chat.id, yohave.message_id)
-                            .catch((err)=> {
-                                if (err.description.includes('delete')) {
-                                    bot.telegram.sendMessage(dt.shd, err.description)
-                                }
-                            })
-                        }, 10000)
-                    }) 
+
+                    setTimeout(() => {
+                        ctx.reply(`You got the file and ${pt} point(s) deducted from your points balance.\n\nYou remain with <b>${user.points - pt} points.</b>`, {
+                            parse_mode: 'HTML'
+                        }).then((yohave) => {
+                            setTimeout(() => {
+                                bot.telegram.deleteMessage(ctx.chat.id, yohave.message_id)
+                                    .catch((err) => {
+                                        if (err.description.includes('delete')) {
+                                            bot.telegram.sendMessage(dt.shd, err.description)
+                                        }
+                                    })
+                            }, 10000)
+                        })
                     }, 1000)
-                    
+
                 }
                 if (user && user.points < 2) {
                     await ctx.reply(`You don't have enough points to get the file (you need at least 2 points)\n\nYou have <b>${user.points}</b> points... Click <b>"➕ Add points"</b> button below to increase your points, alternatively you can follow this link ${url}`, {
