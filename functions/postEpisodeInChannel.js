@@ -124,7 +124,7 @@ module.exports = (bot, dt, anyErr) => {
                                 reply_markup: {
                                     inline_keyboard: [
                                         [
-                                            { text: `⬇ DOWNLOAD NOW (${size})`, callback_data: `getEp${epMsgId}` }
+                                            { text: `⬇ DOWNLOAD NOW (${size})`, callback_data: `2getEp${epMsgId}` }
                                         ],
                                         [
                                             { text: '⬇ OPTION 2', url: `font5.net/pages/telegram?msgid=777shemdoe${epMsgId}777shemdoe${sizeWeb}777shemdoe${ep}`},

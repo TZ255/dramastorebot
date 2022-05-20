@@ -50,8 +50,14 @@ module.exports = (bot, dt, anyErr) => {
             else if (ctx.callbackQuery.data.includes('getEp')) {
                 let epnoMsgId = ctx.callbackQuery.data.split('getEp')[1].trim()
 
+                let dParam = 'shemdoe'
+
+                if(ctx.callbackQuery.data.includes('2getEp')) {
+                    dParam = '2shemdoe'
+                }
+
                 ctx.answerCbQuery('dramastore', {
-                    url: `${dt.link}2shemdoe${epnoMsgId}`,
+                    url: `${dt.link}${dParam}${epnoMsgId}`,
                     cache_time: 14400 //4 hours
                 })
             }
