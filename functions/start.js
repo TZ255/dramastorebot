@@ -48,6 +48,7 @@ module.exports = (bot, dt, anyErr) => {
                             }, 5000)
                         })
                     }, 1000)
+                    await usersModel.findOneAndUpdate({ userId: ctx.chat.id}, {$inc: {downloaded: 1}})
                     return console.log(`Episode sent to ${name} by OPTION 2`)
                 }
 
