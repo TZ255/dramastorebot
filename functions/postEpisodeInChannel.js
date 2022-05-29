@@ -16,7 +16,7 @@ module.exports = (bot, dt, anyErr) => {
                         let netSize = Math.round(SizeInMB * 10) / 10 //round to 1 dp
                         let noEp = ''
                         let capQty = '540P HDTV H.264'
-                        let muxed = '#Eng Softsubbed'
+                        let muxed = '#English Soft-subbed'
                         let extraParams = ''
 
                         //document spillited with dramastore
@@ -40,7 +40,7 @@ module.exports = (bot, dt, anyErr) => {
 
                         if (fileName.toLowerCase().includes('480p.hdtv.mp4')) {
                             capQty = '480P HDTV H.264'
-                            muxed = '#Eng Hardsubbed'
+                            muxed = '#English Hard-subbed'
                             extraParams = '480p_HDTV_MP4'
                         }
 
@@ -51,11 +51,14 @@ module.exports = (bot, dt, anyErr) => {
 
                         else if (fileName.toLowerCase().includes('.nk.')) {
                             capQty = '540P HDTV H.265'
-                            muxed = '#Eng Hardsubbed'
+                            muxed = '#English Hard-subbed'
                             extraParams = 'NK'
                         }
 
-                        let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty} | ${muxed}\n▬▬▬▬▬▬▬▬▬▬▬▬\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>`
+                        let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}\n▬▬▬▬▬▬▬▬▬▬▬▬\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>`
+                        if(muxed == '#English Soft-subbed') {
+                            cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}\n▬▬▬▬▬▬▬▬▬▬▬▬\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>\n\n<i>- This ep. is soft-subbed, use VLC or MX Player to see subtitles</i>`
+                        }
 
                         await bot.telegram.editMessageCaption(ctx.channelPost.chat.id, msgId, '', cap, { parse_mode: 'HTML' })
 
@@ -77,7 +80,7 @@ module.exports = (bot, dt, anyErr) => {
                             let chatId = ctx.channelPost.chat.id
                             let idToDelete = ctx.channelPost.message_id
                             let quality = '540p HDTV H.264'
-                            let subs = '#English Softsubbed'
+                            let subs = '#English Soft-subbed'
                             let totalEps = ''
 
                             let cname = ctx.channelPost.sender_chat.title
@@ -106,7 +109,7 @@ module.exports = (bot, dt, anyErr) => {
                             }
                             else if (txt.includes('NK')) {
                                 quality = '540p HDTV H.265'
-                                subs = '#English Hardsubbed'
+                                subs = '#English Hard-subbed'
                             }
                             else if (txt.includes('720p_WEBDL')) {
                                 quality = '720p WEBDL'
