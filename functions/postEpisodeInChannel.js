@@ -52,6 +52,7 @@ module.exports = (bot, dt, anyErr) => {
                         else if (fileName.toLowerCase().includes('.nk.')) {
                             capQty = '540P HDTV H.265'
                             muxed = '#Eng Hardsubbed'
+                            extraParams = 'NK'
                         }
 
                         let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty} | ${muxed}\n▬▬▬▬▬▬▬▬▬▬▬▬\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>`
@@ -75,8 +76,8 @@ module.exports = (bot, dt, anyErr) => {
                             let epMsgId = data[5].substring(5)
                             let chatId = ctx.channelPost.chat.id
                             let idToDelete = ctx.channelPost.message_id
-                            let quality = '540p HDTV H.265'
-                            let subs = '#English Hardsubbed'
+                            let quality = '540p HDTV H.264'
+                            let subs = '#English Softsubbed'
                             let totalEps = ''
 
                             let cname = ctx.channelPost.sender_chat.title
@@ -102,6 +103,10 @@ module.exports = (bot, dt, anyErr) => {
                             else if (txt.includes('480p_HDTV_MKV')) {
                                 quality = '540p HDTV H.265'
                                 enc = ''
+                            }
+                            else if (txt.includes('NK')) {
+                                quality = '540p HDTV H.265'
+                                subs = '#English Hardsubbed'
                             }
                             else if (txt.includes('720p_WEBDL')) {
                                 quality = '720p WEBDL'
