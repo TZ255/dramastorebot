@@ -16,7 +16,7 @@ module.exports = (bot, dt, anyErr) => {
                         let netSize = Math.round(SizeInMB * 10) / 10 //round to 1 dp
                         let noEp = ''
                         let capQty = '540P HDTV H.264'
-                        let muxed = 'With #English Subtitles'
+                        let muxed = '#Eng Softsubbed'
                         let extraParams = ''
 
                         //document spillited with dramastore
@@ -33,14 +33,15 @@ module.exports = (bot, dt, anyErr) => {
                             noEp = fileName.toLowerCase().substring(0, 3).toUpperCase()
                         }
 
-                        if (fileName.toLowerCase().includes('480p')) {
+                        if (fileName.toLowerCase().includes('480p.web')) {
                             capQty = '480P WEBDL'
                             extraParams = '480p_WEBDL'
                         }
 
-                        if (fileName.toLowerCase().includes('480p.hdtv')) {
+                        if (fileName.toLowerCase().includes('480p.hdtv.mp4')) {
                             capQty = '480P HDTV H.264'
-                            extraParams = '480p_HDTV'
+                            muxed = '#Eng Hardsubbed'
+                            extraParams = '480p_HDTV_MP4'
                         }
 
                         else if (fileName.toLowerCase().includes('540p') && fileName.toLowerCase().includes('web')) {
@@ -48,12 +49,9 @@ module.exports = (bot, dt, anyErr) => {
                             extraParams = '540p_WEBDL'
                         }
 
-                        else if (fileName.toLowerCase().includes('540p') && fileName.toLowerCase().includes('.nk.')) {
+                        else if (fileName.toLowerCase().includes('.nk.')) {
                             capQty = '540P HDTV H.265'
-                        }
-
-                        if (Number(SizeInMB) < 150 && !fileName.toLowerCase().includes('480p.hdtv')) {
-                            capQty = '540P HDTV H.265'
+                            muxed = '#Eng Hardsubbed'
                         }
 
                         let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty} | ${muxed}\n▬▬▬▬▬▬▬▬▬▬▬▬\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>`
@@ -77,8 +75,8 @@ module.exports = (bot, dt, anyErr) => {
                             let epMsgId = data[5].substring(5)
                             let chatId = ctx.channelPost.chat.id
                             let idToDelete = ctx.channelPost.message_id
-                            let quality = '540p HDTV'
-                            let subs = 'with english subtitles'
+                            let quality = '540p HDTV H.265'
+                            let subs = '#English Hardsubbed'
                             let totalEps = ''
 
                             let cname = ctx.channelPost.sender_chat.title
@@ -97,8 +95,12 @@ module.exports = (bot, dt, anyErr) => {
                                 quality = '480p WEBDL'
                                 enc = ''
                             }
-                            else if (txt.includes('480p_HDTV')) {
+                            else if (txt.includes('480p_HDTV_MP4')) {
                                 quality = '480p HDTV (kissasian)'
+                                enc = ''
+                            }
+                            else if (txt.includes('480p_HDTV_MKV')) {
+                                quality = '540p HDTV H.265'
                                 enc = ''
                             }
                             else if (txt.includes('720p_WEBDL')) {
@@ -117,9 +119,9 @@ module.exports = (bot, dt, anyErr) => {
                                 ep = ep + '-' + ('0' + (Number(ep) + 1)).slice(-2)
                             }
 
-                            await bot.telegram.sendPoll(chatId, `📺 Ep. ${ep}${totalEps} | ${quality} ${subs})`, [
-                                '👍 Like',
-                                '👎 Dislike'
+                            await bot.telegram.sendPoll(chatId, `📺 Ep. ${ep}${totalEps} | ${quality} \n${subs})`, [
+                                '👍 Good',
+                                '👎 Bad'
                             ], {
                                 reply_markup: {
                                     inline_keyboard: [
