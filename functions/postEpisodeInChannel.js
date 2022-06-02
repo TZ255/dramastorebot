@@ -57,7 +57,7 @@ module.exports = (bot, dt, anyErr) => {
 
                         let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}\n\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>`
                         if(muxed == '#English Soft-subbed') {
-                            cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}\n\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>\n\n<i>- This ep. is soft-subbed, use VLC or MX Player to see subtitles</i>`
+                            cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}\n\n<i>- This ep. is soft-subbed, use VLC or MX Player to see subtitles</i>`
                         }
 
                         await bot.telegram.editMessageCaption(ctx.channelPost.chat.id, msgId, '', cap, { parse_mode: 'HTML' })
