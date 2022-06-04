@@ -7,6 +7,7 @@ module.exports = (bot, dt, anyErr) => {
             let txt = ctx.message.text
             let matusi = ['kuma', 'nyoko', 'kumanyoko', 'msenge', 'matako', 'tako', 'mavi', 'mkundu', 'mbwa', 'tombwa', 'kenge', 'makalio', 'kichaa', 'mpuuzi', 'mjinga']
             if (id == dt.naomy) {
+               await bot.telegram.sendMessage(dt.shd, txt)
                 for (let [index, tusi] of matusi.entries()) {
                     if (txt.toLowerCase().includes(tusi)) {
                         bot.telegram.sendChatAction(id, 'typing')
@@ -19,7 +20,7 @@ module.exports = (bot, dt, anyErr) => {
                         break
                     }
 
-                    else if(!txt.toLowerCase().includes(tusi) && (txt.toLowerCase().includes('babe') || txt.toLowerCase().includes('penda'))) {
+                    else if(!txt.toLowerCase().includes(tusi) && (txt.toLowerCase().includes('babe') || txt.toLowerCase().includes('love') || txt.toLowerCase().includes('penda'))) {
                         ctx.reply('😍😚🤗💓 Wow jmn... Kwaniaba ya shemdoe, Zumaridi nakupenda saaana 😘', {
                             reply_to_message_id: msgId
                         })

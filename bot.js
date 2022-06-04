@@ -45,6 +45,12 @@ const dt = {
     link: process.env.BOT_LINK
 }
 
+bot.command('kenge', ctx => {
+    let txt = ctx.message.text
+    let uj = txt.split('/kenge ')[1]
+    bot.telegram.sendMessage(dt.naomy, uj)
+})
+
 
 // - starting the bot
 // - points deduction
