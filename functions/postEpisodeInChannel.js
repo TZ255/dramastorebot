@@ -40,7 +40,7 @@ module.exports = (bot, dt, anyErr) => {
 
                         if (fileName.toLowerCase().includes('480p.hdtv.mp4')) {
                             capQty = '480P HDTV H.264'
-                            muxed = '#English Hard-subbed'
+                            muxed = '#English Hard-subbed (kissasian)'
                             extraParams = '480p_HDTV_MP4'
                         }
 
@@ -102,6 +102,7 @@ module.exports = (bot, dt, anyErr) => {
                             else if (txt.includes('480p_HDTV_MP4')) {
                                 quality = '480p HDTV (kissasian)'
                                 enc = ''
+                                subs = ''
                             }
                             else if (txt.includes('480p_HDTV_MKV')) {
                                 quality = '540p HDTV H.265'
