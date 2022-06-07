@@ -128,7 +128,7 @@ module.exports = (bot, dt, anyErr) => {
                                 ep = ep + '-' + ('0' + (Number(ep) + 1)).slice(-2)
                             }
 
-                            await bot.telegram.sendPoll(chatId, `📺 Ep. ${ep}${totalEps} | ${quality} \n${subs})`, [
+                            await bot.telegram.sendPoll(chatId, `📺 Ep. ${ep}${totalEps} | ${quality} \n${subs}`, [
                                 '👍 Good',
                                 '👎 Bad'
                             ], {
