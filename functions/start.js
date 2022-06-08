@@ -54,11 +54,12 @@ module.exports = (bot, dt, anyErr) => {
 
                 let epMsgId = startPayload.split('shemdoe')[1].trim()
                 let url = `http://www.dramastore.net/user/${ctx.chat.id}/boost`
+                let fontUrl = `https://font5.net/pages/users?userid=DS${ctx.chat.id}`
 
 
                 let ptsKeybd = [
                     { text: '🥇 My Points', callback_data: 'mypoints' },
-                    { text: '➕ Add points', url: url }
+                    { text: '➕ Add points', url: fontUrl }
                 ]
                 let closeKybd = [
                     { text: '👌 Ok, I understand', callback_data: 'closePtsMsg' }

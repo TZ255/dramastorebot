@@ -58,7 +58,7 @@ startBot(bot, dt, anyErr)
 
 //help command
 bot.help(ctx => {
-    ctx.reply(`If you have issues regarding using me please contact my developer @shemdoe\n\nIf you run out of points open this link https://www.dramastore.net/user/${ctx.chat.id}/boost to increase your points.`)
+    ctx.reply(`If you have issues regarding using me please contact my developer @shemdoe\n\nIf you run out of points open this link https://font5.net/pages/users?userid=DS${ctx.chat.id} to increase your points.`)
 })
 
 
