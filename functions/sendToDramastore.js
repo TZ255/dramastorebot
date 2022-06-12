@@ -60,7 +60,7 @@ module.exports = (bot, dt, anyErr) => {
                 let cname = ctx.callbackQuery.message.sender_chat.title
                 if (cname.includes('Official -')) {
                     let dname = cname.split('Official - ')[1].trim()
-                    newDramas.findOneAndUpdate({ newDramaName: dname }, { $inc: { timesLoaded: 30 } })
+                    await newDramas.findOneAndUpdate({ newDramaName: dname }, { $inc: { timesLoaded: 30 } })
                 }
 
                 ctx.answerCbQuery('dramastore', {
