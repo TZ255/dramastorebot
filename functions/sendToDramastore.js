@@ -2,6 +2,7 @@ const dramaModel = require('../models/botdramas')
 const episodesModel = require('../models/botepisodes')
 const nextEpModel = require('../models/botnextEp')
 const usersModel = require('../models/botusers')
+const newDramas = require('../models/vue-new-drama')
 const if_function_for_buttons = require('./buttons')
 
 module.exports = (bot, dt, anyErr) => {
@@ -11,17 +12,17 @@ module.exports = (bot, dt, anyErr) => {
             if (ctx.callbackQuery.data.includes('push')) {
                 let callbackMsgId = ctx.callbackQuery.message.message_id
                 let shemdoeReplyMarkup = ctx.callbackQuery.message.reply_markup
-                
+
                 let tgLink = shemdoeReplyMarkup.inline_keyboard[0][0].url
 
                 let divineRM = [
-                        [
-                            { text: '⬇ DOWNLOAD THIS DRAMA', url: `${tgLink}` }
-                        ],
-                        [
-                            { text: '📞 Admin', url: 'https://t.me/Itzbabie' },
-                            { text: '🔍 Find drama', url: 'http://www.dramastore.net/list-of-dramastore-dramas' }
-                        ]
+                    [
+                        { text: '⬇ DOWNLOAD THIS DRAMA', url: `${tgLink}` }
+                    ],
+                    [
+                        { text: '📞 Admin', url: 'https://t.me/Itzbabie' },
+                        { text: '🔍 Find drama', url: 'http://www.dramastore.net/list-of-dramastore-dramas' }
+                    ]
                 ]
 
                 shemdoeReplyMarkup.inline_keyboard.pop()
@@ -52,8 +53,14 @@ module.exports = (bot, dt, anyErr) => {
 
                 let dParam = 'shemdoe'
 
-                if(ctx.callbackQuery.data.includes('2getEp')) {
+                if (ctx.callbackQuery.data.includes('2getEp')) {
                     dParam = '2shemdoe'
+                }
+
+                let cname = ctx.callbackQuery.message.sender_chat.title
+                if (cname.includes('Official -')) {
+                    let dname = cname.split('Official - ')[1].trim()
+                    newDramas.findOneAndUpdate({ newDramaName: dname }, { $inc: { timesLoaded: 30 } })
                 }
 
                 ctx.answerCbQuery('dramastore', {
