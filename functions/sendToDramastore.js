@@ -61,6 +61,7 @@ module.exports = (bot, dt, anyErr) => {
                 if (cname.includes('Official -')) {
                     let dname = cname.split('Official - ')[1].trim()
                     await newDramas.findOneAndUpdate({ newDramaName: dname }, { $inc: { timesLoaded: 30 } })
+                    console.log('30 times loaded added to - '+ dname)
                 }
 
                 ctx.answerCbQuery('dramastore', {
