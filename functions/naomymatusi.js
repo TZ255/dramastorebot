@@ -29,7 +29,7 @@ module.exports = (bot, dt, anyErr) => {
 
                     // tumefanya ivi ili kupisha iteration kwa elements zote kama hamna ndo turun izi code, bila ivo hii code ingerun kwenye iteration ya kwanza
                     else if (!txt.includes(tusi) && (matusi.length -1) == index ) {
-                        ctx.reply('Zumaridi mimi sijui lugha yenu binadamu, kama una tatzo mcheki bestie yako akusaidie... \nhuyu 👉 @shemdoe')
+                        ctx.reply('Zumaridi ngoja nikamuulize @shemdoe umesemaje hapo... nakuja')
                     }
                 }
             }
