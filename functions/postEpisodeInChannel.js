@@ -91,7 +91,8 @@ module.exports = (bot, dt, anyErr) => {
                                     totalEps = `/${drama.noOfEpisodes}`
 
                                     if(Number(ep) == Number(drama.noOfEpisodes)) {
-                                        drama.updateOne({status: 'Completed'})
+                                        await drama.updateOne({status: 'Completed'})
+                                        console.log(`${drama.newDramaName} is Completed`)
                                     }
                                 }
                             }
