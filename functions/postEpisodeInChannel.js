@@ -89,6 +89,10 @@ module.exports = (bot, dt, anyErr) => {
                                 let drama = await vueNewDramaModel.findOne({ newDramaName: dname})
                                 if(drama) {
                                     totalEps = `/${drama.noOfEpisodes}`
+
+                                    if(Number(ep) == Number(drama.noOfEpisodes)) {
+                                        drama.updateOne({status: 'Completed'})
+                                    }
                                 }
                             }
 
