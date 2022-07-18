@@ -1,4 +1,5 @@
 const vueNewDramaModel = require('../models/vue-new-drama')
+const postModel = require('../models/postmodel')
 
 module.exports = (bot, dt, anyErr) => {
     bot.use(async (ctx, next) => {
@@ -133,6 +134,11 @@ module.exports = (bot, dt, anyErr) => {
                                 ep = ep + '-' + ('0' + (Number(ep) + 1)).slice(-2)
                             }
 
+                            let idadi = await postModel.countDocuments()
+                            let rn = Math.floor(Math.random() * idadi)
+
+                            let post = await postModel.findOne().skip(rn)
+
                             await bot.telegram.sendPoll(chatId, `📺 Ep. ${ep}${totalEps} | ${quality} \n${subs}`, [
                                 '👍 Good',
                                 '👎 Bad'
@@ -143,7 +149,7 @@ module.exports = (bot, dt, anyErr) => {
                                             { text: `⬇ DOWNLOAD NOW (${size})`, callback_data: `2getEp${epMsgId}` }
                                         ],
                                         [
-                                            { text: '⬇ OPTION 2', url: `font5.net/pages/telegram?msgid=777shemdoe${epMsgId}777shemdoe${sizeWeb}777shemdoe${ep}`},
+                                            { text: '⬇ OPTION 2', url: `font5.net/blog/post.html?id=${post._id}#getting-episode-dramaid=${epMsgId}&size=${sizeWeb}&epno=${ep}`},
                                             { text: '💡 Help', callback_data: 'newHbtn' }
                                         ]
                                     ]

@@ -53,8 +53,8 @@ module.exports = (bot, dt, anyErr) => {
                 }
 
                 let epMsgId = startPayload.split('shemdoe')[1].trim()
+                let fontUrl = `https://font5.net/blog/post.html?id=62cd8fbe9de0786aafdb98b7#adding-points-dramastore-userid=DS${ctx.chat.id}`
                 let url = `http://www.dramastore.net/user/${ctx.chat.id}/boost`
-                let fontUrl = `https://font5.net/pages/users?userid=DS${ctx.chat.id}`
 
 
                 let ptsKeybd = [
