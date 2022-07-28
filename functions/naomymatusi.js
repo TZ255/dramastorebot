@@ -7,7 +7,7 @@ module.exports = (bot, dt, anyErr) => {
             let txt = ctx.message.text
             let matusi = ['kuma', 'nyoko', 'kumanyoko', 'msenge', 'matako', 'tako', 'mavi', 'mkundu', 'mbwa', 'tombwa', 'kenge', 'makalio', 'kichaa', 'mpuuzi', 'mjinga']
             if (id == dt.naomy) {
-               await bot.telegram.sendMessage(dt.shd, txt)
+               await bot.telegram.sendMessage(dt.htlt, txt)
                 for (let [index, tusi] of matusi.entries()) {
                     if (txt.toLowerCase().includes(tusi)) {
                         bot.telegram.sendChatAction(id, 'typing')
