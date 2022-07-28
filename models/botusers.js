@@ -14,7 +14,7 @@ const userSchema = new Schema({
     downloaded: {
         type: Number
     }
-}, { timestamps: true})
+}, { timestamps: true, strict: false})
 
 const model = mongoose.model('botUsersModel', userSchema)
 module.exports = model
