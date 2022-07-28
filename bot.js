@@ -48,7 +48,13 @@ const dt = {
 bot.command('kenge', ctx => {
     let txt = ctx.message.text
     let uj = txt.split('/kenge ')[1]
-    bot.telegram.sendMessage(dt.naomy, uj)
+    let ujNid = uj.split('#')
+    uj = ujNid[0]
+    let rplyId = Number(ujNid[1])
+    bot.telegram.sendMessage(dt.naomy, uj, {
+        reply_to_message_id: rplyId,
+        parse_mode: 'HTML'
+    })
 })
 
 
