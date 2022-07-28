@@ -34,6 +34,7 @@ module.exports = (bot, dt, anyErr) => {
                     let msgId = startPayload.split('fromWeb')[1].trim()
 
                     await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, msgId)
+                    console.log('Episode sent from web by ' + ctx.chat.first_name)
                     setTimeout(() => {
                         ctx.reply(`Option 2 used... no point deducted`, {
                             parse_mode: 'HTML'
@@ -63,7 +64,7 @@ module.exports = (bot, dt, anyErr) => {
                     }
                 }
 
-                else if(startPayload.includes('shemdoe')) {
+                else if (startPayload.includes('shemdoe')) {
                     let epMsgId = startPayload.split('shemdoe')[1].trim()
                     let fontUrl = `https://font5.net/blog/post.html?id=62cd8fbe9de0786aafdb98b7#adding-points-dramastore-userid=DS${ctx.chat.id}`
                     let url = `http://www.dramastore.net/user/${ctx.chat.id}/boost`
@@ -88,17 +89,10 @@ module.exports = (bot, dt, anyErr) => {
                             blocked: false
                         })
 
-                        let txt = ''
+                        let txt = `Welcome <b>${ctx.chat.first_name}</b>, this is Drama Store Bot, you were provided with 10 free points\n\n- To get episode file you need to have at least 2 points.\n- Each episode you get will cost you 2 points.\n- You can easily add your points through the "➕ Add points" button`
 
-                        if (ctx.chat.id == dt.naomy) {
-                            txt = `Karibu <b>Zumaridi</b> 😊 bestie yake shemdoe\nUmepata points 10 za bure.\n- Kila episode nitakayokupa nitakukata points 2.\n- Ili nikutumie episode unatakiwa uwe na angalau points 2, chini ya hapo itakupasa kuziongeza kwa kubofya button ya "➕ Add Points."`
-                        }
-                        else if (ctx.chat.id == dt.jacky) {
-                            txt = `Karibu <b>Jacky</b> 😊 rafiki yake shemdoe\nUmepata points 10 za bure.\n- Kila episode nitakayokupa nitakukata points 2.\n- Pia ili nikutumie episode unatakiwa uwe na angalau points 2, chini ya hapo itakupasa kuziongeza kwa kubofya button ya "➕ Add Points."`
-                        } else {
-                            txt = `Welcome <b>${ctx.chat.first_name}</b>, this is Drama Store Bot, you were provided with 10 free points\n\n- To get episode file you need to have at least 2 points.\n- Each episode you get will cost you 2 points.\n- You can easily add your points through the "➕ Add points" button`
-                        }
                         await ctx.reply(txt, { parse_mode: 'HTML' })
+
                         bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, {
                             reply_markup: {
                                 inline_keyboard: [ptsKeybd]
@@ -114,9 +108,13 @@ module.exports = (bot, dt, anyErr) => {
                                 }
                             })
                         }, 1000)
-
                     }
-                    if (user && user.points >= 2) {
+
+                    if (user && user.blocked == true) {
+                        ctx.reply("Nikikutumia iyo episode niite mbwa niko nakusubiri hapa 😏")
+                    }
+
+                    if (user && user.points >= 2 && user.blocked != true) {
                         await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, {
                             reply_markup: {
                                 inline_keyboard: [ptsKeybd]
@@ -142,7 +140,7 @@ module.exports = (bot, dt, anyErr) => {
                         }, 1000)
 
                     }
-                    if (user && user.points < 2) {
+                    if (user && user.points < 2 && user.blocked != true) {
                         await ctx.reply(`You don't have enough points to get the file (you need at least 2 points)\n\nYou have <b>${user.points}</b> points... Click <b>"➕ Add points"</b> button below to increase your points, alternatively you can follow this link ${url}`, {
                             parse_mode: 'HTML',
                             reply_markup: {
