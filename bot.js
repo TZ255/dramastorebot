@@ -57,6 +57,12 @@ bot.command('kenge', ctx => {
     })
 })
 
+bot.command('all', ctx=> {
+    usersModel.updateMany({}, {$set: {blocked: false}})
+    .then(()=> console.log('Done'))
+    .catch((err)=> console.log(err.message))
+})
+
 
 // - starting the bot
 // - points deduction

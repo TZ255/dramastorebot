@@ -48,8 +48,19 @@ module.exports = (bot, dt, anyErr) => {
                             }, 5000)
                         })
                     }, 1000)
-                    await usersModel.findOneAndUpdate({ userId: ctx.chat.id}, {$inc: {downloaded: 1}})
-                    return console.log(`Episode sent to ${name} by OPTION 2`)
+                    let userfromWeb = await usersModel.findOneAndUpdate({ userId: ctx.chat.id }, { $inc: { downloaded: 1 } })
+
+                    //if user from web is not on database
+                    if (!userfromWeb) {
+                        await usersModel.create({
+                            userId: ctx.chat.id,
+                            points: 10,
+                            fname: ctx.chat.first_name,
+                            downloaded: 1,
+                            blocked: false
+                        })
+                        console.log('From web not on db but added')
+                    }
                 }
 
                 let epMsgId = startPayload.split('shemdoe')[1].trim()
@@ -72,7 +83,8 @@ module.exports = (bot, dt, anyErr) => {
                         userId: ctx.chat.id,
                         points: 10,
                         fname: ctx.chat.first_name,
-                        downloaded: 1
+                        downloaded: 1,
+                        blocked: false
                     })
 
                     let txt = ''
