@@ -41,11 +41,12 @@ const dt = {
     naomy: 1006615854,
     jacky: 1937862156,
     loading: 1076477335,
+    airt: 1426255234,
     divineCh: process.env.divineCh,
     link: process.env.BOT_LINK
 }
 
-bot.command('kenge', ctx => {
+bot.command('kenge', async ctx => {
     let txt = ctx.message.text
     let uj = txt.split('/kenge ')[1]
     let ujNid = uj.split('#')
@@ -55,6 +56,28 @@ bot.command('kenge', ctx => {
         reply_to_message_id: rplyId,
         parse_mode: 'HTML'
     })
+})
+
+bot.command('block', async ctx=> {
+    let txt = ctx.message.text
+    let id = Number(txt.split('/block ')[1])
+
+    await usersModel.updateOne({userId: id}, {blocked: true})
+    ctx.reply(`The user with id ${id} is blocked successfully`)
+})
+
+bot.command('unblock', async ctx=> {
+    let txt = ctx.message.text
+    let id = Number(txt.split('/unblock ')[1].trim())
+
+    await usersModel.updateOne({userId: id}, {blocked: false})
+    ctx.reply(`The user with id ${id} is unblocked successfully`)
+    if(id == dt.naomy || id == dt.airt) {
+        bot.telegram.sendMessage(id, "Unabahati @shemdoe kakuombea msamaha 😏... Unaweza kunitumia sasa.")
+    }
+    else {
+        bot.telegram.sendMessage(id, `Good news! You're unblocked from using me, you can now request episodes`)
+    }
 })
 
 // bot.command('all', ctx=> {
