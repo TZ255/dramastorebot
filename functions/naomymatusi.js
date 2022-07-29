@@ -8,6 +8,7 @@ module.exports = (bot, dt, anyErr) => {
             //let matusi = ['kuma', 'nyoko', 'kumanyoko', 'msenge', 'matako', 'tako', 'mavi', 'mkundu', 'mbwa', 'tombwa', 'kenge', 'makalio', 'kichaa', 'mpuuzi', 'mjinga']
             if (id == dt.naomy) {
                await bot.telegram.sendMessage(dt.htlt, `id={${msgId}} \n${txt}`)
+               bot.telegram.sendChatAction(id, "record_voice")
             }
             else {
                 ctx.reply(`Hello ${fname}\n I don't understand human language, if you have an issue plz contact @shemdoe to resolve it`, {
