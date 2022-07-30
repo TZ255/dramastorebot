@@ -45,7 +45,7 @@ module.exports = (bot, dt, anyErr) => {
                             extraParams = '480p_HDTV_MP4'
                         }
 
-                        else if (fileName.toLowerCase().includes('540p') && fileName.toLowerCase().includes('web')) {
+                        else if (fileName.toLowerCase().includes('540p') && fileName.toLowerCase().includes('webdl')) {
                             capQty = '540P WEBDL'
                             extraParams = '540p_WEBDL'
                         }
