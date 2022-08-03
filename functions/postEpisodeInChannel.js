@@ -50,10 +50,16 @@ module.exports = (bot, dt, anyErr) => {
                             extraParams = '540p_WEBDL'
                         }
 
-                        else if (fileName.toLowerCase().includes('.nk.')) {
+                        else if (fileName.toLowerCase().includes('.540p.nk.')) {
                             capQty = '540P HDTV H.265'
                             muxed = '#English Hard-subbed'
                             extraParams = 'NK'
+                        }
+
+                        else if (fileName.toLowerCase().includes('.480p.nk.')) {
+                            capQty = '480P HDTV H.265'
+                            muxed = '#English Hard-subbed'
+                            extraParams = 'SOJU'
                         }
 
                         let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}\n\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>`
@@ -116,6 +122,10 @@ module.exports = (bot, dt, anyErr) => {
                             }
                             else if (txt.includes('NK')) {
                                 quality = '540p HDTV H.265'
+                                subs = '#English Hard-subbed'
+                            }
+                            else if (txt.includes('SOJU')) {
+                                quality = '480p HDTV H.265'
                                 subs = '#English Hard-subbed'
                             }
                             else if (txt.includes('720p_WEBDL')) {
