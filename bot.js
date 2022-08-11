@@ -49,30 +49,35 @@ const dt = {
 bot.command('kenge', async ctx => {
     let txt = ctx.message.text
     let uj = txt.split('/kenge ')[1]
-    let ujNid = uj.split('#')
-    uj = ujNid[0]
-    let rplyId = Number(ujNid[1])
-    bot.telegram.sendMessage(dt.naomy, uj, {
-        reply_to_message_id: rplyId,
-        parse_mode: 'HTML'
-    })
+    if (txt.includes('#')) {
+        let ujNid = uj.split('#')
+        uj = ujNid[0]
+        let rplyId = Number(ujNid[1])
+        bot.telegram.sendMessage(dt.naomy, uj, {
+            reply_to_message_id: rplyId,
+            parse_mode: 'HTML'
+        })
+    }
+    else {
+        bot.telegram.sendMessage(dt.naomy, uj)
+    }
 })
 
-bot.command('block', async ctx=> {
+bot.command('block', async ctx => {
     let txt = ctx.message.text
     let id = Number(txt.split('/block ')[1])
 
-    await usersModel.updateOne({userId: id}, {blocked: true})
+    await usersModel.updateOne({ userId: id }, { blocked: true })
     ctx.reply(`The user with id ${id} is blocked successfully`)
 })
 
-bot.command('unblock', async ctx=> {
+bot.command('unblock', async ctx => {
     let txt = ctx.message.text
     let id = Number(txt.split('/unblock ')[1].trim())
 
-    await usersModel.updateOne({userId: id}, {blocked: false})
+    await usersModel.updateOne({ userId: id }, { blocked: false })
     ctx.reply(`The user with id ${id} is unblocked successfully`)
-    if(id == dt.naomy || id == dt.airt) {
+    if (id == dt.naomy || id == dt.airt) {
         bot.telegram.sendMessage(id, "Unabahati @shemdoe kakuombea msamaha 😏... Unaweza kunitumia sasa.")
     }
     else {
