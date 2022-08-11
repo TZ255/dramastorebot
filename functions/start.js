@@ -141,7 +141,7 @@ module.exports = (bot, dt, anyErr) => {
 
                     }
                     if (user && user.points < 2 && user.blocked != true) {
-                        await ctx.reply(`You don't have enough points to get the file (you need at least 2 points)\n\nYou have <b>${user.points}</b> points... Click <b>"➕ Add points"</b> button below to increase your points, alternatively you can follow this link ${url}`, {
+                        await ctx.reply(`You don't have enough points to get the file (you need at least 2 points)\n\nYou have <b>${user.points}</b> points... Click <b>"➕ Add points"</b> button below to boost your points.`, {
                             parse_mode: 'HTML',
                             reply_markup: {
                                 inline_keyboard: [ptsKeybd]
