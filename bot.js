@@ -91,31 +91,52 @@ bot.command('unblock', async ctx => {
 //     .catch((err)=> console.log(err.message))
 // })
 
-bot.command('nigeria', async ctx => {
-    let users = await usersModel.find()
+// bot.command('nigeria', async ctx => {
+//     let users = await usersModel.find()
 
-    try {
-        users.forEach((user, index) => {
-            setTimeout(() => {
-                bot.telegram.sendMessage(user.userId, `Hello <b>${user.fname}</b>, this is dramastore bot. \n\nAre you from Nigeria?, If yes I have an offer for you... Open the link below, complete the offer and you will be rewarded with 50 Points 😍 for downloading dramas.`, {
-                    parse_mode: 'HTML',
-                    reply_markup: {
-                        inline_keyboard: [
-                            [
-                                {
-                                    text: 'Complete the offer now',
-                                    url: `www.dramastore.net/reward/50/${user.userId}`
-                                }
-                            ]
-                        ]
-                    }
-                })
-                console.log('Sent')
-            }, 50 * index)
+//     try {
+//         users.forEach((user, index) => {
+//             setTimeout(() => {
+//                 bot.telegram.sendMessage(user.userId, `Hello <b>${user.fname}</b>, this is dramastore bot. \n\nAre you from Nigeria?, If yes I have an offer for you... Open the link below, complete the offer and you will be rewarded with 50 Points 😍 for downloading dramas.`, {
+//                     parse_mode: 'HTML',
+//                     reply_markup: {
+//                         inline_keyboard: [
+//                             [
+//                                 {
+//                                     text: 'Complete the offer now',
+//                                     url: `www.dramastore.net/reward/50/${user.userId}`
+//                                 }
+//                             ]
+//                         ]
+//                     }
+//                 })
+//                 console.log('Sent')
+//             }, 50 * index)
+//         })
+//     } catch (err) {
+//         console.log('Failed')
+//     }
+// })
+
+bot.command('/addpts', async ctx => {
+    let txt = ctx.message.text
+    if (txt.includes('-')) {
+        let arr = txt.split('-')
+        let pts = Number(arr[1])
+        let id = Number(arr[2])
+
+        await usersModel.findOneAndUpdate({userId: id}, {$inc: {points: pts}})
+        await bot.telegram.sendMessage(id, `Shemdoe kakuongezea ${pts} points, Enjoy 😉`, {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        { text: 'My Points', callback_data: 'mypoints'}
+                    ]
+                ]
+            }
         })
-    } catch (err) {
-        console.log('Failed')
     }
+
 })
 
 
