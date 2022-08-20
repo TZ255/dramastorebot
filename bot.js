@@ -125,8 +125,14 @@ bot.command('/addpts', async ctx => {
         let pts = Number(arr[1])
         let id = Number(arr[2])
 
+        let msg = `Shemdoe kakuongezea ${pts} points, Enjoy 😉`
+
+        if(txt.includes('eng')) {
+            msg = `Shemdoe just rewarded you with ${pts}pts, Enjoy 😉`
+        }
+
         await usersModel.findOneAndUpdate({userId: id}, {$inc: {points: pts}})
-        await bot.telegram.sendMessage(id, `Shemdoe kakuongezea ${pts} points, Enjoy 😉`, {
+        await bot.telegram.sendMessage(id, msg, {
             reply_markup: {
                 inline_keyboard: [
                     [
@@ -135,6 +141,7 @@ bot.command('/addpts', async ctx => {
                 ]
             }
         })
+        await ctx.reply(`You add ${pts} points to user with ID ${id}`)
     }
 
 })
