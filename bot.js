@@ -6,7 +6,11 @@ const episodesModel = require('./models/botepisodes')
 const nextEpModel = require('./models/botnextEp')
 const usersModel = require('./models/botusers')
 const dramasModel = require('./models/vue-new-drama')
+const homeModel = require('./models/vue-home-db')
 const bot = new Telegraf(process.env.BOT_TOKEN)
+
+let rp = require('request-promise')
+let cheerio = require('cheerio')
 
 //TELEGRAPH
 const telegraph = require('telegraph-node')
@@ -164,7 +168,7 @@ sendToDramastore(bot, dt, anyErr)
 
 //posting episodes
 // sendPoll
-postEpisodesInChannel(bot, dt, anyErr);
+postEpisodesInChannel(bot, dt, anyErr, rp, cheerio, ph, dramasModel, homeModel);
 
 naomymatusi(bot, dt, anyErr)
 

@@ -1,7 +1,7 @@
 const vueNewDramaModel = require('../models/vue-new-drama')
 const postModel = require('../models/postmodel')
 
-module.exports = (bot, dt, anyErr) => {
+module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel) => {
     bot.use(async (ctx, next) => {
         try {
             // check if it is used in channel
@@ -63,7 +63,7 @@ module.exports = (bot, dt, anyErr) => {
                         }
 
                         let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}\n\n⭐️ More Telegram K-Drama WWW.DRAMASTORE.NET</b>`
-                        if(muxed == '#English Soft-subbed') {
+                        if (muxed == '#English Soft-subbed') {
                             cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}</b>\n\n<i>- This ep. is soft-subbed, use VLC or MX Player to see subtitles</i>`
                         }
 
@@ -93,12 +93,12 @@ module.exports = (bot, dt, anyErr) => {
                             let cname = ctx.channelPost.sender_chat.title
                             if (cname.includes('Official -')) {
                                 let dname = cname.split('Official - ')[1].trim()
-                                let drama = await vueNewDramaModel.findOne({ newDramaName: dname})
-                                if(drama) {
+                                let drama = await vueNewDramaModel.findOne({ newDramaName: dname })
+                                if (drama) {
                                     totalEps = `/${drama.noOfEpisodes}`
 
-                                    if(Number(ep) == Number(drama.noOfEpisodes)) {
-                                        await drama.updateOne({status: 'Completed'})
+                                    if (Number(ep) == Number(drama.noOfEpisodes)) {
+                                        await drama.updateOne({ status: 'Completed' })
                                         console.log(`${drama.newDramaName} is Completed`)
                                     }
                                 }
@@ -159,13 +159,139 @@ module.exports = (bot, dt, anyErr) => {
                                             { text: `⬇ DOWNLOAD NOW (${size})`, callback_data: `2getEp${epMsgId}` }
                                         ],
                                         [
-                                            { text: '⬇ OPTION 2', url: `font5.net/blog/post.html?id=${post._id}#getting-episode-dramaid=${epMsgId}&size=${sizeWeb}&epno=${ep}`},
+                                            { text: '⬇ OPTION 2', url: `font5.net/blog/post.html?id=${post._id}#getting-episode-dramaid=${epMsgId}&size=${sizeWeb}&epno=${ep}` },
                                             { text: '💡 Help', callback_data: 'newHbtn' }
                                         ]
                                     ]
                                 }
                             })
                             bot.telegram.deleteMessage(chatId, idToDelete)
+                        }
+
+                        else if (txt.includes('post_drama')) {
+                            let chid = ctx.channelPost.chat.id
+                            let info = await bot.telegram.getChat(chid)
+                            let arrs = txt.split(' ')
+
+                            let invite_link = info.invite_link
+                            let url = arrs[1].trim()
+                            let dramaid = arrs[2].trim()
+
+                            const html = await rp(url)
+                            const $ = cheerio.load(html)
+                            let syn = $('.show-synopsis').text()
+                            if (syn.includes('(Source: ')) {
+                                let arr = syn.split('(Source: ')
+                                syn = arr[0].trim()
+                            }
+                            let genres = $('.show-genres').text().split('Genres: ')[1].trim()
+                            let lowq_img = $('.row .cover .block img').attr('data-cfsrc')
+                            let dramaName = $('.box-header .film-title').text().trim()
+
+                            let no_of_episodes = $('.box-body ul li:nth-child(3)').text().split('Popularity')[0].split('Episodes: ')[1].trim()
+                            let aired = $('.box-body ul li:nth-child(4)').text().split('Watchers')[0].split('Aired: ')[1].trim()
+
+                            let page = await ph.createPage(process.env.TOKEN, dramaName, [
+                                { tag: 'img', attrs: { src: lowq_img } },
+                                { tag: 'h3', children: ['Details'] },
+                                {
+                                    tag: 'ul', children: [
+                                        {
+                                            tag: 'li', children: [
+                                                { tag: 'b', children: ['Drama: '] },
+                                                { tag: 'i', children: [dramaName] }
+                                            ]
+                                        },
+                                        {
+                                            tag: 'li', children: [
+                                                { tag: 'b', children: ['Episodes: '] },
+                                                { tag: 'i', children: [no_of_episodes] }
+                                            ]
+                                        },
+                                        {
+                                            tag: 'li', children: [
+                                                { tag: 'b', children: ['Subtitle: '] },
+                                                { tag: 'i', children: ['English'] }
+                                            ]
+                                        },
+                                        {
+                                            tag: 'li', children: [
+                                                { tag: 'b', children: ['Aired: '] },
+                                                { tag: 'i', children: [aired] }
+                                            ]
+                                        },
+                                        {
+                                            tag: 'li', children: [
+                                                { tag: 'b', children: ['Genre: '] },
+                                                { tag: 'i', children: [genres] }
+                                            ]
+                                        },
+                                        {
+                                            tag: 'li', children: [
+                                                { tag: 'b', children: ['Country: '] },
+                                                { tag: 'i', children: ['South Korea'] }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                { tag: 'h3', children: ['Synopsis'] },
+                                {
+                                    tag: 'em', children: [
+                                        {
+                                            tag: 'i', children: [syn]
+                                        }
+                                    ]
+                                }
+                            ],
+                                {
+                                    author_name: '@shemdoe',
+                                    author_url: 'https://t.me/shemdoe'
+                                })
+                            let telegraph_link = page.url
+                            let link_id = invite_link.split('/+')[1]
+
+
+                            await new_drama.create({
+                                newDramaName: dramaName,
+                                noOfEpisodes: no_of_episodes,
+                                genre: genres,
+                                aired,
+                                subtitle: 'English',
+                                id: dramaid,
+                                coverUrl: lowq_img,
+                                synopsis: syn.replace(/\n/g, '<br>'),
+                                status: 'Ongoing',
+                                tgChannel: `tg://join?invite=${link_id}`,
+                                telegraph: telegraph_link,
+                                timesLoaded: 1
+                            })
+
+                            let yearScrap = dramaName.split('(2')[1].split(')')[0]
+                            let strYr = `2${yearScrap}`
+                            await homeModel.create({
+                                idToHome: dramaid,
+                                year: Number(strYr),
+                                dramaName,
+                                imageUrl: lowq_img,
+                                episodesUrl: dramaid,
+                            })
+                            await bot.telegram.sendMessage(dt.shd, `<a href="${telegraph_link}">🇰🇷 </a><u><b>${dramaName}</b></u>`, {
+                                parse_mode: 'HTML',
+                                reply_markup: {
+                                    inline_keyboard: [
+                                        [
+                                            {text: '⬇ DOWNLOAD THIS DRAMA', url: invite_link}
+                                        ],
+                                        [
+                                            {text: '📞 Admin', url: 'https://t.me/shemdoe'},
+                                            {text: '🔍 Find drama', url: 'www.dramastore.net/list-of-dramastore-dramas'}
+                                        ],
+                                        [
+                                            {text: 'Push to dramastore', callback_data: 'push'}
+                                        ]
+                                    ]
+                                }
+                            })
                         }
                     }
 
