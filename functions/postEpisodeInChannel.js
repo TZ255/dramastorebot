@@ -185,6 +185,9 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel) => {
                                 syn = arr[0].trim()
                             }
                             let genres = $('.show-genres').text().split('Genres: ')[1].trim()
+                            let pic_href = $('.row .cover .block').attr('href')
+                            let pic_id = pic_href.split('/photos/')[1].trim()
+                            let highq_img = `https://i.mydramalist.com/${pic_id}f.jpg`
                             let lowq_img = $('.row .cover .block img').attr('data-cfsrc')
                             let dramaName = $('.box-header .film-title').text().trim()
 
@@ -258,7 +261,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel) => {
                                 aired,
                                 subtitle: 'English',
                                 id: dramaid,
-                                coverUrl: lowq_img,
+                                coverUrl: highq_img,
                                 synopsis: syn.replace(/\n/g, '<br>'),
                                 status: 'Ongoing',
                                 tgChannel: `tg://join?invite=${link_id}`,
