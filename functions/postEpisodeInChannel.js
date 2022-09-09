@@ -195,7 +195,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel) => {
                             let aired = $('.box-body ul li:nth-child(4)').text().split('Watchers')[0].split('Aired: ')[1].trim()
 
                             let page = await ph.createPage(process.env.TOKEN, dramaName, [
-                                { tag: 'img', attrs: { src: lowq_img } },
+                                { tag: 'img', attrs: { src: highq_img } },
                                 { tag: 'h3', children: ['Details'] },
                                 {
                                     tag: 'ul', children: [
