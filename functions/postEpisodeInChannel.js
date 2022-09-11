@@ -156,7 +156,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel) => {
                                 reply_markup: {
                                     inline_keyboard: [
                                         [
-                                            { text: `⬇ DOWNLOAD NOW (${size})`, url: `https://${dt.link}2getEp${epMsgId}` }
+                                            { text: `⬇ DOWNLOAD NOW (${size})`, url: `https://${dt.link}2shemdoe${epMsgId}` }
                                         ],
                                         [
                                             { text: '⬇ OPTION 2', url: `font5.net/blog/post.html?id=${post._id}#getting-episode-dramaid=${epMsgId}&size=${sizeWeb}&epno=${ep}` },
