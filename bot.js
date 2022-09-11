@@ -51,28 +51,34 @@ const dt = {
 }
 
 bot.command('kenge', async ctx => {
-    let txt = ctx.message.text
-    let uj = txt.split('/kenge ')[1]
-    if (txt.includes('#')) {
-        let ujNid = uj.split('#')
-        uj = ujNid[0]
-        let rplyId = Number(ujNid[1])
-        bot.telegram.sendMessage(dt.naomy, uj, {
-            reply_to_message_id: rplyId,
-            parse_mode: 'HTML'
-        })
+    if (ctx.chat.id == dt.shd || ctx.chat.id == dt.htlt) {
+        let txt = ctx.message.text
+        let uj = txt.split('/kenge ')[1]
+        if (txt.includes('#')) {
+            let ujNid = uj.split('#')
+            uj = ujNid[0]
+            let rplyId = Number(ujNid[1])
+            bot.telegram.sendMessage(dt.naomy, uj, {
+                reply_to_message_id: rplyId,
+                parse_mode: 'HTML'
+            })
+        }
+        else {
+            bot.telegram.sendMessage(dt.naomy, uj)
+        }
     }
-    else {
-        bot.telegram.sendMessage(dt.naomy, uj)
-    }
+
 })
 
 bot.command('block', async ctx => {
-    let txt = ctx.message.text
-    let id = Number(txt.split('/block ')[1])
+    if (ctx.chat.id == dt.shd || ctx.chat.id == dt.htlt) {
+        let txt = ctx.message.text
+        let id = Number(txt.split('/block ')[1])
 
-    await usersModel.updateOne({ userId: id }, { blocked: true })
-    ctx.reply(`The user with id ${id} is blocked successfully`)
+        await usersModel.updateOne({ userId: id }, { blocked: true })
+        ctx.reply(`The user with id ${id} is blocked successfully`)
+    }
+
 })
 
 bot.command('unblock', async ctx => {
@@ -123,31 +129,32 @@ bot.command('unblock', async ctx => {
 // })
 
 bot.command('/addpts', async ctx => {
-    let txt = ctx.message.text
-    if (txt.includes('-')) {
-        let arr = txt.split('-')
-        let pts = Number(arr[1])
-        let id = Number(arr[2])
+    if (ctx.chat.id == dt.shd || ctx.chat.id == dt.htlt) {
+        let txt = ctx.message.text
+        if (txt.includes('-')) {
+            let arr = txt.split('-')
+            let pts = Number(arr[1])
+            let id = Number(arr[2])
 
-        let msg = `Shemdoe kakuongezea ${pts} points, Enjoy 😉`
+            let msg = `Shemdoe kakuongezea ${pts} points, Enjoy 😉`
 
-        if(txt.includes('eng')) {
-            msg = `Shemdoe just rewarded you with ${pts}pts, Enjoy 😉`
-        }
-
-        await usersModel.findOneAndUpdate({userId: id}, {$inc: {points: pts}})
-        await bot.telegram.sendMessage(id, msg, {
-            reply_markup: {
-                inline_keyboard: [
-                    [
-                        { text: 'My Points', callback_data: 'mypoints'}
-                    ]
-                ]
+            if (txt.includes('eng')) {
+                msg = `Shemdoe just rewarded you with ${pts}pts, Enjoy 😉`
             }
-        })
-        await ctx.reply(`You add ${pts} points to user with ID ${id}`)
-    }
 
+            await usersModel.findOneAndUpdate({ userId: id }, { $inc: { points: pts } })
+            await bot.telegram.sendMessage(id, msg, {
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            { text: 'My Points', callback_data: 'mypoints' }
+                        ]
+                    ]
+                }
+            })
+            await ctx.reply(`You add ${pts} points to user with ID ${id}`)
+        }
+    }
 })
 
 

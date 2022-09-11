@@ -21,7 +21,7 @@ module.exports = (bot, dt, anyErr) => {
                     ],
                     [
                         { text: '📞 Admin', url: 'https://t.me/Itzbabie' },
-                        { text: '🔍 Find drama', url: 'http://www.dramastore.net/list-of-dramastore-dramas' }
+                        { text: '🔍 Find drama', url: 'http://dramastore.net/list-of-dramastore-dramas' }
                     ]
                 ]
 
