@@ -171,7 +171,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel) => {
                         else if (txt.includes('post_drama')) {
                             let chid = ctx.channelPost.chat.id
                             let info = await bot.telegram.getChat(chid)
-                            let arrs = txt.split(' ')
+                            let arrs = txt.split('=')
 
                             let invite_link = info.invite_link
                             let url = arrs[1].trim()
@@ -188,7 +188,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel) => {
                             let pic_href = $('.row .cover .block').attr('href')
                             let pic_id = pic_href.split('/photos/')[1].trim()
                             let highq_img = `https://i.mydramalist.com/${pic_id}f.jpg`
-                            let lowq_img = $('.row .cover .block img').attr('data-cfsrc')
+                            let lowq_img = $('.row .cover .block img').attr('src')
                             let dramaName = $('.box-header .film-title').text().trim()
 
                             let no_of_episodes = $('.box-body ul li:nth-child(3)').text().split('Popularity')[0].split('Episodes: ')[1].trim()
