@@ -15,16 +15,6 @@ module.exports = (bot, dt, anyErr) => {
 
                 let tgLink = shemdoeReplyMarkup.inline_keyboard[0][0].url
 
-                let divineRM = [
-                    [
-                        { text: '⬇ DOWNLOAD THIS DRAMA', url: `${tgLink}` }
-                    ],
-                    [
-                        { text: '📞 Admin', url: 'https://t.me/Itzbabie' },
-                        { text: '🔍 Find drama', url: 'http://dramastore.net/list-of-dramastore-dramas' }
-                    ]
-                ]
-
                 shemdoeReplyMarkup.inline_keyboard.pop()
 
                 await bot.telegram.copyMessage(dt.ds, ctx.chat.id, callbackMsgId, {
@@ -32,11 +22,6 @@ module.exports = (bot, dt, anyErr) => {
                 })
                 await bot.telegram.copyMessage(dt.whats, ctx.chat.id, callbackMsgId, {
                     reply_markup: shemdoeReplyMarkup
-                })
-                await bot.telegram.copyMessage(dt.divineCh, ctx.chat.id, callbackMsgId, {
-                    reply_markup: {
-                        inline_keyboard: divineRM
-                    }
                 })
 
                 bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId).catch((err) => {

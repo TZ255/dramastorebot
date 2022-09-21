@@ -283,7 +283,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel) => {
                                 reply_markup: {
                                     inline_keyboard: [
                                         [
-                                            {text: '⬇ DOWNLOAD THIS DRAMA', url: invite_link}
+                                            {text: '⬇ DOWNLOAD ALL EPISODES', url: invite_link}
                                         ],
                                         [
                                             {text: '📞 Admin', url: 'https://t.me/shemdoe'},
