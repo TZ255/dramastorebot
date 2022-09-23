@@ -188,7 +188,12 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel) => {
                             let pic_href = $('.row .cover .block').attr('href')
                             let pic_id = pic_href.split('/photos/')[1].trim()
                             let highq_img = `https://i.mydramalist.com/${pic_id}f.jpg`
-                            let lowq_img = $('.row .cover .block img').attr('src')
+                            let lowq_img = ''
+                            if($('.row .cover .block img').attr('src')) {
+                                lowq_img = $('.row .cover .block img').attr('src')
+                            } else {
+                                lowq_img = $('.row .cover .block img').attr('data-cfsrc')
+                            }
                             let dramaName = $('.box-header .film-title').text().trim()
 
                             let no_of_episodes = $('.box-body ul li:nth-child(3)').text().split('Popularity')[0].split('Episodes: ')[1].trim()
