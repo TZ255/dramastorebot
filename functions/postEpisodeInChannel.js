@@ -24,7 +24,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel) => {
                         if (fileName.includes('dramastore.xyz')) {
                             noEp = fileName.split('[dramastore.xyz] ')[1].substring(0, 3)
                         }
-                        else if (fileName.includes('dramastore.net')) {
+                        else if (fileName.includes('dramastore.net') && !fileName.includes('NK.3.')) {
                             noEp = fileName.split('[dramastore.net] ')[1].substring(0, 3)
                         }
                         else if (fileName.toLowerCase().includes('@dramaost')) {
