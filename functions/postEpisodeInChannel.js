@@ -65,6 +65,12 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel) => {
                             extraParams = 'SOJU'
                         }
 
+                        else if (fileName.toLowerCase().includes('.360p.nk.')) {
+                            capQty = '360P HDTV H.264'
+                            muxed = '#English Hard-subbed'
+                            extraParams = 'KIMOI'
+                        }
+
                         let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}\n\n⭐️ More Telegram K-Dramas <a href="https://t.me/+vfhmLVXO7pIzZThk">@KOREAN_DRAMA_STORE</a></b>`
                         if (muxed == '#English Soft-subbed') {
                             cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}</b>\n\n<i>- This ep. is soft-subbed, use VLC or MX Player to see subtitles</i>`
@@ -129,6 +135,10 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel) => {
                             }
                             else if (txt.includes('SOJU')) {
                                 quality = '480p HDTV H.265'
+                                subs = '#English Hard-subbed'
+                            }
+                            else if (txt.includes('KIMOI')) {
+                                quality = '360p HDTV H.264 (kimoiTV)'
                                 subs = '#English Hard-subbed'
                             }
                             else if (txt.includes('720p_WEBDL')) {
