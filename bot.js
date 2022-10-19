@@ -101,32 +101,36 @@ bot.command('unblock', async ctx => {
 //     .catch((err)=> console.log(err.message))
 // })
 
-// bot.command('nigeria', async ctx => {
-//     let users = await usersModel.find()
+bot.command('/broadcast', async ctx => {
+    let myId = ctx.chat.id
+    let txt = ctx.message.text
+    let msg_id = Number(txt.split('/broadcast-')[1].trim())
+    if (myId == dt.shd || myId == dt.htlt) {
+        try {
+            let all_users = await usersModel.find()
 
-//     try {
-//         users.forEach((user, index) => {
-//             setTimeout(() => {
-//                 bot.telegram.sendMessage(user.userId, `Hello <b>${user.fname}</b>, this is dramastore bot. \n\nAre you from Nigeria?, If yes I have an offer for you... Open the link below, complete the offer and you will be rewarded with 50 Points 😍 for downloading dramas.`, {
-//                     parse_mode: 'HTML',
-//                     reply_markup: {
-//                         inline_keyboard: [
-//                             [
-//                                 {
-//                                     text: 'Complete the offer now',
-//                                     url: `www.dramastore.net/reward/50/${user.userId}`
-//                                 }
-//                             ]
-//                         ]
-//                     }
-//                 })
-//                 console.log('Sent')
-//             }, 50 * index)
-//         })
-//     } catch (err) {
-//         console.log('Failed')
-//     }
-// })
+            all_users.forEach((u, index) => {
+                setTimeout(() => {
+                    if (index == all_users.length - 1) {
+                        ctx.reply('Done sending offers')
+                    }
+                    bot.telegram.copyMessage(u.userId, dt.databaseChannel, msg_id)
+                        .then(() => console.log('Offer sent to ' + u.userId))
+                        .catch((err) => {
+                            if (err.message.includes('blocked')) {
+                                users.findOneAndDelete({ userId: u.userId })
+                                    .then(() => { console.log(u.userId + ' is deleted') })
+                            }
+                        })
+                }, index * 40)
+            })
+        } catch (err) {
+            console.log(err.message)
+        }
+    }
+
+})
+
 
 bot.command('/addpts', async ctx => {
     if (ctx.chat.id == dt.shd || ctx.chat.id == dt.htlt) {
