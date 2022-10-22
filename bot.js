@@ -118,7 +118,7 @@ bot.command('/broadcast', async ctx => {
                         .then(() => console.log('Offer sent to ' + u.userId))
                         .catch((err) => {
                             if (err.message.includes('blocked')) {
-                                users.findOneAndDelete({ userId: u.userId })
+                                usersModel.findOneAndDelete({ userId: u.userId })
                                     .then(() => { console.log(u.userId + ' is deleted') })
                             }
                         })
