@@ -46,9 +46,19 @@ const dt = {
     jacky: 1937862156,
     loading: 1076477335,
     airt: 1426255234,
+    hotel_king: -1001425392198,
+    hotel_del_luna: -1001457093470,
+    dr_stranger: -1001199318533,
+    romance_book: -1001175513824,
+    my_love_from_star: -1001220805172,
+    tale: -1001167737100,
+    fiery: -1001315216267,
+    hwarang: -1001182807060,
     divineCh: process.env.divineCh,
     link: process.env.BOT_LINK
 }
+
+const other_channels = [dt.hotel_del_luna, dt.hotel_king, dt.dr_stranger, dt.romance_book, dt.my_love_from_star, dt.tale, dt.fiery, dt.hwarang]
 
 bot.command('kenge', async ctx => {
     if (ctx.chat.id == dt.shd || ctx.chat.id == dt.htlt) {
@@ -175,11 +185,11 @@ bot.help(ctx => {
 // -post to dramastore callback action
 // -check points balance
 // - Get episode by user
-sendToDramastore(bot, dt, anyErr)
+sendToDramastore(bot, dt, anyErr, other_channels)
 
 //posting episodes
 // sendPoll
-postEpisodesInChannel(bot, dt, anyErr, rp, cheerio, ph, dramasModel, homeModel);
+postEpisodesInChannel(bot, dt, anyErr, rp, cheerio, ph, dramasModel, homeModel, other_channels);
 
 naomymatusi(bot, dt, anyErr)
 

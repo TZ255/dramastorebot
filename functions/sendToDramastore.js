@@ -5,7 +5,7 @@ const usersModel = require('../models/botusers')
 const newDramas = require('../models/vue-new-drama')
 const if_function_for_buttons = require('./buttons')
 
-module.exports = (bot, dt, anyErr) => {
+module.exports = (bot, dt, anyErr, other_channels) => {
     bot.on('callback_query', async ctx => {
         try {
             // check if is callbackquery for updating drama
@@ -22,6 +22,12 @@ module.exports = (bot, dt, anyErr) => {
                 })
                 await bot.telegram.copyMessage(dt.whats, ctx.chat.id, callbackMsgId, {
                     reply_markup: shemdoeReplyMarkup
+                })
+
+                other_channels.forEach(ch=>{
+                    bot.telegram.copyMessage(ch, ctx.chat.id, callbackMsgId, {
+                        reply_markup: shemdoeReplyMarkup
+                    })
                 })
 
                 bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId).catch((err) => {

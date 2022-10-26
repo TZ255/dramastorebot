@@ -1,7 +1,7 @@
 const vueNewDramaModel = require('../models/vue-new-drama')
 const postModel = require('../models/postmodel')
 
-module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel) => {
+module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_channels) => {
     bot.use(async (ctx, next) => {
         try {
             // check if it is used in channel
