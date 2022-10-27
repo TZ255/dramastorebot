@@ -17,6 +17,8 @@ module.exports = (bot, dt, anyErr, other_channels) => {
 
                 shemdoeReplyMarkup.inline_keyboard.pop()
 
+                let sending = await ctx.reply('sending drama to channels....')
+
                 await bot.telegram.copyMessage(dt.ds, ctx.chat.id, callbackMsgId, {
                     reply_markup: shemdoeReplyMarkup
                 })
@@ -24,19 +26,26 @@ module.exports = (bot, dt, anyErr, other_channels) => {
                     reply_markup: shemdoeReplyMarkup
                 })
 
-                other_channels.forEach(ch=>{
+                other_channels.forEach(ch => {
                     bot.telegram.copyMessage(ch, ctx.chat.id, callbackMsgId, {
                         reply_markup: shemdoeReplyMarkup
                     })
                 })
 
-                bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId).catch((err) => {
-                    if (err.message.includes(`delete`)) {
-                        ctx.answerCbQuery(`Can't close this message.... It's too old, delete it instead.`, {
-                            show_alert: true
-                        })
-                    }
-                })
+                setTimeout(() => {
+                    bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId)
+                    .then(()=> {bot.telegram.deleteMessage(ctx.chat.id, sending.message_id)})
+                    .catch((err) => {
+                        if (err.message.includes(`delete`)) {
+                            ctx.answerCbQuery(`Can't close this message.... It's too old, delete it instead.`, {
+                                show_alert: true
+                            })
+                        }
+                    })
+                }, 5000)
+
+
+
             }
 
             else if (ctx.callbackQuery.data.includes('getEp')) {
@@ -52,7 +61,7 @@ module.exports = (bot, dt, anyErr, other_channels) => {
                 if (cname.includes('Official -')) {
                     let dname = cname.split('Official - ')[1].trim()
                     await newDramas.findOneAndUpdate({ newDramaName: dname }, { $inc: { timesLoaded: 30 } })
-                    console.log('30 times loaded added to - '+ dname)
+                    console.log('30 times loaded added to - ' + dname)
                 }
 
                 ctx.answerCbQuery('dramastore', {
