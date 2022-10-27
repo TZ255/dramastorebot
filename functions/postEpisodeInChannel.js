@@ -210,6 +210,9 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             let dramaName = $('.box-header .film-title').text().trim()
 
                             let no_of_episodes = $('.box-body ul li:nth-child(3)').text().split('Popularity')[0].split('Episodes: ')[1].trim()
+                            if (no_of_episodes.length == 1) {
+                                no_of_episodes = '0' + no_of_episodes
+                            }
                             let aired = $('.box-body ul li:nth-child(4)').text().split('Watchers')[0].split('Aired: ')[1].trim()
 
                             let page = await ph.createPage(process.env.TOKEN, dramaName, [
