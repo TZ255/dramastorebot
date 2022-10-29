@@ -170,7 +170,7 @@ sendToDramastore(bot, dt, anyErr, other_channels)
 
 //posting episodes
 // sendPoll
-postEpisodesInChannel(bot, dt, anyErr, rp, cheerio, ph, dramasModel, homeModel, other_channels);
+postEpisodesInChannel(bot, dt, anyErr, rp, cheerio, ph, dramasModel, homeModel, other_channels, nanoid);
 
 naomymatusi(bot, dt, anyErr)
 

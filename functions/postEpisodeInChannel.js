@@ -1,7 +1,7 @@
 const vueNewDramaModel = require('../models/vue-new-drama')
 const postModel = require('../models/postmodel')
 
-module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_channels) => {
+module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_channels, nanoid) => {
     bot.use(async (ctx, next) => {
         try {
             // check if it is used in channel
@@ -289,7 +289,8 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 status: 'Ongoing',
                                 tgChannel: `tg://join?invite=${link_id}`,
                                 telegraph: telegraph_link,
-                                timesLoaded: 1
+                                timesLoaded: 1,
+                                nano: nanoid(5)
                             })
 
                             let yearScrap = dramaName.split('(2')[1].split(')')[0]
