@@ -7,6 +7,7 @@ const nextEpModel = require('./models/botnextEp')
 const usersModel = require('./models/botusers')
 const dramasModel = require('./models/vue-new-drama')
 const homeModel = require('./models/vue-home-db')
+const { nanoid } = require('nanoid')
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
 let rp = require('request-promise')
@@ -141,35 +142,15 @@ bot.command('/broadcast', async ctx => {
 
 })
 
+// bot.command('/update', async ctx=> {
+//     let all = await dramasModel.find()
 
-bot.command('/addpts', async ctx => {
-    if (ctx.chat.id == dt.shd || ctx.chat.id == dt.htlt) {
-        let txt = ctx.message.text
-        if (txt.includes('-')) {
-            let arr = txt.split('-')
-            let pts = Number(arr[1])
-            let id = Number(arr[2])
-
-            let msg = `Shemdoe kakuongezea ${pts} points, Enjoy 😉`
-
-            if (txt.includes('eng')) {
-                msg = `Shemdoe just rewarded you with ${pts}pts, Enjoy 😉`
-            }
-
-            await usersModel.findOneAndUpdate({ userId: id }, { $inc: { points: pts } })
-            await bot.telegram.sendMessage(id, msg, {
-                reply_markup: {
-                    inline_keyboard: [
-                        [
-                            { text: 'My Points', callback_data: 'mypoints' }
-                        ]
-                    ]
-                }
-            })
-            await ctx.reply(`You add ${pts} points to user with ID ${id}`)
-        }
-    }
-})
+//     for (let drama of all) {
+//         let id = nanoid(5)
+//         await drama.updateOne({nano: id})
+//         console.log(drama.newDramaName + ' updated')
+//     }
+// })
 
 
 // - starting the bot

@@ -98,6 +98,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             let quality = '540p HDTV H.264'
                             let subs = '#English Soft-subbed'
                             let totalEps = ''
+                            let nano = ''
 
                             let cname = ctx.channelPost.sender_chat.title
                             if (cname.includes('Official -')) {
@@ -105,6 +106,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 let drama = await vueNewDramaModel.findOne({ newDramaName: dname })
                                 if (drama) {
                                     totalEps = `/${drama.noOfEpisodes}`
+                                    nano = drama.nano
 
                                     if (Number(ep) == Number(drama.noOfEpisodes)) {
                                         await drama.updateOne({ status: 'Completed' })
@@ -169,7 +171,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 reply_markup: {
                                     inline_keyboard: [
                                         [
-                                            { text: `⬇ DOWNLOAD NOW (${size})`, url: `https://${dt.link}2shemdoe${epMsgId}` }
+                                            { text: `⬇ DOWNLOAD NOW (${size})`, url: `https://${dt.link}nano_${nano}AND_2shemdoe${epMsgId}` }
                                         ],
                                         [
                                             { text: '⬇ OPTION 2', url: `font5.net/blog/post.html?id=${post._id}#getting-episode-dramaid=${epMsgId}&size=${sizeWeb}&epno=${ep}` },

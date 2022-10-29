@@ -1,4 +1,4 @@
-const dramaModel = require('../models/botdramas')
+const dramasModel = require('../models/vue-new-drama')
 const episodesModel = require('../models/botepisodes')
 const nextEpModel = require('../models/botnextEp')
 const usersModel = require('../models/botusers')
@@ -52,6 +52,13 @@ module.exports = (bot, dt, anyErr) => {
                 }
 
                 else if (startPayload.includes('shemdoe')) {
+                    if(startPayload.includes('nano_')) {
+                        let nano = startPayload.split('nano_')[1]
+                        nano = nano.split('AND_')[0]
+                        
+                        let drama = await dramasModel.findOneAndUpdate({nano}, {$inc: {timesLoaded: 30}}, {new: true})
+                        console.log(drama.newDramaName + ' updated to '+ drama.timesLoaded)
+                    }
                     let epMsgId = startPayload.split('shemdoe')[1].trim()
                     let fontUrl = `https://font5.net/blog/post.html?id=62cd8fbe9de0786aafdb98b7#adding-points-dramastore-userid=DS${ctx.chat.id}`
 
