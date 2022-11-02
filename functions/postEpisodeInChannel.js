@@ -112,6 +112,10 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                         await drama.updateOne({ status: 'Completed' })
                                         console.log(`${drama.newDramaName} is Completed`)
                                     }
+                                    
+                                    let theep = {no: Number(ep), msg_id: Number(epMsgId), size: Number(data[4].substring(1))}
+
+                                    await drama.updateOne({$push: {episodes: theep}})
                                 }
                             }
 

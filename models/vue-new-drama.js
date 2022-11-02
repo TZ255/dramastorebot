@@ -53,6 +53,9 @@ const NewDrama = new Schema(
       type: Number,
       default: 1,
     },
+    episodes: {
+      type: Array
+    },
   },
   { timestamps: true, strict: false }
 );
