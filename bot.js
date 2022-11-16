@@ -7,6 +7,7 @@ const nextEpModel = require('./models/botnextEp')
 const usersModel = require('./models/botusers')
 const dramasModel = require('./models/vue-new-drama')
 const homeModel = require('./models/vue-home-db')
+const analytics = require('./models/analytics')
 const { nanoid } = require('nanoid')
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
@@ -140,6 +141,11 @@ bot.command('/broadcast', async ctx => {
         }
     }
 
+})
+
+bot.command('stats', async ctx=> {
+    let anas = await analytics.findOne()
+    ctx.reply('Total downloads are '+ anas.times)
 })
 
 // bot.command('/update', async ctx=> {
