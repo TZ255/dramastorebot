@@ -82,6 +82,8 @@ bot.command('kenge', async ctx => {
 
 })
 
+
+
 bot.command('block', async ctx => {
     if (ctx.chat.id == dt.shd || ctx.chat.id == dt.htlt) {
         let txt = ctx.message.text
@@ -146,6 +148,28 @@ bot.command('/broadcast', async ctx => {
 bot.command('stats', async ctx => {
     let anas = await analytics.findOne()
     ctx.reply('Total downloads are ' + anas.times)
+})
+
+bot.command('add', async ctx => {
+    let txt = ctx.message.text
+
+    try {
+        let arr = txt.split('-')
+        let id = Number(arr[1])
+        let pts = Number(arr[2])
+
+        let updt = await usersModel.findOneAndUpdate({ userId : id }, { $inc: { points: pts } }, { new: true })
+        await bot.telegram.sendMessage(id, `Haka kajinga (@shemdoe) kamekupa ${pts} points burebure tu 😏\n\nhaya enjoy.`,{
+            reply_markup: {
+                inline_keyboard: [
+                    [{text: 'Angalia hapa salio lako 😏', callback_data: 'mypoints'}]
+                ]
+            }
+        })
+        await ctx.reply(`Added, she has now ${updt.points}`)
+    } catch (err) {
+        errMessage(err, ctx.chat.id)
+    }
 })
 
 // bot.command('/update', async ctx=> {
