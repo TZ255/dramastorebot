@@ -61,7 +61,7 @@ module.exports = (bot, dt, anyErr) => {
                     }
                     let epMsgId = startPayload.split('shemdoe')[1].trim()
 
-                    ptsUrl = `http://dramastore.net/user/1423874795/boost/`
+                    let ptsUrl = `http://dramastore.net/user/${ctx.chat.id}/boost/`
 
 
                     let ptsKeybd = [

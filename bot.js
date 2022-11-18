@@ -143,9 +143,9 @@ bot.command('/broadcast', async ctx => {
 
 })
 
-bot.command('stats', async ctx=> {
+bot.command('stats', async ctx => {
     let anas = await analytics.findOne()
-    ctx.reply('Total downloads are '+ anas.times)
+    ctx.reply('Total downloads are ' + anas.times)
 })
 
 // bot.command('/update', async ctx=> {
@@ -165,7 +165,17 @@ startBot(bot, dt, anyErr)
 
 //help command
 bot.help(ctx => {
-    ctx.reply(`If you have issues regarding using me please contact my developer @shemdoe`)
+    let ptsUrl = `http://dramastore.net/user/${ctx.chat.id}/boost/`
+    let ptsKeybd = [
+        { text: '🥇 My Points', callback_data: 'mypoints' },
+        { text: '➕ Add points', url: ptsUrl }
+    ]
+    
+    ctx.reply(`If you have issues regarding using me please contact my developer @shemdoe`, {
+        reply_markup: {
+            inline_keyboard: [ptsKeybd]
+        }
+    })
 })
 
 
