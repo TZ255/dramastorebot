@@ -52,27 +52,29 @@ module.exports = (bot, dt, anyErr) => {
                 }
 
                 else if (startPayload.includes('shemdoe')) {
-                    if(startPayload.includes('nano_')) {
+                    if (startPayload.includes('nano_')) {
                         let nano = startPayload.split('nano_')[1]
                         nano = nano.split('AND_')[0]
-                        
-                        let drama = await dramasModel.findOneAndUpdate({nano}, {$inc: {timesLoaded: 30}}, {new: true})
-                        console.log(drama.newDramaName + ' updated to '+ drama.timesLoaded)
+
+                        let drama = await dramasModel.findOneAndUpdate({ nano }, { $inc: { timesLoaded: 30 } }, { new: true })
+                        console.log(drama.newDramaName + ' updated to ' + drama.timesLoaded)
                     }
                     let epMsgId = startPayload.split('shemdoe')[1].trim()
-                    let fontUrl = `https://font5.net/blog/post.html?id=62cd8fbe9de0786aafdb98b7#adding-points-dramastore-userid=DS${ctx.chat.id}`
 
-                    let url = `http://font5.net/blog/post.html?id=62c17505ff0a4608ebd38b1c#getting-episode-dramaid=${epMsgId}&size=NAN&epno=${ctx.chat.id}`
+                    ptsUrl = `http://dramastore.net/user/1423874795/boost/`
 
 
                     let ptsKeybd = [
                         { text: '🥇 My Points', callback_data: 'mypoints' },
-                        { text: '➕ Add points', url: fontUrl }
+                        { text: '➕ Add points', url: ptsUrl }
                     ]
 
-                    let linkKey = [
-                        { text: '▶️ OPEN THE EPISODE', url }
-                    ]
+                    function deleteMsg(bot, ctx, mmid) {
+                        setTimeout(() => {
+                            bot.telegram.deleteMessage(ctx.chat.id, mmid)
+                                .catch((err) => console.log(err.message))
+                        }, 7000)
+                    }
 
                     let closeKybd = [
                         { text: '👌 Ok, I understand', callback_data: 'closePtsMsg' }
@@ -80,31 +82,54 @@ module.exports = (bot, dt, anyErr) => {
 
                     // add user to database
                     let user = await usersModel.findOne({ userId: ctx.chat.id })
+
+                    //if user not exist
                     if (!user) {
                         let newUser = await usersModel.create({
                             userId: ctx.chat.id,
-                            points: 10,
+                            points: 8,
                             fname: ctx.chat.first_name,
                             downloaded: 1,
                             blocked: false
                         })
+
+                        await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, {
+                            reply_markup: { inline_keyboard: [ptsKeybd] }
+                        })
+
+                        setTimeout(() => {
+                            ctx.reply('You got the file and 2 points deducted from your points balance.\n\n<b>You remained with 8 points.</b>', { parse_mode: 'HTML' })
+                                .catch((err) => console.log(err.message))
+                                .then((em) => {
+                                    deleteMsg(bot, ctx, em.message_id)
+                                })
+                        }, 1500)
                     }
 
-                    let txt = 'Preparing the Episode... ⏳'
-                    let txt2 = '✅ Episode prepared successfully.'
+                    //if user exist
+                    else {
+                        if (user.points > 1) {
+                            await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, {
+                                reply_markup: { inline_keyboard: [ptsKeybd] }
+                            })
 
-                    let send = await ctx.reply(txt)
-                    setTimeout(()=>{
-                        bot.telegram.deleteMessage(ctx.chat.id, send.message_id)
-                        .then(()=> {
-                            ctx.reply(txt2, {
-                                parse_mode: 'HTML',
-                                reply_markup: {
-                                    inline_keyboard: [linkKey]
-                                }
-                            }).catch((err)=> console.log(err))
-                        }).catch((err)=> console.log(err))
-                    }, 1500)
+                            let upd = await usersModel.findOneAndUpdate({ userId: ctx.chat.id }, { $inc: { points: -2 } }, { new: true })
+
+                            setTimeout(() => {
+                                ctx.reply(`You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${upd.points} points.</b>`, { parse_mode: 'HTML' })
+                                .catch((err)=> console.log(err.message))
+                                .then((em)=>{
+                                    deleteMsg(bot, ctx, em.message_id)
+                                })
+                            }, 1500)
+                        }
+
+                        else {
+                            await ctx.reply(`You don't have enough points to get this file, you need at least 2 points.\n\nFollow this link to add more http://dramastore.net/user/${ctx.chat.id}/boost or click the button below.`, {
+                                reply_markup: { inline_keyboard: [ptsKeybd] }
+                            })
+                        }
+                    }
                 }
             }
 
