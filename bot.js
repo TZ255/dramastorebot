@@ -158,15 +158,20 @@ bot.command('add', async ctx => {
             let arr = txt.split('-')
             let id = Number(arr[1])
             let pts = Number(arr[2])
+            let param = arr[3]
 
             let updt = await usersModel.findOneAndUpdate({ userId: id }, { $inc: { points: pts } }, { new: true })
-            await bot.telegram.sendMessage(id, `Haka kajinga (@shemdoe) kamekupa ${pts} points burebure tu 😏\n\nhaya enjoy.`, {
-                reply_markup: {
-                    inline_keyboard: [
-                        [{ text: 'Angalia hapa salio lako 😏', callback_data: 'mypoints' }]
-                    ]
-                }
-            })
+
+            if(param == 'e') {
+                let t1 = `Shemdoe just added ${pts} points to you. Your new points balance is ${updt.points} points.`
+                await bot.telegram.sendMessage(id, t1)
+            }
+
+            else if(param == 's') {
+                let t2 = `Shemdoe amekuongezea ${pts} points. Sasa umekuwa na jumla ya ${updt.points} points... Karibu sana! 😉.`
+                await bot.telegram.sendMessage(id, t2)
+            }
+            
             await ctx.reply(`Added, she has now ${updt.points}`)
         } catch (err) {
             console.log(err.message)
