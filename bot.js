@@ -168,7 +168,7 @@ bot.command('add', async ctx => {
             }
 
             else if(param == 's') {
-                let t2 = `Shemdoe amekuongezea ${pts} points. Sasa umekuwa na jumla ya ${updt.points} points... Karibu sana! 😉.`
+                let t2 = `Shemdoe amekuongezea points ${pts}. Sasa umekuwa na jumla ya points ${updt.points}... Karibu sana! 😉.`
                 await bot.telegram.sendMessage(id, t2)
             }
             
