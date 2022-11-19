@@ -153,22 +153,25 @@ bot.command('stats', async ctx => {
 bot.command('add', async ctx => {
     let txt = ctx.message.text
 
-    try {
-        let arr = txt.split('-')
-        let id = Number(arr[1])
-        let pts = Number(arr[2])
+    if (ctx.chat.id == dt.shd || ctx.chat.id == dt.htlt) {
+        try {
+            let arr = txt.split('-')
+            let id = Number(arr[1])
+            let pts = Number(arr[2])
 
-        let updt = await usersModel.findOneAndUpdate({ userId : id }, { $inc: { points: pts } }, { new: true })
-        await bot.telegram.sendMessage(id, `Haka kajinga (@shemdoe) kamekupa ${pts} points burebure tu 😏\n\nhaya enjoy.`,{
-            reply_markup: {
-                inline_keyboard: [
-                    [{text: 'Angalia hapa salio lako 😏', callback_data: 'mypoints'}]
-                ]
-            }
-        })
-        await ctx.reply(`Added, she has now ${updt.points}`)
-    } catch (err) {
-        errMessage(err, ctx.chat.id)
+            let updt = await usersModel.findOneAndUpdate({ userId: id }, { $inc: { points: pts } }, { new: true })
+            await bot.telegram.sendMessage(id, `Haka kajinga (@shemdoe) kamekupa ${pts} points burebure tu 😏\n\nhaya enjoy.`, {
+                reply_markup: {
+                    inline_keyboard: [
+                        [{ text: 'Angalia hapa salio lako 😏', callback_data: 'mypoints' }]
+                    ]
+                }
+            })
+            await ctx.reply(`Added, she has now ${updt.points}`)
+        } catch (err) {
+            console.log(err.message)
+            ctx.reply(err.message)
+        }
     }
 })
 
@@ -194,7 +197,7 @@ bot.help(ctx => {
         { text: '🥇 My Points', callback_data: 'mypoints' },
         { text: '➕ Add points', url: ptsUrl }
     ]
-    
+
     ctx.reply(`If you have issues regarding using me please contact my developer @shemdoe`, {
         reply_markup: {
             inline_keyboard: [ptsKeybd]
