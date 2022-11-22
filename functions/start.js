@@ -113,7 +113,7 @@ module.exports = (bot, dt, anyErr) => {
                                 reply_markup: { inline_keyboard: [ptsKeybd] }
                             })
 
-                            let upd = await usersModel.findOneAndUpdate({ userId: ctx.chat.id }, { $inc: { points: -2 } }, { new: true })
+                            let upd = await usersModel.findOneAndUpdate({ userId: ctx.chat.id }, { $inc: { points: -2, downloaded: 1 } }, { new: true })
 
                             setTimeout(() => {
                                 ctx.reply(`You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${upd.points} points.</b>`, { parse_mode: 'HTML' })
