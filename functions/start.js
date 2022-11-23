@@ -93,8 +93,10 @@ module.exports = (bot, dt, anyErr) => {
 
                         await delay(1500)
                         let re = await ctx.reply(ujumbe3, { parse_mode: 'HTML' })
-                        await delay(7000)
-                        await bot.telegram.deleteMessage(ctx.chat.id, re.message_id)
+                        setTimeout(()=>{
+                            bot.telegram.deleteMessage(ctx.chat.id, re.message_id)
+                            .catch((err)=> console.log(err.message))
+                        }, 7000)
                     }
 
                     //if user exist
@@ -111,15 +113,22 @@ module.exports = (bot, dt, anyErr) => {
 
                             let ujumbe2 = `You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${uj_pts} points.</b>\n\n_____\n\n<i>Get 200 points by donating $5 to dramastore. Contact @shemdoe to make your donation.</i>`
 
+                            //delay for 2 secs, not good in longer millsecs
                             await delay(2000)
                             if (upd.downloaded >= 32) {
                                 let re50 = await ctx.reply(ujumbe2, { parse_mode: 'HTML' })
-                                await delay(20000)
-                                await bot.telegram.deleteMessage(ctx.chat.id, re50.message_id)
+                                setTimeout(()=> {
+                                    bot.telegram.deleteMessage(ctx.chat.id, re50.message_id)
+                                    .catch((err)=> console.log(err.message))
+                                }, 20000)
+                                
                             } else if (upd.downloaded < 32) {
                                 let re49 = await ctx.reply(ujumbe1, { parse_mode: 'HTML' })
-                                await delay(7000)
-                                await bot.telegram.deleteMessage(ctx.chat.id, re49.message_id)
+                                setTimeout(()=> {
+                                    bot.telegram.deleteMessage(ctx.chat.id, re49.message_id)
+                                    .catch((err)=> console.log(err.message))
+                                }, 7000)
+                                
                             }
                         }
 
