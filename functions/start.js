@@ -4,6 +4,11 @@ const nextEpModel = require('../models/botnextEp')
 const usersModel = require('../models/botusers')
 
 module.exports = (bot, dt, anyErr) => {
+
+    let delay = (ms) => new Promise(reslv => setTimeout(reslv, ms))
+
+    let ujumbe3 = 'You got the file and 2 points deducted from your points balance.\n\n<b>You remained with 8 points.</b>'
+
     bot.start(async (ctx) => {
         let name = ctx.chat.first_name
         let msg = `
@@ -69,17 +74,6 @@ module.exports = (bot, dt, anyErr) => {
                         { text: '➕ Add points', url: ptsUrl }
                     ]
 
-                    function deleteMsg(bot, ctx, mmid) {
-                        setTimeout(() => {
-                            bot.telegram.deleteMessage(ctx.chat.id, mmid)
-                                .catch((err) => console.log(err.message))
-                        }, 7000)
-                    }
-
-                    let closeKybd = [
-                        { text: '👌 Ok, I understand', callback_data: 'closePtsMsg' }
-                    ]
-
                     // add user to database
                     let user = await usersModel.findOne({ userId: ctx.chat.id })
 
@@ -97,13 +91,10 @@ module.exports = (bot, dt, anyErr) => {
                             reply_markup: { inline_keyboard: [ptsKeybd] }
                         })
 
-                        setTimeout(() => {
-                            ctx.reply('You got the file and 2 points deducted from your points balance.\n\n<b>You remained with 8 points.</b>', { parse_mode: 'HTML' })
-                                .catch((err) => console.log(err.message))
-                                .then((em) => {
-                                    deleteMsg(bot, ctx, em.message_id)
-                                })
-                        }, 1500)
+                        await delay(1500)
+                        let re = await ctx.reply(ujumbe3, { parse_mode: 'HTML' })
+                        await delay(7000)
+                        await bot.telegram.deleteMessage(ctx.chat.id, re.message_id)
                     }
 
                     //if user exist
@@ -115,16 +106,24 @@ module.exports = (bot, dt, anyErr) => {
 
                             let upd = await usersModel.findOneAndUpdate({ userId: ctx.chat.id }, { $inc: { points: -2, downloaded: 1 } }, { new: true })
 
-                            setTimeout(() => {
-                                ctx.reply(`You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${upd.points} points.</b>`, { parse_mode: 'HTML' })
-                                .catch((err)=> console.log(err.message))
-                                .then((em)=>{
-                                    deleteMsg(bot, ctx, em.message_id)
-                                })
-                            }, 1500)
+                            let uj_pts = upd.points
+                            let ujumbe1 = `You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${uj_pts} points.</b>`
+
+                            let ujumbe2 = `You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${uj_pts} points.</b>\n\n_____\n\n<i>Get 200 points by donating $5 to dramastore. Contact @shemdoe to make your donation.</i>`
+
+                            await delay(2000)
+                            if (upd.downloaded >= 50) {
+                                let re50 = await ctx.reply(ujumbe2, { parse_mode: 'HTML' })
+                                await delay(20000)
+                                await bot.telegram.deleteMessage(ctx.chat.id, re50.message_id)
+                            } else if (upd.downloaded < 50) {
+                                let re49 = await ctx.reply(ujumbe1, { parse_mode: 'HTML' })
+                                await delay(7000)
+                                await bot.telegram.deleteMessage(ctx.chat.id, re49.message_id)
+                            }
                         }
 
-                        else {
+                        if (user.points < 2) {
                             await ctx.reply(`You don't have enough points to get this file, you need at least 2 points.\n\nFollow this link to add more http://dramastore.net/user/${ctx.chat.id}/boost or click the button below.`, {
                                 reply_markup: { inline_keyboard: [ptsKeybd] }
                             })
