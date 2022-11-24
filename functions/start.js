@@ -111,7 +111,7 @@ module.exports = (bot, dt, anyErr) => {
                             let uj_pts = upd.points
                             let ujumbe1 = `You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${uj_pts} points.</b>`
 
-                            let ujumbe2 = `You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${uj_pts} points.</b>\n\n_____\n\n<i>🎁 Get rewarded with 200 points by donating a small amount to the dramastore. Contact @shemdoe to make your donation.</i>`
+                            let ujumbe2 = `You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${uj_pts} points.</b>\n\n⁙⁙⁙⁙⁙⁙⁙⁙⁙\n\n<i>🎁 Get rewarded with 200 points by donating a small amount to dramastore. Contact @shemdoe to see how you can donate.</i>`
 
                             //delay for 2 secs, not good in longer millsecs
                             await delay(2000)
