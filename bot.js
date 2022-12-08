@@ -10,6 +10,7 @@ const homeModel = require('./models/vue-home-db')
 const analytics = require('./models/analytics')
 const { nanoid } = require('nanoid')
 const bot = new Telegraf(process.env.BOT_TOKEN)
+.catch((err)=> console.log(err.message))
 
 let rp = require('request-promise')
 let cheerio = require('cheerio')
