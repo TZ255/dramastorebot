@@ -213,6 +213,12 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             } else {
                                 lowq_img = $('.row .cover .block img').attr('data-cfsrc')
                             }
+
+                            if(lowq_img.includes(`/cdn-cgi/mirage/`)) {
+                                let raw = lowq_img.split('https:')
+                                lowq_img = 'https:' + raw[1]
+                            }
+                            
                             let dramaName = $('.box-header .film-title').text().trim()
 
                             let no_of_episodes = $('.box-body ul li:nth-child(3)').text().split('Popularity')[0].split('Episodes: ')[1].trim()
