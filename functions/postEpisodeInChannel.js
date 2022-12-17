@@ -14,7 +14,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                         let fileName = ctx.update.channel_post.document.file_name
                         let fileZize = ctx.channelPost.document.file_size
                         let SizeInMB = (fileZize / (1024 * 1024))
-                        let netSize = Math.round(SizeInMB * 10) / 10 //round to 1 dp
+                        let netSize = Math.trunc(SizeInMB)
                         let noEp = ''
                         let capQty = '540P HDTV H.264'
                         let muxed = '#English Soft-subbed'
@@ -175,7 +175,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 reply_markup: {
                                     inline_keyboard: [
                                         [
-                                            { text: `⬇ DOWNLOAD NOW (${size})`, url: `https://${dt.link}nano_${nano}AND_2shemdoe${epMsgId}` }
+                                            { text: `⬇ DOWNLOAD EP. ${ep} (${size})`, url: `https://${dt.link}nano_${nano}AND_2shemdoe${epMsgId}` }
                                         ],
                                         [
                                             { text: '⬇ OPTION 2', url: `font5.net/blog/post.html?id=${post._id}#getting-episode-dramaid=${epMsgId}&size=${sizeWeb}&epno=${ep}` },
