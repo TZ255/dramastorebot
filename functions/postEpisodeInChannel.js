@@ -59,6 +59,12 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             extraParams = 'NK'
                         }
 
+                        else if (fileName.toLowerCase().includes('.540p.nn.')) {
+                            capQty = '540P HDTV H.265'
+                            muxed = 'RAW'
+                            extraParams = 'NN='
+                        }
+
                         else if (fileName.toLowerCase().includes('.480p.nk.')) {
                             capQty = '480P HDTV H.265'
                             muxed = '#English Hard-subbed'
@@ -74,6 +80,10 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                         let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}\n\n⭐️ More Telegram K-Dramas <a href="https://t.me/+vfhmLVXO7pIzZThk">@KOREAN_DRAMA_STORE</a></b>`
                         if (muxed == '#English Soft-subbed') {
                             cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}</b>\n\n<i>- This ep. is soft-subbed, use VLC or MX Player to see subtitles</i>`
+                        }
+
+                        if (extraParams == 'NN=') {
+                            cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}</b>\n\n<i>- This episode has no subtitle. While playing add the subtitle file below.</i>`
                         }
 
                         await bot.telegram.editMessageCaption(ctx.channelPost.chat.id, msgId, '', cap, { parse_mode: 'HTML' })
@@ -138,6 +148,12 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             else if (txt.includes('NK')) {
                                 quality = '540p HDTV H.265'
                                 subs = '#English Hard-subbed'
+                            }
+                            else if (txt.includes('NN=')) {
+                                quality = '540p HDTV H.265'
+                                subs = '#English sub'
+                                let subId = txt.split('NN=')[1]
+                                epMsgId = `TT${epMsgId}TT${subId}`
                             }
                             else if (txt.includes('SOJU')) {
                                 quality = '480p HDTV H.265'

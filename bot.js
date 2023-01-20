@@ -42,6 +42,7 @@ function anyErr(err) {
 const dt = {
     ds: process.env.DRAMASTORE_CHANNEL,
     databaseChannel: -1001239425048,
+    subsDb: '-1001570087172',
     whats: process.env.WHATS,
     shd: 741815228,
     htlt: 1473393723,

@@ -38,7 +38,17 @@ module.exports = (bot, dt, anyErr) => {
                 if (startPayload.includes('fromWeb')) {
                     let msgId = startPayload.split('fromWeb')[1].trim()
 
-                    await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, msgId)
+                    if (msgId.includes('TT')) {
+                        let _data = msgId.split('TT')
+                        let ep_id = Number(_data[1])
+                        let sub_id = Number(_data[2])
+
+                        await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, ep_id)
+                        await delay(500)
+                        await bot.telegram.copyMessage(ctx.chat.id, dt.subsDb, sub_id)
+                    } else {
+                        await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, msgId)
+                    }
                     console.log('Episode sent from web by ' + ctx.chat.first_name)
 
                     let userfromWeb = await usersModel.findOneAndUpdate({ userId: ctx.chat.id }, { $inc: { downloaded: 1 } })
@@ -77,6 +87,23 @@ module.exports = (bot, dt, anyErr) => {
                     // add user to database
                     let user = await usersModel.findOne({ userId: ctx.chat.id })
 
+                    //function to send episode
+                    const sendEp = async (bot, ctx) => {
+                        if (epMsgId.includes('TT')) {
+                            let _data = epMsgId.split('TT')
+                            let ep_id = Number(_data[1])
+                            let sub_id = Number(_data[2])
+
+                            await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, ep_id)
+                            delay(500)
+                            await bot.telegram.copyMessage(ctx.chat.id, dt.subsDb, sub_id)
+                        } else {
+                            await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, {
+                                reply_markup: { inline_keyboard: [ptsKeybd] }
+                            })
+                        }
+                    }
+
                     //if user not exist
                     if (!user) {
                         let newUser = await usersModel.create({
@@ -86,49 +113,45 @@ module.exports = (bot, dt, anyErr) => {
                             downloaded: 1,
                             blocked: false
                         })
-
-                        await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, {
-                            reply_markup: { inline_keyboard: [ptsKeybd] }
-                        })
-
+                        //send episode
+                        sendEp(bot, ctx)
                         await delay(1500)
                         let re = await ctx.reply(ujumbe3, { parse_mode: 'HTML' })
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             bot.telegram.deleteMessage(ctx.chat.id, re.message_id)
-                            .catch((err)=> console.log(err.message))
+                                .catch((err) => console.log(err.message))
                         }, 7000)
                     }
 
                     //if user exist
                     else {
                         if (user.points > 1) {
-                            await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, {
-                                reply_markup: { inline_keyboard: [ptsKeybd] }
-                            })
+                            //send episode
+                            sendEp(bot, ctx)
 
                             let upd = await usersModel.findOneAndUpdate({ userId: ctx.chat.id }, { $inc: { points: -2, downloaded: 1 } }, { new: true })
 
                             let uj_pts = upd.points
                             let ujumbe1 = `You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${uj_pts} points.</b>`
 
-                            let ujumbe2 = `You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${uj_pts} points.</b>\n\n⁙⁙⁙⁙⁙⁙⁙⁙⁙\n\n<i>🎁 Get rewarded with 200 points by donating a small amount to dramastore. Contact @shemdoe to see how you can donate.</i>`
+                            let ujumbe2 = `You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${uj_pts} points.</b>\n\n⁙⁙⁙⁙⁙⁙⁙⁙⁙\n\n<i>🎁 Get rewarded with 200 points <tg-spoiler>by donating a small amount to dramastore. Contact @shemdoe to see how you can donate.</tg-spoiler></i>`
 
                             //delay for 2 secs, not good in longer millsecs
                             await delay(2000)
                             if (upd.downloaded >= 32) {
                                 let re50 = await ctx.reply(ujumbe2, { parse_mode: 'HTML' })
-                                setTimeout(()=> {
+                                setTimeout(() => {
                                     bot.telegram.deleteMessage(ctx.chat.id, re50.message_id)
-                                    .catch((err)=> console.log(err.message))
+                                        .catch((err) => console.log(err.message))
                                 }, 20000)
-                                
+
                             } else if (upd.downloaded < 32) {
                                 let re49 = await ctx.reply(ujumbe1, { parse_mode: 'HTML' })
-                                setTimeout(()=> {
+                                setTimeout(() => {
                                     bot.telegram.deleteMessage(ctx.chat.id, re49.message_id)
-                                    .catch((err)=> console.log(err.message))
+                                        .catch((err) => console.log(err.message))
                                 }, 7000)
-                                
+
                             }
                         }
 
