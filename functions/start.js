@@ -134,16 +134,16 @@ module.exports = (bot, dt, anyErr) => {
                             let uj_pts = upd.points
                             let ujumbe1 = `You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${uj_pts} points.</b>`
 
-                            let ujumbe2 = `You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${uj_pts} points.</b>\n\n⁙⁙⁙⁙⁙⁙⁙⁙⁙\n\n<i>🎁 Get rewarded with 200 points <tg-spoiler>by donating a small amount to dramastore. Contact @shemdoe to see how you can donate.</tg-spoiler></i>`
+                            let ujumbe2 = `You got the file and 2 points deducted from your points balance.\n\n<b>You remained with ${uj_pts} points.</b>`
 
                             //delay for 2 secs, not good in longer millsecs
-                            await delay(2000)
+                            await delay(1000)
                             if (upd.downloaded >= 32) {
                                 let re50 = await ctx.reply(ujumbe2, { parse_mode: 'HTML' })
                                 setTimeout(() => {
                                     bot.telegram.deleteMessage(ctx.chat.id, re50.message_id)
                                         .catch((err) => console.log(err.message))
-                                }, 20000)
+                                }, 7000)
 
                             } else if (upd.downloaded < 32) {
                                 let re49 = await ctx.reply(ujumbe1, { parse_mode: 'HTML' })
