@@ -67,7 +67,7 @@ module.exports = (bot, dt, anyErr) => {
                 }
 
                 else if (startPayload.includes('shemdoe')) {
-                    if (startPayload.includes('nano_')) {
+                    if (startPayload.includes('nano_') && !startPayload.includes('nano_AND')) {
                         let nano = startPayload.split('nano_')[1]
                         nano = nano.split('AND_')[0]
 
