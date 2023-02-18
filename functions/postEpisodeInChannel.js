@@ -53,10 +53,16 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             extraParams = '540p_WEBDL'
                         }
 
-                        else if (fileName.toLowerCase().includes('.540p.nk.')) {
+                        else if (fileName.toLowerCase().includes('.540p.nk.') && !fileName.includes('S02.')) {
                             capQty = '540P HDTV H.265'
                             muxed = '#English Hard-subbed'
                             extraParams = 'NK'
+                        } 
+
+                        else if (fileName.toLowerCase().includes('.540p.nk.') && fileName.includes('S02.')) {
+                            capQty = '540P HDTV H.265'
+                            muxed = '#English Hard-subbed'
+                            extraParams = 'NK_S02'
                         }
 
                         else if (fileName.toLowerCase().includes('.540p.nn.')) {
@@ -109,6 +115,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             let subs = '#English Soft-subbed'
                             let totalEps = ''
                             let nano = ''
+                            let _ep_word = '📺 Ep. '
 
                             let cname = ctx.channelPost.sender_chat.title
                             if (cname.includes('Official -')) {
@@ -145,9 +152,14 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 quality = '540p HDTV H.265'
                                 enc = ''
                             }
-                            else if (txt.includes('NK')) {
+                            else if (txt.includes('NK') && !txt.includes('NK_S02')) {
                                 quality = '540p HDTV H.265'
                                 subs = '#English Hard-subbed'
+                            }
+                            else if (txt.includes('NK_S02')) {
+                                quality = '540p HDTV H.265'
+                                subs = '#English Hard-subbed'
+                                _ep_word = 'S02E'
                             }
                             else if (txt.includes('NN=')) {
                                 quality = '540p HDTV H.265'
@@ -184,7 +196,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
 
                             let post = await postModel.findOne().skip(rn)
 
-                            await bot.telegram.sendPoll(chatId, `📺 Ep. ${ep}${totalEps} | ${quality} \n${subs}`, [
+                            await bot.telegram.sendPoll(chatId, `${_ep_word}${ep}${totalEps} | ${quality} \n${subs}`, [
                                 '👍 Good',
                                 '👎 Bad'
                             ], {
