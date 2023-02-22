@@ -10,7 +10,7 @@ const homeModel = require('./models/vue-home-db')
 const analytics = require('./models/analytics')
 const { nanoid } = require('nanoid')
 const bot = new Telegraf(process.env.BOT_TOKEN)
-.catch((err)=> console.log(err.message))
+    .catch((err) => console.log(err.message))
 
 let rp = require('request-promise')
 let cheerio = require('cheerio')
@@ -148,8 +148,8 @@ bot.command('/broadcast', async ctx => {
 })
 
 bot.command('stats', async ctx => {
-    let anas = await analytics.findOne()
-    ctx.reply('Total downloads are ' + anas.times)
+    let anas = await usersModel.countDocuments()
+    ctx.reply(`Total bot's users are ${anas.toLocaleString('en-us')}`)
 })
 
 bot.command('add', async ctx => {
@@ -164,16 +164,16 @@ bot.command('add', async ctx => {
 
             let updt = await usersModel.findOneAndUpdate({ userId: id }, { $inc: { points: pts } }, { new: true })
 
-            if(param == 'e') {
+            if (param == 'e') {
                 let t1 = `Shemdoe just added ${pts} points to you. Your new points balance is ${updt.points} points.`
                 await bot.telegram.sendMessage(id, t1)
             }
 
-            else if(param == 's') {
+            else if (param == 's') {
                 let t2 = `Shemdoe amekuongezea points ${pts}. Sasa umekuwa na jumla ya points ${updt.points}... Karibu sana! 😉.`
                 await bot.telegram.sendMessage(id, t2)
             }
-            
+
             await ctx.reply(`Added, she has now ${updt.points}`)
         } catch (err) {
             console.log(err.message)
