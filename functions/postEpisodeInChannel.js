@@ -136,6 +136,24 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 }
                             }
 
+                            if (!cname.includes('Official -') && cname.includes('[Eng sub]')) {
+                                let dname = cname.split('[Eng sub] ')[1].trim()
+                                let drama = await vueNewDramaModel.findOne({ newDramaName: dname })
+                                if (drama) {
+                                    totalEps = `/${drama.noOfEpisodes}`
+                                    nano = drama.nano
+
+                                    if (Number(ep) == Number(drama.noOfEpisodes)) {
+                                        await drama.updateOne({ status: 'Completed' })
+                                        console.log(`${drama.newDramaName} is Completed`)
+                                    }
+                                    
+                                    let theep = {no: Number(ep), msg_id: Number(epMsgId), size: Number(data[4].substring(1))}
+
+                                    await drama.updateOne({$push: {episodes: theep}})
+                                }
+                            }
+
                             if (txt.includes('540p_WEBDL')) {
                                 quality = '540p WEBDL'
                             }
