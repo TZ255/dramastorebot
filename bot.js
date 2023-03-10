@@ -182,15 +182,34 @@ bot.command('add', async ctx => {
     }
 })
 
-// bot.command('/update', async ctx=> {
-//     let all = await dramasModel.find()
+bot.command('/update_episodes', async ctx=> {
+    try {
+        let id = ctx.chat.id
+        if(id == dt.shd) {
+            let txt = ctx.message.text
+            let dname = txt.split('/update_episodes ')
+            let d_data = dname[1].split(' | ')
+            let dramaName = d_data[0]
+            let new_eps = d_data[1]
 
-//     for (let drama of all) {
-//         let id = nanoid(5)
-//         await drama.updateOne({nano: id})
-//         console.log(drama.newDramaName + ' updated')
-//     }
-// })
+            let dd = await dramasModel.findOneAndUpdate({newDramaName: dramaName}, {noOfEpisodes: new_eps}, {new: true})
+            await ctx.reply(`${dd.newDramaName} episodes updated to ${dd.noOfEpisodes}`)
+        }
+    } catch (err) {
+        await ctx.reply(err.message)
+    }
+})
+
+bot.command('admin', async ctx=> {
+    try {
+        if(ctx.chat.id == dt.shd) {
+            await bot.telegram.copyMessage(dt.shd, dt.databaseChannel, 5444)
+        }
+    } catch (err) {
+        console.log(err.message)
+        await ctx.reply(err.message)
+    }
+})
 
 
 // - starting the bot
