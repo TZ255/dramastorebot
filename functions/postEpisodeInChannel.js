@@ -206,7 +206,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                         ],
                                         [
                                             { text: '⬇ OPTION 2', url: `font5.net/blog/post.html?id=${post._id}#getting-episode-dramaid=${epMsgId}&size=${sizeWeb}&epno=${ep}` },
-                                            { text: '💡 Help', callback_data: 'newHbtn' }
+                                            { text: '💡 Help', callback_data: 'newHbtn2' }
                                         ]
                                     ]
                                 }

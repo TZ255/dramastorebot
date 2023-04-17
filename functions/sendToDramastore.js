@@ -117,6 +117,15 @@ module.exports = (bot, dt, anyErr, other_channels) => {
                 })
             }
 
+            else if (ctx.callbackQuery.data.includes('newHbtn2')) {
+                let msg = `- To download this episode click the "⬇ DOWNLOAD NOW" button. \n- Confirm your download in Bot by opening our offer page for 10 seconds  \n\n📞 Any problem contact @shemdoe`
+
+                ctx.answerCbQuery(msg, {
+                    show_alert: true,
+                    cache_time: 14400 //4 hours
+                })
+            }
+
             else if (ctx.callbackQuery.data.includes('epinfo')) {
                 let data = ctx.callbackQuery.data.split('_')
                 let epno = data[0].split('epinfo')[1]

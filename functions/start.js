@@ -39,7 +39,7 @@ module.exports = (bot, dt, anyErr) => {
                     let ep_doc_id = startPayload.split('marikiID-')[1]
                     let ep_doc = await episodesModel.findById(ep_doc_id)
 
-                    let txt = `<b><u>🤖 Confirm download:</u></b>\n\n📺 Drama: ${ep_doc.drama_name}\n📂 File: <b>Episode ${ep_doc.epno} (${ep_doc.size})</b>\n\nopen the below button to get this file`
+                    let txt = `<b>🤖 <u>Confirm download:</u></b>\n\n📺 Drama: <b>${ep_doc.drama_name}</b>\n📂 File: <b>Episode ${ep_doc.epno} (${ep_doc.size})</b>\n\nopen the below button to get this file (will be sent here in 10 seconds)`
                     let url = `http://download-dramastore-episode.font5.net/dramastore/episode/${ctx.chat.id}/${ep_doc._id}`
 
                     await ctx.reply(txt, {
