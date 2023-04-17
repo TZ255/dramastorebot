@@ -195,7 +195,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
 
                             let post = await postModel.findOne().skip(rn)
 
-                            await bot.telegram.sendPoll(chatId, `${_ep_word}${ep}${totalEps} | ${quality} \n${subs}`, [
+                            let poll = await bot.telegram.sendPoll(chatId, `${_ep_word}${ep}${totalEps} | ${quality} \n${subs}`, [
                                 '👍 Good',
                                 '👎 Bad'
                             ], {
@@ -211,7 +211,8 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                     ]
                                 }
                             })
-                            bot.telegram.deleteMessage(chatId, idToDelete)
+                            await bot.telegram.deleteMessage(chatId, idToDelete)
+                            await episodesModel.findByIdAndUpdate(episode_post._id, {$set: {poll_msg_id: poll.message_id}})
                         }
 
                         else if (txt.includes('post_drama')) {
