@@ -1,7 +1,7 @@
 const vueNewDramaModel = require('../models/vue-new-drama')
 const postModel = require('../models/postmodel')
 
-module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_channels, nanoid) => {
+module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_channels, nanoid, delay) => {
     bot.use(async (ctx, next) => {
         try {
             // check if it is used in channel
@@ -118,6 +118,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             let _ep_word = '📺 Ep. '
 
                             let cname = ctx.channelPost.sender_chat.title
+                            let chan_id = ctx.channelPost.sender_chat.id
                             if (cname.includes('Official -')) {
                                 let dname = cname.split('Official - ')[1].trim()
                                 let drama = await vueNewDramaModel.findOne({ newDramaName: dname })
@@ -213,6 +214,8 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             let rn = Math.floor(Math.random() * idadi)
 
                             let post = await postModel.findOne().skip(rn)
+
+                            //
 
                             await bot.telegram.sendPoll(chatId, `${_ep_word}${ep}${totalEps} | ${quality} \n${subs}`, [
                                 '👍 Good',
@@ -346,7 +349,8 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 tgChannel: `tg://join?invite=${link_id}`,
                                 telegraph: telegraph_link,
                                 timesLoaded: 1,
-                                nano: nanoid(5)
+                                nano: nanoid(5),
+                                chan_id: chid
                             })
 
                             let yearScrap = dramaName.split('(2')[1].split(')')[0]
@@ -375,6 +379,21 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                     ]
                                 }
                             })
+                        } else if (txt.includes('update_id')) {
+                            let chan_id = ctx.channelPost.chat.id
+                            let cname = ctx.channelPost.chat.title
+
+                            if(cname.includes('Official -')) {
+                                cname = cname.split('Official - ')[1]
+                            } else if (!cname.includes('Official -') && cname.includes('[Eng sub]')) {
+                                cname = cname.split('[Eng sub] ')[1].trim()
+                            }
+
+                            let up = await vueNewDramaModel.findOneAndUpdate({newDramaName: cname}, {$set: {chan_id}}, {new: true})
+                            let did = await ctx.reply(`drama updated with ${up.chan_id}`)
+                            await delay(500)
+                            await ctx.deleteMessage(ctx.channelPost.message_id)
+                            await ctx.deleteMessage(did.message_id)
                         }
                     }
 

@@ -62,6 +62,9 @@ const dt = {
     link: process.env.BOT_LINK
 }
 
+//delaying
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
 const other_channels = [dt.hotel_del_luna, dt.hotel_king, dt.dr_stranger, dt.romance_book, dt.my_love_from_star, dt.tale, dt.fiery, dt.hwarang]
 
 bot.command('kenge', async ctx => {
@@ -239,7 +242,7 @@ sendToDramastore(bot, dt, anyErr, other_channels)
 
 //posting episodes
 // sendPoll
-postEpisodesInChannel(bot, dt, anyErr, rp, cheerio, ph, dramasModel, homeModel, other_channels, nanoid);
+postEpisodesInChannel(bot, dt, anyErr, rp, cheerio, ph, dramasModel, homeModel, other_channels, nanoid, delay);
 
 naomymatusi(bot, dt, anyErr)
 

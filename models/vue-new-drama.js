@@ -53,6 +53,9 @@ const NewDrama = new Schema(
       type: Number,
       default: 1,
     },
+    chan_id: {
+      type: Number
+    },
     episodes: {
       type: Array
     },

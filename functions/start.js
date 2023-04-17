@@ -1,5 +1,5 @@
 const dramasModel = require('../models/vue-new-drama')
-const episodesModel = require('../models/botepisodes')
+const episodesModel = require('../models/vue-new-episode')
 const nextEpModel = require('../models/botnextEp')
 const usersModel = require('../models/botusers')
 
@@ -33,6 +33,15 @@ module.exports = (bot, dt, anyErr) => {
 
                 if (startPayload.includes('2shemdoe')) {
                     pt = 2
+                }
+
+                if(startPayload.includes('marikiID-')) {
+                    let ep_doc_id = startPayload.split('marikiID-')[1]
+                    let ep_doc = await episodesModel.findById(ep_doc_id)
+
+                    await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, ep_doc.epid)
+                    await dramasModel.findOneAndUpdate({chan_id: ep_doc.drama_chan_id}, {$inc: {timesLoaded: 30}})
+                    console.log(ep_doc.drama_name + ' 30 loaded added')
                 }
 
                 if (startPayload.includes('fromWeb')) {
