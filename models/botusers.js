@@ -17,6 +17,9 @@ const userSchema = new Schema({
     blocked: {
         type: Boolean,
         default: false
+    },
+    country: {
+        type: Array
     }
 }, { timestamps: true, strict: false})
 

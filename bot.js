@@ -67,6 +67,10 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 const other_channels = [dt.hotel_del_luna, dt.hotel_king, dt.dr_stranger, dt.romance_book, dt.my_love_from_star, dt.tale, dt.fiery, dt.hwarang]
 
+bot.command('bestie', async ctx=> {
+    let country = {name: 'unknown', c_code: 'unknown'}
+    await usersModel.updateMany({}, {$set: {country}})
+})
 bot.command('kenge', async ctx => {
     if (ctx.chat.id == dt.shd || ctx.chat.id == dt.htlt) {
         let txt = ctx.message.text
