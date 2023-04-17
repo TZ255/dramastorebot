@@ -42,6 +42,7 @@ module.exports = (bot, dt, anyErr) => {
                     let txt = `<b>🤖 <u>Confirm download:</u></b>\n\n📺 Drama: <b>${ep_doc.drama_name}</b>\n📂 File: <b>Episode ${ep_doc.epno} (${ep_doc.size})</b>\n\n<i>💡 open our offer page below for 10 seconds to get this file (will be sent here instantly.)</i>`
                     let url = `http://download-dramastore-episode.font5.net/dramastore/episode/${ctx.chat.id}/${ep_doc._id}`
 
+                    //reply with episodes info
                     await ctx.reply(txt, {
                         parse_mode: 'HTML',
                         reply_markup: {
@@ -52,8 +53,23 @@ module.exports = (bot, dt, anyErr) => {
                             ]
                         }
                     })
+
+                    //update channel count
                     await dramasModel.findOneAndUpdate({chan_id: ep_doc.drama_chan_id}, {$inc: {timesLoaded: 30}})
                     console.log(ep_doc.drama_name + ' 30 loaded added')
+
+                    //check if user available
+                    let user = await usersModel.findOne({userId: ctx.chat.id})
+                    if(!user) {
+                        let fname = ctx.chat.first_name
+                        let blocked = false
+                        let country = {name: 'unknown', c_code: 'unknown'}
+                        let userId = ctx.chat.id
+                        let points = 10
+                        let downloaded = 0
+                        await usersModel.create({fname, blocked, country, userId, points, downloaded})
+                        console.log('new user from offer added')
+                    }
                 }
 
                 if (startPayload.includes('fromWeb')) {
