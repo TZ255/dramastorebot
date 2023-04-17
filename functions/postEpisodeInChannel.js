@@ -1,4 +1,5 @@
 const vueNewDramaModel = require('../models/vue-new-drama')
+const episodesModel = require('../models/vue-new-episode')
 const postModel = require('../models/postmodel')
 
 module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_channels, nanoid, delay) => {
@@ -118,42 +119,21 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             let _ep_word = '📺 Ep. '
 
                             let cname = ctx.channelPost.sender_chat.title
+
                             let chan_id = ctx.channelPost.sender_chat.id
-                            if (cname.includes('Official -')) {
-                                let dname = cname.split('Official - ')[1].trim()
-                                let drama = await vueNewDramaModel.findOne({ newDramaName: dname })
-                                if (drama) {
-                                    totalEps = `/${drama.noOfEpisodes}`
-                                    nano = drama.nano
-
-                                    if (Number(ep) == Number(drama.noOfEpisodes)) {
-                                        await drama.updateOne({ status: 'Completed' })
-                                        console.log(`${drama.newDramaName} is Completed`)
-                                    }
-                                    
-                                    let theep = {no: Number(ep), msg_id: Number(epMsgId), size: Number(data[4].substring(1))}
-
-                                    await drama.updateOne({$push: {episodes: theep}})
-                                }
-                            }
-
-                            if (!cname.includes('Official -') && cname.includes('[Eng sub]')) {
-                                let dname = cname.split('[Eng sub] ')[1].trim()
-                                let drama = await vueNewDramaModel.findOne({ newDramaName: dname })
-                                if (drama) {
-                                    totalEps = `/${drama.noOfEpisodes}`
-                                    nano = drama.nano
-
-                                    if (Number(ep) == Number(drama.noOfEpisodes)) {
-                                        await drama.updateOne({ status: 'Completed' })
-                                        console.log(`${drama.newDramaName} is Completed`)
-                                    }
-                                    
-                                    let theep = {no: Number(ep), msg_id: Number(epMsgId), size: Number(data[4].substring(1))}
-
-                                    await drama.updateOne({$push: {episodes: theep}})
-                                }
-                            }
+                            let query = await vueNewDramaModel.findOne({chan_id})
+                            if(query.noOfEpisodes.length == 1) {
+                                totalEps = `/0${query.noOfEpisodes}`
+                            } else {totalEps = `/${query.noOfEpisodes}`}
+                            
+                            let episode_post = await episodesModel.create({
+                                epid: Number(epMsgId),
+                                epno: Number(ep),
+                                size,
+                                drama_name: query.newDramaName,
+                                drama_chan_id: query.chan_id,
+                                poll_msg_id: 666
+                            })
 
                             if (txt.includes('540p_WEBDL')) {
                                 quality = '540p WEBDL'
@@ -215,8 +195,6 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
 
                             let post = await postModel.findOne().skip(rn)
 
-                            //
-
                             await bot.telegram.sendPoll(chatId, `${_ep_word}${ep}${totalEps} | ${quality} \n${subs}`, [
                                 '👍 Good',
                                 '👎 Bad'
@@ -224,7 +202,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 reply_markup: {
                                     inline_keyboard: [
                                         [
-                                            { text: `⬇ DOWNLOAD NOW E${ep} [${size}]`, url: `https://${dt.link}nano_${nano}AND_2shemdoe${epMsgId}` }
+                                            { text: `⬇ DOWNLOAD NOW E${ep} [${size}]`, url: `https://${dt.link}marikiID-${episode_post._id}` }
                                         ],
                                         [
                                             { text: '⬇ OPTION 2', url: `font5.net/blog/post.html?id=${post._id}#getting-episode-dramaid=${epMsgId}&size=${sizeWeb}&epno=${ep}` },
