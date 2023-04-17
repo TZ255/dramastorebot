@@ -97,7 +97,8 @@ module.exports = (bot, dt, anyErr) => {
                             points: 10,
                             fname: ctx.chat.first_name,
                             downloaded: 1,
-                            blocked: false
+                            blocked: false,
+                            country: {name: 'unknown', c_code: 'unknown'}
                         })
                         console.log('From web not on db but added')
                     }
@@ -148,7 +149,8 @@ module.exports = (bot, dt, anyErr) => {
                             points: 8,
                             fname: ctx.chat.first_name,
                             downloaded: 1,
-                            blocked: false
+                            blocked: false,
+                            country: {name: 'unknown', c_code: 'unknown'}
                         })
                         //send episode
                         sendEp(bot, ctx)
