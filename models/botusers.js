@@ -19,7 +19,7 @@ const userSchema = new Schema({
         default: false
     },
     country: {
-        type: Array
+        type: Object
     }
 }, { timestamps: true, strict: false})
 
