@@ -39,7 +39,19 @@ module.exports = (bot, dt, anyErr) => {
                     let ep_doc_id = startPayload.split('marikiID-')[1]
                     let ep_doc = await episodesModel.findById(ep_doc_id)
 
-                    await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, ep_doc.epid)
+                    let txt = `<b>Confirm download:</b>\n\nDrama: ${ep_doc.drama_name}\nFile: <b>Episode ${ep_doc.epno} (${ep_doc.size})</b>\n\nopen the below button to get this file`
+                    let url = `http://download-dramastore-episode.font5.net/dramastore/episode/${ctx.chat.id}/${ep_doc._id}`
+
+                    await ctx.reply(txt, {
+                        parse_mode: 'HTML',
+                        reply_markup: {
+                            inline_keyboard: [
+                                [
+                                    {text: "⬇ GET this FILE", url}
+                                ]
+                            ]
+                        }
+                    })
                     await dramasModel.findOneAndUpdate({chan_id: ep_doc.drama_chan_id}, {$inc: {timesLoaded: 30}})
                     console.log(ep_doc.drama_name + ' 30 loaded added')
                 }
