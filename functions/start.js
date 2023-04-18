@@ -58,7 +58,7 @@ module.exports = (bot, dt, anyErr) => {
                     setTimeout(()=>{
                         ctx.deleteMessage(epinfo.message_id)
                         .catch((e) => console.log(e.message))
-                    },15000)
+                    },30000)
 
                     //update channel count
                     await dramasModel.findOneAndUpdate({chan_id: ep_doc.drama_chan_id}, {$inc: {timesLoaded: 30}})
