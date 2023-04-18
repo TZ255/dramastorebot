@@ -43,7 +43,7 @@ module.exports = (bot, dt, anyErr) => {
                     let url = `http://download-dramastore-episode.font5.net/dramastore/episode/${ctx.chat.id}/${ep_doc._id}`
 
                     //reply with episodes info
-                    await ctx.reply(txt, {
+                    let epinfo = await ctx.reply(txt, {
                         parse_mode: 'HTML',
                         reply_markup: {
                             inline_keyboard: [
@@ -53,6 +53,12 @@ module.exports = (bot, dt, anyErr) => {
                             ]
                         }
                     })
+
+                    //delete episode info
+                    setTimeout(()=>{
+                        ctx.deleteMessage(epinfo.message_id)
+                        .catch((e) => console.log(e.message))
+                    },15000)
 
                     //update channel count
                     await dramasModel.findOneAndUpdate({chan_id: ep_doc.drama_chan_id}, {$inc: {timesLoaded: 30}})
