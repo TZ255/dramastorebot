@@ -39,7 +39,7 @@ module.exports = (bot, dt, anyErr) => {
                     let ep_doc_id = startPayload.split('marikiID-')[1]
                     let ep_doc = await episodesModel.findById(ep_doc_id)
 
-                    let txt = `<b>🤖 <u>Confirm download:</u></b>\n\n${ep_doc.drama_name}\n\n📂 <b>Episode ${ep_doc.epno} (${ep_doc.size})</b>\n\n<i>💡 open our offer page below for 10 seconds to get this file (will be sent here instantly.)</i>`
+                    let txt = `<b>🤖 <u>Confirm download:</u></b>\n\n${ep_doc.drama_name}\n\n📂 <b>Episode ${ep_doc.epno} (${ep_doc.size})</b>\n\n<tg-spoiler><i>💡 open our offer page below for at least 10 seconds to get this file (will be sent here instantly.)</i></tg-spoiler>`
                     let url = `http://download-dramastore-episode.font5.net/dramastore/episode/${ctx.chat.id}/${ep_doc._id}`
 
                     //reply with episodes info
@@ -48,7 +48,7 @@ module.exports = (bot, dt, anyErr) => {
                         reply_markup: {
                             inline_keyboard: [
                                 [
-                                    {text: "⬇ GET this FILE", url}
+                                    {text: "⬇ GET this EPISODE", url}
                                 ]
                             ]
                         }
