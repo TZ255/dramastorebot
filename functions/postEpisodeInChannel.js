@@ -58,7 +58,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             capQty = '540P HDTV H.265'
                             muxed = '#English Hard-subbed'
                             extraParams = 'NK'
-                        } 
+                        }
 
                         else if (fileName.toLowerCase().includes('.540p.nk.') && fileName.includes('S02.')) {
                             capQty = '540P HDTV H.265'
@@ -121,11 +121,11 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             let cname = ctx.channelPost.sender_chat.title
 
                             let chan_id = ctx.channelPost.sender_chat.id
-                            let query = await vueNewDramaModel.findOne({chan_id})
-                            if(query.noOfEpisodes.length == 1) {
+                            let query = await vueNewDramaModel.findOne({ chan_id })
+                            if (query.noOfEpisodes.length == 1) {
                                 totalEps = `/0${query.noOfEpisodes}`
-                            } else {totalEps = `/${query.noOfEpisodes}`}
-                            
+                            } else { totalEps = `/${query.noOfEpisodes}` }
+
                             let episode_post = await episodesModel.create({
                                 epid: Number(epMsgId),
                                 epno: Number(ep),
@@ -212,7 +212,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 }
                             })
                             await bot.telegram.deleteMessage(chatId, idToDelete)
-                            await episodesModel.findByIdAndUpdate(episode_post._id, {$set: {poll_msg_id: poll.message_id}})
+                            await episodesModel.findByIdAndUpdate(episode_post._id, { $set: { poll_msg_id: poll.message_id } })
                         }
 
                         else if (txt.includes('post_drama')) {
@@ -236,17 +236,17 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             let pic_id = pic_href.split('/photos/')[1].trim()
                             let highq_img = `https://i.mydramalist.com/${pic_id}f.jpg`
                             let lowq_img = ''
-                            if($('.row .cover .block img').attr('src')) {
+                            if ($('.row .cover .block img').attr('src')) {
                                 lowq_img = $('.row .cover .block img').attr('src')
                             } else {
                                 lowq_img = $('.row .cover .block img').attr('data-cfsrc')
                             }
 
-                            if(lowq_img.includes(`/cdn-cgi/mirage/`)) {
+                            if (lowq_img.includes(`/cdn-cgi/mirage/`)) {
                                 let raw = lowq_img.split('https:')
                                 lowq_img = 'https:' + raw[1]
                             }
-                            
+
                             let dramaName = $('.box-header .film-title').text().trim()
 
                             let no_of_episodes = $('.box-body ul li:nth-child(3)').text().split('Popularity')[0].split('Episodes: ')[1].trim()
@@ -314,61 +314,66 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             let telegraph_link = page.url
                             let link_id = invite_link.split('/+')[1]
 
+                            
+                            //create to db if not reposted
+                            if (!txt.includes('repost_drama')) {
+                                await new_drama.create({
+                                    newDramaName: dramaName,
+                                    noOfEpisodes: no_of_episodes,
+                                    genre: genres,
+                                    aired,
+                                    subtitle: 'English',
+                                    id: dramaid,
+                                    coverUrl: highq_img,
+                                    synopsis: syn.replace(/\n/g, '<br>'),
+                                    status: 'Ongoing',
+                                    tgChannel: `tg://join?invite=${link_id}`,
+                                    telegraph: telegraph_link,
+                                    timesLoaded: 1,
+                                    nano: nanoid(5),
+                                    chan_id: chid
+                                })
 
-                            await new_drama.create({
-                                newDramaName: dramaName,
-                                noOfEpisodes: no_of_episodes,
-                                genre: genres,
-                                aired,
-                                subtitle: 'English',
-                                id: dramaid,
-                                coverUrl: highq_img,
-                                synopsis: syn.replace(/\n/g, '<br>'),
-                                status: 'Ongoing',
-                                tgChannel: `tg://join?invite=${link_id}`,
-                                telegraph: telegraph_link,
-                                timesLoaded: 1,
-                                nano: nanoid(5),
-                                chan_id: chid
-                            })
+                                let yearScrap = dramaName.split('(2')[1].split(')')[0]
+                                let strYr = `2${yearScrap}`
+                                await homeModel.create({
+                                    idToHome: dramaid,
+                                    year: Number(strYr),
+                                    dramaName,
+                                    imageUrl: lowq_img,
+                                    episodesUrl: dramaid,
+                                })
+                            }
 
-                            let yearScrap = dramaName.split('(2')[1].split(')')[0]
-                            let strYr = `2${yearScrap}`
-                            await homeModel.create({
-                                idToHome: dramaid,
-                                year: Number(strYr),
-                                dramaName,
-                                imageUrl: lowq_img,
-                                episodesUrl: dramaid,
-                            })
                             await bot.telegram.sendMessage(dt.shd, `<a href="${telegraph_link}">🇰🇷 </a><u><b>${dramaName}</b></u>`, {
                                 parse_mode: 'HTML',
                                 reply_markup: {
                                     inline_keyboard: [
                                         [
-                                            {text: '⬇ DOWNLOAD ALL EPISODES', url: invite_link}
+                                            { text: '⬇ DOWNLOAD ALL EPISODES', url: invite_link }
                                         ],
                                         [
-                                            {text: '📞 Admin', url: 'https://t.me/shemdoe'},
-                                            {text: '🔍 Find drama', url: 'www.dramastore.net/list-of-dramastore-dramas'}
+                                            { text: '📞 Admin', url: 'https://t.me/shemdoe' },
+                                            { text: '🔍 Find drama', url: 'www.dramastore.net/list-of-dramastore-dramas' }
                                         ],
                                         [
-                                            {text: 'Push to dramastore', callback_data: 'push'}
+                                            { text: 'Push to dramastore', callback_data: 'push' }
                                         ]
                                     ]
                                 }
                             })
-                        } else if (txt.includes('update_id')) {
+                        }
+                        else if (txt.includes('update_id')) {
                             let chan_id = ctx.channelPost.chat.id
                             let cname = ctx.channelPost.chat.title
 
-                            if(cname.includes('Official -')) {
+                            if (cname.includes('Official -')) {
                                 cname = cname.split('Official - ')[1]
                             } else if (!cname.includes('Official -') && cname.includes('[Eng sub]')) {
                                 cname = cname.split('[Eng sub] ')[1].trim()
                             }
 
-                            let up = await vueNewDramaModel.findOneAndUpdate({newDramaName: cname}, {$set: {chan_id}}, {new: true})
+                            let up = await vueNewDramaModel.findOneAndUpdate({ newDramaName: cname }, { $set: { chan_id } }, { new: true })
                             let did = await ctx.reply(`drama updated with ${up.chan_id}`)
                             await delay(500)
                             await ctx.deleteMessage(ctx.channelPost.message_id)
