@@ -345,7 +345,13 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 })
                             }
 
-                            await bot.telegram.sendMessage(dt.shd, `<a href="${telegraph_link}">🇰🇷 </a><u><b>${dramaName}</b></u>`, {
+                            let ujumb = `<a href="${telegraph_link}">🇰🇷 </a><u><b>${dramaName}</b></u>`
+
+                            if(txt.includes('repost_drama')) {
+                                ujumb = `#UPDATED\n<a href="${telegraph_link}">🇰🇷 </a><u><b>${dramaName}</b></u>`
+                            }
+
+                            await bot.telegram.sendMessage(dt.shd, ujumb, {
                                 parse_mode: 'HTML',
                                 reply_markup: {
                                     inline_keyboard: [
