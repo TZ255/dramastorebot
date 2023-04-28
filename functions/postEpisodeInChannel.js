@@ -126,6 +126,11 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 totalEps = `/0${query.noOfEpisodes}`
                             } else { totalEps = `/${query.noOfEpisodes}` }
 
+                            //update if finished
+                            if(query.noOfEpisodes == ep) {
+                                query.updateOne({$set: {status: "Completed"}})
+                            }
+
                             let episode_post = await episodesModel.create({
                                 epid: Number(epMsgId),
                                 epno: Number(ep),
