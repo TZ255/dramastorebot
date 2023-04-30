@@ -40,7 +40,7 @@ module.exports = (bot, dt, anyErr) => {
                     let ep_doc = await episodesModel.findById(ep_doc_id)
 
                     let txt = `<b>🤖 <u>Confirm download:</u></b>\n\n${ep_doc.drama_name}\n\n📂 <b>Episode ${ep_doc.epno} (${ep_doc.size})</b>\n\n<tg-spoiler><i>💡 click the button below to go to the download page</i></tg-spoiler>`
-                    let url = `http://download-dramastore-episode.font5.net/dramastore/episode/${ctx.chat.id}/${ep_doc._id}`
+                    let url = `http://dramastore.net/download/episode/${ep_doc._id}/${ctx.chat.id}`
 
                     //reply with episodes info
                     let epinfo = await ctx.reply(txt, {
