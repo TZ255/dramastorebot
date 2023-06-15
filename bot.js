@@ -136,8 +136,15 @@ bot.command('/broadcast', async ctx => {
                     if (index == all_users.length - 1) {
                         ctx.reply('Done sending offers')
                     }
-                    bot.telegram.copyMessage(u.userId, dt.databaseChannel, msg_id)
-                        .then(() => console.log('Offer sent to ' + u.userId))
+                    bot.telegram.copyMessage(u.userId, dt.databaseChannel, msg_id, {
+                        reply_markup: {
+                            inline_keyboard: [
+                                [
+                                    { text: '▶ Watch the Video', url: 'https://youtu.be/aqvv_jthtts' }
+                                ]
+                            ]
+                        }
+                    }).then(() => console.log('Offer sent to ' + u.userId))
                         .catch((err) => {
                             if (err.message.includes('blocked')) {
                                 usersModel.findOneAndDelete({ userId: u.userId })
@@ -188,17 +195,17 @@ bot.command('add', async ctx => {
     }
 })
 
-bot.command('/update_episodes', async ctx=> {
+bot.command('/update_episodes', async ctx => {
     try {
         let id = ctx.chat.id
-        if(id == dt.shd) {
+        if (id == dt.shd) {
             let txt = ctx.message.text
             let dname = txt.split('/update_episodes ')
             let d_data = dname[1].split(' | ')
             let dramaName = d_data[0]
             let new_eps = d_data[1]
 
-            let dd = await dramasModel.findOneAndUpdate({newDramaName: dramaName}, {noOfEpisodes: new_eps}, {new: true})
+            let dd = await dramasModel.findOneAndUpdate({ newDramaName: dramaName }, { noOfEpisodes: new_eps }, { new: true })
             await ctx.reply(`${dd.newDramaName} episodes updated to ${dd.noOfEpisodes}`)
         }
     } catch (err) {
@@ -206,9 +213,9 @@ bot.command('/update_episodes', async ctx=> {
     }
 })
 
-bot.command('admin', async ctx=> {
+bot.command('admin', async ctx => {
     try {
-        if(ctx.chat.id == dt.shd) {
+        if (ctx.chat.id == dt.shd) {
             await bot.telegram.copyMessage(dt.shd, dt.databaseChannel, 5444)
         }
     } catch (err) {
