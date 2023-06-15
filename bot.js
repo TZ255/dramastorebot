@@ -26,11 +26,14 @@ const sendToDramastore = require('./functions/sendToDramastore')
 const startBot = require('./functions/start')
 const naomymatusi = require('./functions/naomymatusi')
 
-mongoose.connect(`mongodb+srv://${process.env.DUSER}:${process.env.DPASS}@nodetuts.ngo9k.mongodb.net/dramastore?retryWrites=true&w=majority`).then(() => {
-    console.log('Connection is successfully')
-}).catch((err) => {
-    console.log(err)
-})
+mongoose.set('strictQuery', false)
+mongoose.connect(`mongodb://${process.env.DUSER}:${process.env.DPASS}@nodetuts-shard-00-00.ngo9k.mongodb.net:27017,nodetuts-shard-00-01.ngo9k.mongodb.net:27017,nodetuts-shard-00-02.ngo9k.mongodb.net:27017/dramastore?ssl=true&replicaSet=atlas-pyxyme-shard-0&authSource=admin&retryWrites=true&w=majority`)
+    .then(() => {
+        console.log('Bot connected to the database')
+    }).catch((err) => {
+        console.log(err)
+        bot.telegram.sendMessage(741815228, err.message)
+    })
 
 
 // function to send any err in catch block
