@@ -195,11 +195,6 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 ep = ep + '-' + ('0' + (Number(ep) + 1)).slice(-2)
                             }
 
-                            let idadi = await postModel.countDocuments()
-                            let rn = Math.floor(Math.random() * idadi)
-
-                            let post = await postModel.findOne().skip(rn)
-
                             let poll = await bot.telegram.sendPoll(chatId, `${_ep_word}${ep}${totalEps} | ${quality} \n${subs}`, [
                                 '👍 Good',
                                 '👎 Bad'
@@ -210,7 +205,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                             { text: `⬇ DOWNLOAD NOW E${ep} [${size}]`, url: `https://${dt.link}marikiID-${episode_post._id}` }
                                         ],
                                         [
-                                            { text: '⬇ OPTION 2', url: `font5.net/blog/post.html?id=${post._id}#getting-episode-dramaid=${epMsgId}&size=${sizeWeb}&epno=${ep}` },
+                                            { text: '⬇ OPTION 2', url: `font5.net/blog/post.html?id=noPost#getting-episode-dramaid=${epMsgId}&size=${sizeWeb}&epno=${ep}` },
                                             { text: '💡 Help', callback_data: 'newHbtn2' }
                                         ]
                                     ]
