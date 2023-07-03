@@ -277,6 +277,10 @@ process.on('uncaughtException', (err) => {
 })
 
 
-    // start to save new users with points, send video & update users
-    // command to get all episodes with to delete button
-    // new dramastore, just index with scrollable div for all drama and boostrap modal scrollable for episodes & channel link
+const http = require('http')
+const server = http.createServer((req, res)=> {
+    res.writeHead(200, {"Content-Type": "text/plain"})
+    res.end('Karibu, Dramastorebot')
+})
+
+server.listen(process.env.PORT || 3000, ()=> console.log('Listen to port 3000'))
