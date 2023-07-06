@@ -22,9 +22,6 @@ module.exports = (bot, dt, anyErr, other_channels) => {
                 await bot.telegram.copyMessage(dt.ds, ctx.chat.id, callbackMsgId, {
                     reply_markup: shemdoeReplyMarkup
                 })
-                await bot.telegram.copyMessage(dt.whats, ctx.chat.id, callbackMsgId, {
-                    reply_markup: shemdoeReplyMarkup
-                })
 
                 other_channels.forEach(ch => {
                     bot.telegram.copyMessage(ch, ctx.chat.id, callbackMsgId, {
