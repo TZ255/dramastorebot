@@ -62,7 +62,8 @@ const dt = {
     fiery: -1001315216267,
     hwarang: -1001182807060,
     divineCh: process.env.divineCh,
-    link: process.env.BOT_LINK
+    link: process.env.BOT_LINK,
+    aliProducts: -1001971329607
 }
 
 //delaying

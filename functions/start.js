@@ -35,57 +35,70 @@ module.exports = (bot, dt, anyErr) => {
                     pt = 2
                 }
 
-                if(startPayload.includes('marikiID-')) {
+                if (startPayload.includes('marikiID-')) {
                     let ep_doc_id = startPayload.split('marikiID-')[1]
-                    let ep_doc = await episodesModel.findById(ep_doc_id)
+                    let sp_ch = 'https://t.me/+6GBS4BpBBWQ3OGE0'
+                    let member = await bot.telegram.getChatMember(dt.aliProducts, ctx.chat.id)
 
-                    let txt = `<b>🤖 <u>Confirm download:</u></b>\n\n${ep_doc.drama_name}\n\n📂 <b>Episode ${ep_doc.epno} (${ep_doc.size})</b>\n\n<tg-spoiler><i>💡 click the button below to go to the download page</i></tg-spoiler>`
-                    let url = `http://dramastore.net/download/episode/${ep_doc._id}/${ctx.chat.id}`
-
-                    //reply with episodes info
-                    let epinfo = await ctx.reply(txt, {
-                        parse_mode: 'HTML',
-                        reply_markup: {
-                            inline_keyboard: [
-                                [
-                                    {text: "⬇ GO TO DOWNLOAD PAGE", url}
-                                ]
-                            ]
-                        }
-                    })
-
-                    //delete episode info
-                    setTimeout(()=>{
-                        ctx.deleteMessage(epinfo.message_id)
-                        .catch((e) => console.log(e.message))
-                    },30000)
-
-                    //update channel count
-                    await dramasModel.findOneAndUpdate({chan_id: ep_doc.drama_chan_id}, {$inc: {timesLoaded: 30}})
-                    console.log(ep_doc.drama_name + ' 30 loaded added')
-
-                    //check if user available
-                    let user = await usersModel.findOne({userId: ctx.chat.id})
-                    if(!user) {
-                        let fname = ctx.chat.first_name
-                        if(ctx.chat.username) {
-                            fname = '@'+ctx.chat.username
-                        }
-                        let blocked = false
-                        let country = {name: 'unknown', c_code: 'unknown'}
-                        let userId = ctx.chat.id
-                        let points = 10
-                        let downloaded = 0
-                        await usersModel.create({fname, blocked, country, userId, points, downloaded})
-                        console.log('new user from offer added')
+                    //check if joined sponsor
+                    if (member.status == 'left') {
+                        await ctx.reply(`‣•‣•‣•‣•‣\n\nYou didn't join our sponsor's channel. \n\nTo get this episode please join the channel below and then click <b>"✅ DONE"</b> button. \n\n<b>🔗 Join Our Sponsors: 👇👇</b> \n${sp_ch}\n${sp_ch}\n\n‣•‣•‣•‣•‣`, {
+                            parse_mode: 'HTML',
+                            disable_web_page_preview: true,
+                            reply_markup: { inline_keyboard: [[{ text: '✅ Done (Already Joined)', url: `https://t.me/dramastorebot?start=marikiID-${ep_doc_id}` }]] }
+                        })
                     } else {
-                        if(ctx.chat.username) {
-                            if(user.fname != `@${ctx.chat.username}`) {
-                                await usersModel.findOneAndUpdate({userId: ctx.chat.id}, {$set: {fname: `@${ctx.chat.username}`}})
+                        //find the document
+                        let ep_doc = await episodesModel.findById(ep_doc_id)
+
+                        let txt = `<b>🤖 <u>Confirm download:</u></b>\n\n${ep_doc.drama_name}\n\n📂 <b>Episode ${ep_doc.epno} (${ep_doc.size})</b>\n\n<tg-spoiler><i>💡 click the button below to go to the download page</i></tg-spoiler>`
+                        let url = `http://dramastore.net/download/episode/${ep_doc._id}/${ctx.chat.id}`
+
+                        //reply with episodes info
+                        let epinfo = await ctx.reply(txt, {
+                            parse_mode: 'HTML',
+                            reply_markup: {
+                                inline_keyboard: [
+                                    [
+                                        { text: "⬇ GO TO DOWNLOAD PAGE", url }
+                                    ]
+                                ]
                             }
+                        })
+
+                        //delete episode info
+                        setTimeout(() => {
+                            ctx.deleteMessage(epinfo.message_id)
+                                .catch((e) => console.log(e.message))
+                        }, 30000)
+
+                        //update channel count
+                        await dramasModel.findOneAndUpdate({ chan_id: ep_doc.drama_chan_id }, { $inc: { timesLoaded: 30 } })
+                        console.log(ep_doc.drama_name + ' 30 loaded added')
+
+                        //check if user available to db
+                        let user = await usersModel.findOne({ userId: ctx.chat.id })
+                        if (!user) {
+                            let fname = ctx.chat.first_name
+                            if (ctx.chat.username) {
+                                fname = '@' + ctx.chat.username
+                            }
+                            let blocked = false
+                            let country = { name: 'unknown', c_code: 'unknown' }
+                            let userId = ctx.chat.id
+                            let points = 10
+                            let downloaded = 0
+                            await usersModel.create({ fname, blocked, country, userId, points, downloaded })
+                            console.log('new user from offer added')
                         } else {
-                            if(user.fname != ctx.chat.first_name) {
-                                await usersModel.findOneAndUpdate({userId: ctx.chat.id}, {$set: {fname: ctx.chat.first_name}})
+                            if (ctx.chat.username) {
+                                if (user.fname != `@${ctx.chat.username}`) {
+                                    await usersModel.findOneAndUpdate({ userId: ctx.chat.id }, { $set: { fname: `@${ctx.chat.username}` } })
+                                }
+                            } else {
+                                if (user.fname != ctx.chat.first_name) {
+                                    await usersModel.findOneAndUpdate({ userId: ctx.chat.id }, { $set: { fname: ctx.chat.first_name } })
+                                }
                             }
                         }
                     }
@@ -117,7 +130,7 @@ module.exports = (bot, dt, anyErr) => {
                             fname: ctx.chat.first_name,
                             downloaded: 1,
                             blocked: false,
-                            country: {name: 'unknown', c_code: 'unknown'}
+                            country: { name: 'unknown', c_code: 'unknown' }
                         })
                         console.log('From web not on db but added')
                     }
@@ -169,7 +182,7 @@ module.exports = (bot, dt, anyErr) => {
                             fname: ctx.chat.first_name,
                             downloaded: 1,
                             blocked: false,
-                            country: {name: 'unknown', c_code: 'unknown'}
+                            country: { name: 'unknown', c_code: 'unknown' }
                         })
                         //send episode
                         sendEp(bot, ctx)
