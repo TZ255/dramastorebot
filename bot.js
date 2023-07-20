@@ -1,13 +1,9 @@
 const { Telegraf } = require('telegraf')
 const mongoose = require('mongoose')
 require('dotenv').config()
-const dramaModel = require('./models/botdramas')
-const episodesModel = require('./models/botepisodes')
-const nextEpModel = require('./models/botnextEp')
 const usersModel = require('./models/botusers')
 const dramasModel = require('./models/vue-new-drama')
 const homeModel = require('./models/vue-home-db')
-const analytics = require('./models/analytics')
 const { nanoid } = require('nanoid')
 const bot = new Telegraf(process.env.BOT_TOKEN)
     .catch((err) => console.log(err.message))
@@ -25,6 +21,7 @@ const postEpisodesInChannel = require('./functions/postEpisodeInChannel')
 const sendToDramastore = require('./functions/sendToDramastore')
 const startBot = require('./functions/start')
 const naomymatusi = require('./functions/naomymatusi')
+const trendingFunctions = require('./functions/schedulers')
 
 mongoose.set('strictQuery', false)
 mongoose.connect(`mongodb://${process.env.DUSER}:${process.env.DPASS}@nodetuts-shard-00-00.ngo9k.mongodb.net:27017,nodetuts-shard-00-01.ngo9k.mongodb.net:27017,nodetuts-shard-00-02.ngo9k.mongodb.net:27017/dramastore?ssl=true&replicaSet=atlas-pyxyme-shard-0&authSource=admin&retryWrites=true&w=majority`)
@@ -61,15 +58,35 @@ const dt = {
     tale: -1001167737100,
     fiery: -1001315216267,
     hwarang: -1001182807060,
+    revenge: -1001863956613,
     divineCh: process.env.divineCh,
     link: process.env.BOT_LINK,
     aliProducts: -1001971329607
 }
 
+var trendingRateLimit = []
+setInterval(()=>{trendingRateLimit.length = 0}, 10000) //clear every 10 secs
+
+setInterval(()=> {
+    let d = new Date()
+    let date = d.getUTCDate()
+    let day = d.getUTCDay()  // 0 to 6 where sunday = 0
+    let hours = d.getUTCHours()
+    let minutes = d.getUTCMinutes()
+    let time = `${hours}:${minutes}`
+
+    if(time == '0:0') {
+        trendingFunctions.daily(bot, dt)
+
+        if(day == 1) {trendingFunctions.weekly(bot, dt)} //every monday
+        if(date == 1) {trendingFunctions.monthly(bot, dt)} //every trh 1
+    }
+}, 1000*59)
+
 //delaying
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
-const other_channels = [dt.hotel_del_luna, dt.hotel_king, dt.dr_stranger, dt.romance_book, dt.my_love_from_star, dt.tale, dt.fiery, dt.hwarang]
+const other_channels = [dt.hotel_del_luna, dt.hotel_king, dt.dr_stranger, dt.romance_book, dt.my_love_from_star, dt.tale, dt.fiery, dt.hwarang, dt.revenge]
 
 bot.command('kenge', async ctx => {
     if (ctx.chat.id == dt.shd || ctx.chat.id == dt.htlt) {
@@ -118,11 +135,65 @@ bot.command('unblock', async ctx => {
     }
 })
 
-// bot.command('all', ctx=> {
-//     usersModel.updateMany({}, {$set: {blocked: false}})
-//     .then(()=> console.log('Done'))
-//     .catch((err)=> console.log(err.message))
-// })
+bot.command('trending_today', async ctx => {
+    try {
+        let id = ctx.chat.id
+
+        if (!trendingRateLimit.includes(id)) {
+            trendingRateLimit.push(id)
+
+            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel today')
+            let txt = `🔥 <u><b>Trending Today (UTC)</b></u>\n\n\n`
+
+            todays.forEach((d, i) => {
+                txt = txt + `${i + 1}. <b>${d.newDramaName} - 🔥 ${d.today.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
+            })
+            await ctx.reply(txt, {parse_mode: 'HTML'})
+        }
+    } catch (err) {
+        await ctx.reply(err.message)
+    }
+})
+
+bot.command('trending_this_week', async ctx => {
+    try {
+        let id = ctx.chat.id
+
+        if (!trendingRateLimit.includes(id)) {
+            trendingRateLimit.push(id)
+
+            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisWeek')
+            let txt = `🔥 <u><b>On Trending This Week (UTC)</b></u>\n\n\n`
+
+            todays.forEach((d, i) => {
+                txt = txt + `${i + 1}. <b>${d.newDramaName} - 🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
+            })
+            await ctx.reply(txt, {parse_mode: 'HTML'})
+        }
+    } catch (err) {
+        await ctx.reply(err.message)
+    }
+})
+
+bot.command('trending_this_month', async ctx => {
+    try {
+        let id = ctx.chat.id
+
+        if (!trendingRateLimit.includes(id)) {
+            trendingRateLimit.push(id)
+
+            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisMonth')
+            let txt = `🔥 <u><b>On Trending This Month (UTC)</b></u>\n\n\n`
+
+            todays.forEach((d, i) => {
+                txt = txt + `${i + 1}. <b>${d.newDramaName} - 🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
+            })
+            await ctx.reply(txt, {parse_mode: 'HTML'})
+        }
+    } catch (err) {
+        await ctx.reply(err.message)
+    }
+})
 
 bot.command('/broadcast', async ctx => {
     let myId = ctx.chat.id
@@ -279,9 +350,9 @@ process.on('uncaughtException', (err) => {
 
 
 const http = require('http')
-const server = http.createServer((req, res)=> {
-    res.writeHead(200, {"Content-Type": "text/plain"})
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { "Content-Type": "text/plain" })
     res.end('Karibu, Dramastorebot')
 })
 
-server.listen(process.env.PORT || 3000, ()=> console.log('Listen to port 3000'))
+server.listen(process.env.PORT || 3000, () => console.log('Listen to port 3000'))

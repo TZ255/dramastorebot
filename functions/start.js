@@ -73,7 +73,7 @@ module.exports = (bot, dt, anyErr) => {
                         }, 30000)
 
                         //update channel count
-                        await dramasModel.findOneAndUpdate({ chan_id: ep_doc.drama_chan_id }, { $inc: { timesLoaded: 30 } })
+                        await dramasModel.findOneAndUpdate({ chan_id: ep_doc.drama_chan_id }, { $inc: { timesLoaded: 30, thisMonth: 30, thisWeek: 30, today: 30 } })
                         console.log(ep_doc.drama_name + ' 30 loaded added')
 
                         //check if user available to db
@@ -141,7 +141,7 @@ module.exports = (bot, dt, anyErr) => {
                         let nano = startPayload.split('nano_')[1]
                         nano = nano.split('AND_')[0]
 
-                        let drama = await dramasModel.findOneAndUpdate({ nano }, { $inc: { timesLoaded: 30 } }, { new: true })
+                        let drama = await dramasModel.findOneAndUpdate({ nano }, { $inc: { timesLoaded: 30, thisMonth: 30, thisWeek: 30, today: 30 } }, { new: true })
                         console.log(drama.newDramaName + ' updated to ' + drama.timesLoaded)
                     }
                     let epMsgId = startPayload.split('shemdoe')[1].trim()
