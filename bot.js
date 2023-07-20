@@ -146,7 +146,7 @@ bot.command('trending_today', async ctx => {
             let txt = `🔥 <u><b>Trending Today (UTC)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}. ${d.newDramaName} - 🔥 ${d.today.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
+                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.today.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
             })
             await ctx.reply(txt, {parse_mode: 'HTML'})
         }
@@ -166,7 +166,7 @@ bot.command('trending_this_week', async ctx => {
             let txt = `🔥 <u><b>On Trending This Week (UTC)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}. ${d.newDramaName} - 🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
+                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
             })
             await ctx.reply(txt, {parse_mode: 'HTML'})
         }
@@ -186,7 +186,7 @@ bot.command('trending_this_month', async ctx => {
             let txt = `🔥 <u><b>On Trending This Month (UTC)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}. ${d.newDramaName} - 🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
+                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
             })
             await ctx.reply(txt, {parse_mode: 'HTML'})
         }
@@ -206,7 +206,7 @@ bot.command('all_time', async ctx => {
             let txt = `🔥 <u><b>Most Popular Dramas (of All Time)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}. ${d.newDramaName} - 🔥 ${d.timesLoaded.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
+                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.timesLoaded.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
             })
             await ctx.reply(txt, {parse_mode: 'HTML'})
         }
