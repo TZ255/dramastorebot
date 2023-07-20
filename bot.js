@@ -202,7 +202,7 @@ bot.command('all_time', async ctx => {
         if (!trendingRateLimit.includes(id)) {
             trendingRateLimit.push(id)
 
-            let todays = await dramasModel.find().limit(25).select('newDramaName tgChannel thisMonth').sort('-timesLoaded')
+            let todays = await dramasModel.find().limit(25).select('newDramaName tgChannel timesLoaded').sort('-timesLoaded')
             let txt = `🔥 <u><b>Most Popular Dramas (of All Time)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
