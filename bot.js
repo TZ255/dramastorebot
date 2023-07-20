@@ -142,11 +142,11 @@ bot.command('trending_today', async ctx => {
         if (!trendingRateLimit.includes(id)) {
             trendingRateLimit.push(id)
 
-            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel today')
+            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel today').sort('-today')
             let txt = `🔥 <u><b>Trending Today (UTC)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `${i + 1}. <b>${d.newDramaName} - 🔥 ${d.today.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
+                txt = txt + `<b>${i + 1}. ${d.newDramaName} - 🔥 ${d.today.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
             })
             await ctx.reply(txt, {parse_mode: 'HTML'})
         }
@@ -162,11 +162,11 @@ bot.command('trending_this_week', async ctx => {
         if (!trendingRateLimit.includes(id)) {
             trendingRateLimit.push(id)
 
-            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisWeek')
+            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisWeek').sort('-thisWeek')
             let txt = `🔥 <u><b>On Trending This Week (UTC)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `${i + 1}. <b>${d.newDramaName} - 🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
+                txt = txt + `<b>${i + 1}. ${d.newDramaName} - 🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
             })
             await ctx.reply(txt, {parse_mode: 'HTML'})
         }
@@ -182,11 +182,11 @@ bot.command('trending_this_month', async ctx => {
         if (!trendingRateLimit.includes(id)) {
             trendingRateLimit.push(id)
 
-            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisMonth')
+            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisMonth').sort('-thisMonth')
             let txt = `🔥 <u><b>On Trending This Month (UTC)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `${i + 1}. <b>${d.newDramaName} - 🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
+                txt = txt + `<b>${i + 1}. ${d.newDramaName} - 🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
             })
             await ctx.reply(txt, {parse_mode: 'HTML'})
         }
