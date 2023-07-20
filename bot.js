@@ -65,7 +65,7 @@ const dt = {
 }
 
 var trendingRateLimit = []
-setInterval(()=>{trendingRateLimit.length = 0}, 10000) //clear every 10 secs
+setInterval(()=>{trendingRateLimit.length = 0}, 15000) //clear every 10 secs
 
 setInterval(()=> {
     let d = new Date()
@@ -187,6 +187,26 @@ bot.command('trending_this_month', async ctx => {
 
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}. ${d.newDramaName} - 🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
+            })
+            await ctx.reply(txt, {parse_mode: 'HTML'})
+        }
+    } catch (err) {
+        await ctx.reply(err.message)
+    }
+})
+
+bot.command('all_time', async ctx => {
+    try {
+        let id = ctx.chat.id
+
+        if (!trendingRateLimit.includes(id)) {
+            trendingRateLimit.push(id)
+
+            let todays = await dramasModel.find().limit(25).select('newDramaName tgChannel thisMonth').sort('-timesLoaded')
+            let txt = `🔥 <u><b>Most Popular Dramas (of All Time)</b></u>\n\n\n`
+
+            todays.forEach((d, i) => {
+                txt = txt + `<b>${i + 1}. ${d.newDramaName} - 🔥 ${d.timesLoaded.toLocaleString('en-US')}</b>\n   📥 ${d.tgChannel}\n\n\n`
             })
             await ctx.reply(txt, {parse_mode: 'HTML'})
         }
