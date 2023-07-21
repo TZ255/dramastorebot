@@ -1,6 +1,7 @@
 const vueNewDramaModel = require('../models/vue-new-drama')
 const episodesModel = require('../models/vue-new-episode')
 const postModel = require('../models/postmodel')
+const usersModel = require('../models/botusers')
 
 module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_channels, nanoid, delay) => {
     bot.use(async (ctx, next) => {
@@ -213,6 +214,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             })
                             await bot.telegram.deleteMessage(chatId, idToDelete)
                             await episodesModel.findByIdAndUpdate(episode_post._id, { $set: { poll_msg_id: poll.message_id } })
+                            await usersModel.findOneAndUpdate({userId: 741815228}, {$inc: {downloaded: 1}})
                         }
 
                         else if (txt.includes('post_drama')) {
