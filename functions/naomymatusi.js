@@ -1,49 +1,36 @@
 module.exports = (bot, dt, anyErr) => {
     bot.on('text', async ctx => {
         try {
-            let id = ctx.chat.id
-            let msgId = ctx.message.message_id
-            let fname = ctx.chat.first_name
-            let txt = ctx.message.text
-            //let matusi = ['kuma', 'nyoko', 'kumanyoko', 'msenge', 'matako', 'tako', 'mavi', 'mkundu', 'mbwa', 'tombwa', 'kenge', 'makalio', 'kichaa', 'mpuuzi', 'mjinga']
-            if (id == dt.naomy) {
-               await bot.telegram.sendMessage(dt.htlt, `id={${msgId}} \n${txt}`)
-               bot.telegram.sendChatAction(id, "record_voice")
-            }
-            else {
-                ctx.reply(`Hello ${fname}\n I don't understand human language, if you have an issue plz contact @shemdoe to resolve it`, {
-                    reply_to_message_id: msgId
-                })
-            }
-        } catch (err) {
-            anyErr(err)
-        }
-    })
+            if (ctx.message.reply_to_message && ctx.chat.id == dt.htlt) {
+                if (ctx.message.reply_to_message.text) {
+                    let myid = ctx.chat.id
+                    let my_msg_id = ctx.message.message_id
+                    let umsg = ctx.message.reply_to_message.text
+                    let ids = umsg.split('id = ')[1].trim()
+                    let userid = Number(ids.split('&mid=')[0])
+                    let mid = Number(ids.split('&mid=')[1])
 
-    bot.on('voice', ctx => {
-        try {
-            let msgId = ctx.message.message_id
-            let id = ctx.chat.id
-    
-            if (id == dt.naomy) {
-                bot.telegram.sendChatAction(id, 'typing')
-                setTimeout(() => {
-                    ctx.reply(`😳😳😳🙉🙉🙉 \nZumaridi kwa voice note umeniweza 🥺🥺, siwezi skiliza nikaelewa... \n\nkama umenitusi na ww pia ivo-ivo 😏\n\nkama ni upendo nakuzidishia x100 🥰 \n\nNisaidie kujua apa chini`, {
-                        reply_to_message_id: msgId,
-                        reply_markup: {
-                            inline_keyboard: [
-                                [
-                                    { text: '🤬 Nimekutukana', callback_data: 'nimekutukana'},
-                                    { text: '😍 Niupendo', callback_data: 'niupendo'}
-                                ]
-                            ]
-                        }
-                    }, 1500)
-                })
+                    await bot.telegram.copyMessage(userid, myid, my_msg_id, { reply_to_message_id: mid })
+
+                } else if (ctx.message.reply_to_message.photo) {
+                    let my_msg = ctx.message.text
+                    let umsg = ctx.message.reply_to_message.caption
+                    let ids = umsg.split('id = ')[1].trim()
+                    let userid = Number(ids.split('&mid=')[0])
+                    let mid = Number(ids.split('&mid=')[1])
+
+                    await bot.telegram.sendMessage(userid, my_msg, { reply_to_message_id: mid })
+                }
+            } else {
+                let userid = ctx.chat.id
+                let txt = ctx.message.text
+                let username = ctx.chat.first_name
+                let mid = ctx.message.message_id
+
+                await bot.telegram.sendMessage(dt.htlt, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>&mid=${mid}`, { parse_mode: 'HTML', disable_notification: true })
             }
         } catch (err) {
-            anyErr(err)
+            console.log(err.message, err)
         }
-    
     })
 }
