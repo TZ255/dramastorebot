@@ -128,18 +128,17 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             } else { totalEps = `/${query.noOfEpisodes}` }
 
                             //update if finished
-                            if(query.noOfEpisodes == ep) {
-                                await vueNewDramaModel.findOneAndUpdate({chan_id}, {$set: {status: "Completed"}})
+                            if (query.noOfEpisodes == ep) {
+                                await vueNewDramaModel.findOneAndUpdate({ chan_id }, { $set: { status: "Completed" } })
                             }
 
-                            let episode_post = await episodesModel.create({
-                                epid: Number(epMsgId),
-                                epno: Number(ep),
-                                size,
-                                drama_name: query.newDramaName,
-                                drama_chan_id: query.chan_id,
-                                poll_msg_id: 666
-                            })
+                            let episode_post = await episodesModel.findOneAndUpdate({ epno: Number(ep), drama_chan_id: query.chan_id }, { $set: { epid: Number(epMsgId) } }, { new: true })
+
+                            if (!episode_post) {
+                                episode_post = await episodesModel.create({
+                                    epid: Number(epMsgId), epno: Number(ep), size, drama_name: query.newDramaName, drama_chan_id: query.chan_id, poll_msg_id: 666
+                                })
+                            }
 
                             if (txt.includes('540p_WEBDL')) {
                                 quality = '540p WEBDL'
@@ -214,7 +213,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             })
                             await bot.telegram.deleteMessage(chatId, idToDelete)
                             await episodesModel.findByIdAndUpdate(episode_post._id, { $set: { poll_msg_id: poll.message_id } })
-                            await usersModel.findOneAndUpdate({userId: 741815228}, {$inc: {downloaded: 1}})
+                            await usersModel.findOneAndUpdate({ userId: 741815228 }, { $inc: { downloaded: 1 } })
                         }
 
                         else if (txt.includes('post_drama')) {
@@ -256,6 +255,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 no_of_episodes = '0' + no_of_episodes
                             }
                             let aired = $('.box-body ul li:nth-child(4)').text().split('Watchers')[0].split('Aired: ')[1].trim()
+                            let country = $('.box-body ul li:nth-child(2) b').text().split('Country: ')[1].trim()
 
                             let page = await ph.createPage(process.env.TOKEN, dramaName, [
                                 { tag: 'img', attrs: { src: highq_img } },
@@ -295,7 +295,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                         {
                                             tag: 'li', children: [
                                                 { tag: 'b', children: ['Country: '] },
-                                                { tag: 'i', children: ['South Korea'] }
+                                                { tag: 'i', children: [country] }
                                             ]
                                         }
                                     ]
@@ -316,7 +316,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             let telegraph_link = page.url
                             let link_id = invite_link.split('/+')[1]
 
-                            
+
                             //create to db if not reposted
                             if (!txt.includes('repost_drama')) {
                                 await new_drama.create({
@@ -333,7 +333,8 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                     telegraph: telegraph_link,
                                     timesLoaded: 1,
                                     nano: nanoid(5),
-                                    chan_id: chid
+                                    chan_id: chid,
+                                    country
                                 })
 
                                 let yearScrap = dramaName.split('(2')[1].split(')')[0]
@@ -348,8 +349,11 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             }
 
                             let ujumb = `<a href="${telegraph_link}">🇰🇷 </a><u><b>${dramaName}</b></u>`
+                            if (country == 'China') {
+                                ujumb = `<a href="${telegraph_link}">🇨🇳 </a><u><b>${dramaName}</b></u>`
+                            }
 
-                            if(txt.includes('repost_drama')) {
+                            if (txt.includes('repost_drama')) {
                                 ujumb = `#UPDATED\n<a href="${telegraph_link}">🇰🇷 </a><u><b>${dramaName}</b></u>`
                             }
 
