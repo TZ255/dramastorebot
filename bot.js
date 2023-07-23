@@ -141,9 +141,10 @@ bot.command('trending_today', async ctx => {
 
         if (!trendingRateLimit.includes(id)) {
             trendingRateLimit.push(id)
+            let d = new Date().toUTCString()
 
             let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel today').sort('-today')
-            let txt = `🔥 <u><b>Trending Today (UTC)</b></u>\n\n\n`
+            let txt = `🔥 <u><b>Trending Today (UTC)</b></u>\n<code>${d}</code>\n\n\n`
 
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.today.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`

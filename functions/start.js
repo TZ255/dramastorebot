@@ -11,9 +11,7 @@ module.exports = (bot, dt, anyErr) => {
 
     bot.start(async (ctx) => {
         let name = ctx.chat.first_name
-        let msg = `
-    Welcome ${name}, Visit Drama Store Website For Korean Series
-    `
+        let msg = `Welcome ${name}, Visit Drama Store Website For Korean Series`
         try {
             if (!ctx.startPayload) {
                 await ctx.reply(msg, {

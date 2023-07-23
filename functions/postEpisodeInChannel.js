@@ -202,10 +202,10 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 reply_markup: {
                                     inline_keyboard: [
                                         [
-                                            { text: `⬇ DOWNLOAD NOW E${ep} [${size}]`, url: `https://${dt.link}marikiID-${episode_post._id}` }
+                                            { text: `📥 DOWNLOAD NOW E${ep} [${size}]`, url: `https://${dt.link}marikiID-${episode_post._id}` }
                                         ],
                                         [
-                                            { text: '⬇ OPTION 2', url: `font5.net/blog/post.html?id=noPost#getting-episode-dramaid=${epMsgId}&size=${sizeWeb}&epno=${ep}` },
+                                            { text: '📥 OPTION 2', url: `font5.net/blog/post.html?id=noPost#getting-episode-dramaid=${epMsgId}&size=${sizeWeb}&epno=${ep}` },
                                             { text: '💡 Help', callback_data: 'newHbtn2' }
                                         ]
                                     ]
@@ -255,7 +255,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 no_of_episodes = '0' + no_of_episodes
                             }
                             let aired = $('.box-body ul li:nth-child(4)').text().split('Watchers')[0].split('Aired: ')[1].trim()
-                            let country = $('.box-body ul li:nth-child(2) b').text().split('Country: ')[1].trim()
+                            let country = $('.box-body ul li:nth-child(2)').text().split('Country: ')[1].split('Ranked')[0].trim()
 
                             let page = await ph.createPage(process.env.TOKEN, dramaName, [
                                 { tag: 'img', attrs: { src: highq_img } },
