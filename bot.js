@@ -44,6 +44,8 @@ const dt = {
     databaseChannel: -1001239425048,
     subsDb: '-1001570087172',
     whats: process.env.WHATS,
+    dstore_domain: 'https://dramastore.net',
+    main_channel: `https://t.me/+mTx_t-6TBx9hNTc8`,
     shd: 741815228,
     htlt: 1473393723,
     naomy: 1006615854,
@@ -147,7 +149,7 @@ bot.command('trending_today', async ctx => {
             let txt = `🔥 <u><b>Trending Today (UTC)</b></u>\n<code>${d}</code>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.today.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
+                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.today.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
             await ctx.reply(txt, {parse_mode: 'HTML'})
         }
@@ -164,11 +166,12 @@ bot.command('trending_this_week', async ctx => {
             trendingRateLimit.push(id)
 
             let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisWeek').sort('-thisWeek')
-            let d = new Date().getDay() + 1
+            let d = new Date().getDay()
+            if(d == 0) {d = 7}
             let txt = `🔥 <u><b>On Trending This Week (Day ${d})</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
+                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
             await ctx.reply(txt, {parse_mode: 'HTML'})
         }
@@ -188,7 +191,7 @@ bot.command('trending_this_month', async ctx => {
             let txt = `🔥 <u><b>On Trending This Month (UTC)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
+                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
             await ctx.reply(txt, {parse_mode: 'HTML'})
         }
@@ -208,12 +211,21 @@ bot.command('all_time', async ctx => {
             let txt = `🔥 <u><b>Most Popular Dramas (of All Time)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.timesLoaded.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
+                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.timesLoaded.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
             await ctx.reply(txt, {parse_mode: 'HTML'})
         }
     } catch (err) {
         await ctx.reply(err.message)
+    }
+})
+
+bot.command('find_drama', async ctx => {
+    let txt = `Hey <b>${ctx.chat.first_name}!</b>\n\nYou can find drama on our website here ${dt.dstore_domain} or join our main Telegram channel and use the search filter to find the drama you need\n\n<b>Our Main Channel:</b>\n${dt.main_channel}\n${dt.main_channel}`
+    try {
+        await ctx.reply(txt, {parse_mode: 'HTML'})
+    } catch (err) {
+        console.log(err.message)
     }
 })
 
