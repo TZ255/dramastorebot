@@ -164,7 +164,8 @@ bot.command('trending_this_week', async ctx => {
             trendingRateLimit.push(id)
 
             let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisWeek').sort('-thisWeek')
-            let txt = `🔥 <u><b>On Trending This Week (UTC)</b></u>\n\n\n`
+            let d = new Date().getDay() + 1
+            let txt = `🔥 <u><b>On Trending This Week (Day ${d})</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
