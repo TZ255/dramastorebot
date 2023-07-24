@@ -145,7 +145,7 @@ bot.command('trending_today', async ctx => {
             trendingRateLimit.push(id)
             let d = new Date().toUTCString()
 
-            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel today').sort('-today')
+            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel today id').sort('-today')
             let txt = `🔥 <u><b>Trending Today (UTC)</b></u>\n<code>${d}</code>\n\n\n`
 
             todays.forEach((d, i) => {
@@ -165,7 +165,7 @@ bot.command('trending_this_week', async ctx => {
         if (!trendingRateLimit.includes(id)) {
             trendingRateLimit.push(id)
 
-            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisWeek').sort('-thisWeek')
+            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisWeek id').sort('-thisWeek')
             let d = new Date().getDay()
             if(d == 0) {d = 7}
             let txt = `🔥 <u><b>On Trending This Week (Day ${d})</b></u>\n\n\n`
@@ -187,7 +187,7 @@ bot.command('trending_this_month', async ctx => {
         if (!trendingRateLimit.includes(id)) {
             trendingRateLimit.push(id)
 
-            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisMonth').sort('-thisMonth')
+            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisMonth id').sort('-thisMonth')
             let txt = `🔥 <u><b>On Trending This Month (UTC)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
@@ -207,7 +207,7 @@ bot.command('all_time', async ctx => {
         if (!trendingRateLimit.includes(id)) {
             trendingRateLimit.push(id)
 
-            let todays = await dramasModel.find().limit(25).select('newDramaName tgChannel timesLoaded').sort('-timesLoaded')
+            let todays = await dramasModel.find().limit(25).select('newDramaName tgChannel timesLoaded id').sort('-timesLoaded')
             let txt = `🔥 <u><b>Most Popular Dramas (of All Time)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
@@ -223,7 +223,7 @@ bot.command('all_time', async ctx => {
 bot.command('find_drama', async ctx => {
     let txt = `Hey <b>${ctx.chat.first_name}!</b>\n\nYou can find drama on our website here ${dt.dstore_domain} or join our main Telegram channel and use the search filter to find the drama you need\n\n<b>Our Main Channel:</b>\n${dt.main_channel}\n${dt.main_channel}`
     try {
-        await ctx.reply(txt, {parse_mode: 'HTML'})
+        await ctx.reply(txt, {parse_mode: 'HTML', disable_web_page_preview: true})
     } catch (err) {
         console.log(err.message)
     }
