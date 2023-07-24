@@ -151,7 +151,7 @@ bot.command('trending_today', async ctx => {
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.today.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
-            await ctx.reply(txt, {parse_mode: 'HTML'})
+            await ctx.reply(txt, {parse_mode: 'HTML', disable_web_page_preview: true})
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -173,7 +173,7 @@ bot.command('trending_this_week', async ctx => {
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
-            await ctx.reply(txt, {parse_mode: 'HTML'})
+            await ctx.reply(txt, {parse_mode: 'HTML', disable_web_page_preview: true})
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -193,7 +193,7 @@ bot.command('trending_this_month', async ctx => {
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
-            await ctx.reply(txt, {parse_mode: 'HTML'})
+            await ctx.reply(txt, {parse_mode: 'HTML', disable_web_page_preview: true})
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -213,7 +213,7 @@ bot.command('all_time', async ctx => {
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.timesLoaded.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
-            await ctx.reply(txt, {parse_mode: 'HTML'})
+            await ctx.reply(txt, {parse_mode: 'HTML', disable_web_page_preview: true})
         }
     } catch (err) {
         await ctx.reply(err.message)
