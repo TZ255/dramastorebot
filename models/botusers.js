@@ -18,6 +18,10 @@ const userSchema = new Schema({
         type: Boolean,
         default: false
     },
+    adult: {
+        type: Boolean,
+        default: true
+    },
     country: {
         type: Object
     }

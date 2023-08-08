@@ -137,6 +137,19 @@ bot.command('unblock', async ctx => {
     }
 })
 
+bot.command('adult', async ctx=> {
+    try {
+        if(ctx.chat.id == dt.shd) {
+            let txt = ctx.message.text
+            let userId = Number(txt.split('adult=')[1])
+            let u = await usersModel.findOneAndUpdate({userId}, {$set: {adult: false}}, {new: true})
+            await ctx.reply(`${u.fname} updated to ${u.adult}`)
+        }
+    } catch (error) {
+        await ctx.reply(error.message)
+    }
+})
+
 bot.command('trending_today', async ctx => {
     try {
         let id = ctx.chat.id
