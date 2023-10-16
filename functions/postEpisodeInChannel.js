@@ -375,6 +375,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 }
                             })
                         }
+                        
                         else if (txt.includes('update_id')) {
                             let chan_id = ctx.channelPost.chat.id
                             let cname = ctx.channelPost.chat.title

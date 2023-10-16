@@ -67,9 +67,9 @@ const dt = {
 }
 
 var trendingRateLimit = []
-setInterval(()=>{trendingRateLimit.length = 0}, 15000) //clear every 10 secs
+setInterval(() => { trendingRateLimit.length = 0 }, 15000) //clear every 10 secs
 
-setInterval(()=> {
+setInterval(() => {
     let d = new Date()
     let date = d.getUTCDate()
     let day = d.getUTCDay()  // 0 to 6 where sunday = 0
@@ -77,13 +77,13 @@ setInterval(()=> {
     let minutes = d.getUTCMinutes()
     let time = `${hours}:${minutes}`
 
-    if(time == '0:0') {
+    if (time == '0:0') {
         trendingFunctions.daily(bot, dt)
 
-        if(day == 1) {trendingFunctions.weekly(bot, dt)} //every monday
-        if(date == 1) {trendingFunctions.monthly(bot, dt)} //every trh 1
+        if (day == 1) { trendingFunctions.weekly(bot, dt) } //every monday
+        if (date == 1) { trendingFunctions.monthly(bot, dt) } //every trh 1
     }
-}, 1000*59)
+}, 1000 * 59)
 
 //delaying
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
@@ -137,13 +137,22 @@ bot.command('unblock', async ctx => {
     }
 })
 
-bot.command('adult', async ctx=> {
+bot.command('adult', async ctx => {
     try {
-        if(ctx.chat.id == dt.shd) {
+        if (ctx.chat.id == dt.shd) {
             let txt = ctx.message.text
-            let userId = Number(txt.split('adult=')[1])
-            let u = await usersModel.findOneAndUpdate({userId}, {$set: {adult: false}}, {new: true})
-            await ctx.reply(`${u.fname} updated to ${u.adult}`)
+            if (txt.includes('adult=')) {
+                let userId = Number(txt.split('adult=')[1])
+                let u = await usersModel.findOneAndUpdate({ userId }, { $set: { adult: false } }, { new: true })
+                await ctx.reply(`${u.fname} updated to ${u.adult}`)
+            } else {
+                let all = await usersModel.find({adult: false})
+                let majina = 'Hawa hapa ambao tunaheshimiana\n\n'
+                for (let u of all) {
+                    majina = majina + `${u.fname} - ${u.adult}\n\n`
+                }
+                await ctx.reply(majina)
+            }
         }
     } catch (error) {
         await ctx.reply(error.message)
@@ -164,7 +173,7 @@ bot.command('trending_today', async ctx => {
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.today.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
-            await ctx.reply(txt, {parse_mode: 'HTML', disable_web_page_preview: true})
+            await ctx.reply(txt, { parse_mode: 'HTML', disable_web_page_preview: true })
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -180,13 +189,13 @@ bot.command('trending_this_week', async ctx => {
 
             let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisWeek id').sort('-thisWeek')
             let d = new Date().getDay()
-            if(d == 0) {d = 7}
+            if (d == 0) { d = 7 }
             let txt = `🔥 <u><b>On Trending This Week (Day ${d})</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
-            await ctx.reply(txt, {parse_mode: 'HTML', disable_web_page_preview: true})
+            await ctx.reply(txt, { parse_mode: 'HTML', disable_web_page_preview: true })
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -206,7 +215,7 @@ bot.command('trending_this_month', async ctx => {
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
-            await ctx.reply(txt, {parse_mode: 'HTML', disable_web_page_preview: true})
+            await ctx.reply(txt, { parse_mode: 'HTML', disable_web_page_preview: true })
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -226,7 +235,7 @@ bot.command('all_time', async ctx => {
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.timesLoaded.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
-            await ctx.reply(txt, {parse_mode: 'HTML', disable_web_page_preview: true})
+            await ctx.reply(txt, { parse_mode: 'HTML', disable_web_page_preview: true })
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -236,7 +245,7 @@ bot.command('all_time', async ctx => {
 bot.command('find_drama', async ctx => {
     let txt = `Hey <b>${ctx.chat.first_name}!</b>\n\nYou can find drama on our website here ${dt.dstore_domain} or join our main Telegram channel and use the search filter to find the drama you need\n\n<b>Our Main Channel:</b>\n${dt.main_channel}\n${dt.main_channel}`
     try {
-        await ctx.reply(txt, {parse_mode: 'HTML', disable_web_page_preview: true})
+        await ctx.reply(txt, { parse_mode: 'HTML', disable_web_page_preview: true })
     } catch (err) {
         console.log(err.message)
     }
@@ -282,6 +291,17 @@ bot.command('/broadcast', async ctx => {
 bot.command('stats', async ctx => {
     let anas = await usersModel.countDocuments()
     ctx.reply(`Total bot's users are ${anas.toLocaleString('en-us')}`)
+
+    let pps = await usersModel.aggregate([
+        {$group: {_id: '$country.name', total: {$sum: 1}}},
+        {$sort: {"total": -1}}
+    ]).limit(20)
+
+    let ttx = `Top 20 countries with most users\n\n`
+    for (let u of pps) {
+        ttx = ttx + `<b>• ${u._id}:</b> ${u.total.toLocaleString('en-us')} users\n`
+    }
+    await ctx.reply(ttx, {parse_mode: 'HTML'})
 })
 
 bot.command('add', async ctx => {
