@@ -24,7 +24,11 @@ const nkiriFetch = async (dt, bot) => {
                     await bot.telegram.sendMessage(-1002079073174, txt, { parse_mode: 'HTML', reply_markup: {inline_keyboard: [[{text: 'Home', url}, {text: 'Drama', url: link}]]} })
                 } else {
                     console.log('No new drama found')
-                    await bot.telegram.sendMessage(dt.shd, 'No new drama', {disable_notification: true})
+                    let ms = await bot.telegram.sendMessage(dt.shd, 'No new drama', {disable_notification: true})
+                    setTimeout(()=>{
+                        bot.telegram.deleteMessage(dt.shd, ms.message_id)
+                        .catch(e => console.log(e.message))
+                    }, 1000*60*5)
                 }
             }
         })
