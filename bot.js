@@ -8,6 +8,8 @@ const { nanoid } = require('nanoid')
 const bot = new Telegraf(process.env.BOT_TOKEN)
     .catch((err) => console.log(err.message))
 
+const nkiriFetch = require('./functions/nkiri')
+
 let rp = require('request-promise')
 let cheerio = require('cheerio')
 
@@ -146,7 +148,7 @@ bot.command('adult', async ctx => {
                 let u = await usersModel.findOneAndUpdate({ userId }, { $set: { adult: false } }, { new: true })
                 await ctx.reply(`${u.fname} updated to ${u.adult}`)
             } else {
-                let all = await usersModel.find({adult: false})
+                let all = await usersModel.find({ adult: false })
                 let majina = 'Hawa hapa ambao tunaheshimiana\n\n'
                 for (let u of all) {
                     majina = majina + `${u.fname} - ${u.adult}\n\n`
@@ -293,15 +295,15 @@ bot.command('stats', async ctx => {
     ctx.reply(`Total bot's users are ${anas.toLocaleString('en-us')}`)
 
     let pps = await usersModel.aggregate([
-        {$group: {_id: '$country.name', total: {$sum: 1}}},
-        {$sort: {"total": -1}}
+        { $group: { _id: '$country.name', total: { $sum: 1 } } },
+        { $sort: { "total": -1 } }
     ]).limit(20)
 
     let ttx = `Top 20 countries with most users\n\n`
     for (let u of pps) {
         ttx = ttx + `<b>• ${u._id}:</b> ${u.total.toLocaleString('en-us')} users\n`
     }
-    await ctx.reply(ttx, {parse_mode: 'HTML'})
+    await ctx.reply(ttx, { parse_mode: 'HTML' })
 })
 
 bot.command('add', async ctx => {
@@ -394,6 +396,15 @@ sendToDramastore(bot, dt, anyErr, other_channels)
 postEpisodesInChannel(bot, dt, anyErr, rp, cheerio, ph, dramasModel, homeModel, other_channels, nanoid, delay);
 
 naomymatusi(bot, dt, anyErr)
+
+//scrap nkiri every five minutes
+setInterval(() => {
+    nkiriFetch.nkiriFetch(dt, bot)
+        .catch(err => {
+            bot.telegram.sendMessage(-1002079073174, err.message)
+                .catch(e => console.log(e.message))
+        })
+}, 1000 * 60 * 5)
 
 
 bot.launch()
