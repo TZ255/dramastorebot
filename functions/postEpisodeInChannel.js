@@ -195,6 +195,8 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 ep = ep + '-' + ('0' + (Number(ep) + 1)).slice(-2)
                             }
 
+                            let option2 = `http://dramastore.net/download/episode/option2/${episode_post._id}/shemdoe`
+
                             let poll = await bot.telegram.sendPoll(chatId, `${_ep_word}${ep}${totalEps} | ${quality} \n${subs}`, [
                                 '👍 Good',
                                 '👎 Bad'
@@ -205,7 +207,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                             { text: `📥 DOWNLOAD NOW E${ep} [${size}]`, url: `https://${dt.link}marikiID-${episode_post._id}` }
                                         ],
                                         [
-                                            { text: '📥 OPTION 2', url: `font5.net/blog/post.html?id=noPost#getting-episode-dramaid=${epMsgId}&size=${sizeWeb}&epno=${ep}` },
+                                            { text: '📥 OPTION 2', url: option2 },
                                             { text: '💡 Help', callback_data: 'newHbtn2' }
                                         ]
                                     ]
