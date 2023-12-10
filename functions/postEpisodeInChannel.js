@@ -214,7 +214,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 }
                             })
 
-                            let caption = `<b>🎥 ${episode_post.drama_name}\n\nNew episode just uploaded 🔥\n\nDownload Episode ${episode_post.epno} below.</b>`
+                            let caption = `<b>🎥 ${episode_post.drama_name} - Episode ${episode_post.epno}</b>\n\nNew episode with English subtitles just uploaded 🔥\n\nDownload this episode or full drama below.`
                             await bot.telegram.sendPhoto(dt.aliProducts, query.coverUrl, {
                                 parse_mode: 'HTML',
                                 caption,
@@ -224,7 +224,7 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                             {text: `📥 Download this Episode (${episode_post.size})`, url: option2}
                                         ],
                                         [
-                                            {text: `📥 Download Full Drama (${query.noOfEpisodes} eps)`, url: `http://dramastore.net/${query.id}`}
+                                            {text: `📥 Download Full Drama (${query.noOfEpisodes} Eps.)`, url: `http://dramastore.net/${query.id}`}
                                         ]
                                     ]
                                 }
