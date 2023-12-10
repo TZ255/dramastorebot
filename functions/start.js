@@ -40,7 +40,7 @@ module.exports = (bot, dt, anyErr) => {
 
                     //check if joined sponsor
                     if (member.status == 'left') {
-                        await ctx.reply(`‣•‣•‣•‣•‣\n\nYou didn't join our sponsor's channel. \n\nTo get this episode please join the channel below and then click <b>"✅ DONE"</b> button. \n\n<b>🔗 Join Our Sponsors: 👇👇</b> \n${sp_ch}\n${sp_ch}\n\n‣•‣•‣•‣•‣`, {
+                        await ctx.reply(`‣•‣•‣•‣•‣\n\nYou didn't join our notificatio channel. \n\nTo get this episode please join the channel below and then click <b>"✅ DONE"</b> button. \n\n<b>🔗 Join Notification Channel: 👇👇</b> \n${sp_ch}\n${sp_ch}\n\n‣•‣•‣•‣•‣`, {
                             parse_mode: 'HTML',
                             disable_web_page_preview: true,
                             reply_markup: { inline_keyboard: [[{ text: '✅ Done (Already Joined)', url: `https://t.me/dramastorebot?start=marikiID-${ep_doc_id}` }]] }
