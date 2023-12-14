@@ -40,10 +40,10 @@ module.exports = (bot, dt, anyErr) => {
 
                     //check if joined sponsor
                     if (member.status == 'left') {
-                        await ctx.reply(`You didn't join our notifications channel. \n\nTo get this episode please join the channel below and then click <b>"✅ DONE"</b> button to proceed. \n\n<b>🔗 Join the Channel: 👇👇</b> \n${sp_ch}\n${sp_ch}`, {
+                        await ctx.reply(`You didn't join our notifications channel. \n\nTo get this episode please join the channel below.\n\n<b>🔗 Join the Channel: 👇👇</b> \n${sp_ch}\n${sp_ch}\n\nAfter joining click the button below to proceed`, {
                             parse_mode: 'HTML',
                             disable_web_page_preview: true,
-                            reply_markup: { inline_keyboard: [[{ text: '✅ Done (Already Joined)', url: `https://t.me/dramastorebot?start=marikiID-${ep_doc_id}` }]] }
+                            reply_markup: { inline_keyboard: [[{ text: '✅ Done', url: `https://t.me/dramastorebot?start=marikiID-${ep_doc_id}` }]] }
                         })
                     } else {
                         //find the document

@@ -372,7 +372,7 @@ bot.on('chat_join_request', async ctx=> {
         //if is drama updates
         if(chan_id == dt.aliProducts) {
             await bot.telegram.approveChatJoinRequest(chan_id, userid)
-            await bot.telegram.sendMessage(userid, 'Request approved. You can now download the episode.\n\nClick the <b>✅ DONE</b> button above to proceed with your download')
+            await bot.telegram.sendMessage(userid, 'Request approved. You can now download the episode.\n\nClick the <b>✅ DONE</b> button above to proceed with your download', {parse_mode: 'HTML'})
         }
     } catch (error) {
         console.log(error.message)
