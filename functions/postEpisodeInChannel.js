@@ -214,21 +214,8 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                                 }
                             })
 
-                            let caption = `<b>🎥 ${episode_post.drama_name} - Episode ${episode_post.epno}</b>\n\n🔔 New episode with English subtitles just uploaded 🔥\n\nDownload this episode or full drama below.`
-                            await bot.telegram.sendPhoto(dt.aliProducts, query.coverUrl, {
-                                parse_mode: 'HTML',
-                                caption,
-                                reply_markup: {
-                                    inline_keyboard: [
-                                        [
-                                            {text: `📥 Download this Episode (${episode_post.size})`, url: option2}
-                                        ],
-                                        [
-                                            {text: `📥 Download Full Drama (${query.noOfEpisodes} Eps.)`, url: `http://dramastore.net/${query.id}`}
-                                        ]
-                                    ]
-                                }
-                            })
+                            let caption = `<b>🎥 ${episode_post.drama_name} - Episode ${episode_post.epno}</b>\n\n🔔 New episode with English subtitles just uploaded 🔥\n\n<b>⬇️ Download this Episode\n<a href="${option2}">https://t.me/download-${epMsgId}</a>\n\n⬇️ Download Full Drama\n<a href="${query.tgChannel}">https://t.me/full-drama-${epMsgId}</a></b>`
+                            await bot.telegram.sendPhoto(dt.aliProducts, query.coverUrl, {parse_mode: 'HTML', caption})
                             await bot.telegram.deleteMessage(chatId, idToDelete)
                             await episodesModel.findByIdAndUpdate(episode_post._id, { $set: { poll_msg_id: poll.message_id } })
                             await usersModel.findOneAndUpdate({ userId: 741815228 }, { $inc: { downloaded: 1 } })
