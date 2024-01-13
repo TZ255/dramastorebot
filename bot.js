@@ -377,7 +377,7 @@ bot.on('chat_join_request', async ctx=> {
         }
     } catch (error) {
         console.log(error.message)
-        await bot.telegram.sendMessage(dt.shd, `Join Err: ${error.message}`)
+        await bot.telegram.sendMessage(dt.shd, `Join Error: ${error.message}`)
     }
 })
 

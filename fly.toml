@@ -1,10 +1,12 @@
-# fly.toml app configuration file generated for dramastorebot on 2023-07-03T22:24:20+03:00
+# fly.toml app configuration file generated for dramastorebot on 2024-01-13T06:11:34+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = "dramastorebot"
-primary_region = "jnb"
+primary_region = "ams"
+
+[build]
 
 [http_service]
   internal_port = 3000
@@ -12,3 +14,9 @@ primary_region = "jnb"
   auto_stop_machines = false
   auto_start_machines = true
   min_machines_running = 0
+  processes = ["app"]
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
