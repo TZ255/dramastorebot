@@ -3,7 +3,7 @@ const episodesModel = require('../models/vue-new-episode')
 const nextEpModel = require('../models/botnextEp')
 const usersModel = require('../models/botusers')
 
-module.exports = (bot, dt, anyErr) => {
+module.exports = (bot, dt, anyErr, trendingRateLimit) => {
 
     let delay = (ms) => new Promise(reslv => setTimeout(reslv, ms))
 
@@ -25,7 +25,8 @@ module.exports = (bot, dt, anyErr) => {
                     }
                 })
             }
-            else {
+            else if (ctx.startPayload && !trendingRateLimit.includes(ctx.chat.id)) {
+                trendingRateLimit.push(ctx.chat.id)
                 let startPayload = ctx.startPayload
                 let pt = 1
 

@@ -42,7 +42,7 @@ function anyErr(err) {
 
 // important field
 const dt = {
-    ds: process.env.DRAMASTORE_CHANNEL,
+    ds: -1001245181784,
     databaseChannel: -1001239425048,
     subsDb: '-1001570087172',
     whats: process.env.WHATS,
