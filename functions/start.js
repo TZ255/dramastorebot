@@ -11,6 +11,7 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
 
     bot.start(async (ctx) => {
         let name = ctx.chat.first_name
+        let message_id = ctx.message.message_id
         let msg = `Welcome ${name}, Visit Drama Store Website For Korean Series`
         try {
             if (!ctx.startPayload) {
@@ -232,6 +233,9 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                         }
                     }
                 }
+            }
+            else if (ctx.startPayload && trendingRateLimit.includes(ctx.chat.id)) {
+                await ctx.deleteMessage(message_id)
             }
 
         } catch (err) {

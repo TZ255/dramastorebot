@@ -384,7 +384,7 @@ bot.on('chat_join_request', async ctx=> {
 
 // - starting the bot
 // - points deduction
-startBot(bot, dt, anyErr)
+startBot(bot, dt, anyErr, trendingRateLimit)
 
 //help command
 bot.help(ctx => {
