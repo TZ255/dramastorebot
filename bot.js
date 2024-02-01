@@ -10,7 +10,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 
 const nkiriFetch = require('./functions/nkiri')
 
-let rp = require('request-promise')
+let axios = require('axios').default
 let cheerio = require('cheerio')
 
 //TELEGRAPH
@@ -409,7 +409,7 @@ sendToDramastore(bot, dt, anyErr, other_channels)
 
 //posting episodes
 // sendPoll
-postEpisodesInChannel(bot, dt, anyErr, rp, cheerio, ph, dramasModel, homeModel, other_channels, nanoid, delay);
+postEpisodesInChannel(bot, dt, anyErr, axios, cheerio, ph, dramasModel, homeModel, other_channels, nanoid, delay);
 
 naomymatusi(bot, dt, anyErr)
 

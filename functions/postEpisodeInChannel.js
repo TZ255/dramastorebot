@@ -3,7 +3,7 @@ const episodesModel = require('../models/vue-new-episode')
 const postModel = require('../models/postmodel')
 const usersModel = require('../models/botusers')
 
-module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_channels, nanoid, delay) => {
+module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, other_channels, nanoid, delay) => {
     bot.use(async (ctx, next) => {
         try {
             // check if it is used in channel
@@ -230,8 +230,8 @@ module.exports = (bot, dt, anyErr, rp, cheerio, ph, new_drama, homeModel, other_
                             let url = arrs[1].trim()
                             let dramaid = arrs[2].trim()
 
-                            const html = await rp(url)
-                            const $ = cheerio.load(html)
+                            const html = await axios.get(url)
+                            const $ = cheerio.load(html.data)
                             let syn = $('.show-synopsis').text()
                             if (syn.includes('(Source: ')) {
                                 let arr = syn.split('(Source: ')

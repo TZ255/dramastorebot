@@ -1,12 +1,12 @@
-const rp = require('request-promise')
+const axios = require('axios').default
 const cheerio = require('cheerio')
 const nkiriDB = require('../models/nkiri')
 
 const nkiriFetch = async (dt, bot) => {
     try {
         let url = 'http://nkiri.com/'
-        let html = await rp(url)
-        let $ = cheerio.load(html)
+        let html = await axios.get(url)
+        let $ = cheerio.load(html.data)
 
         let dramas = $('#eael-post-grid-7643917 article')
 
