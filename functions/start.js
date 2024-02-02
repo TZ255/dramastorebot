@@ -14,7 +14,7 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
         let message_id = ctx.message.message_id
         let msg = `Welcome ${name}, Visit Drama Store Website For Korean Series`
         try {
-            if (!ctx.startPayload) {
+            if (!ctx.payload) {
                 await ctx.reply(msg, {
                     parse_mode: 'HTML',
                     reply_markup: {
@@ -26,17 +26,17 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                     }
                 })
             }
-            else if (ctx.startPayload && !trendingRateLimit.includes(ctx.chat.id)) {
+            else if (ctx.payload && !trendingRateLimit.includes(ctx.chat.id)) {
                 trendingRateLimit.push(ctx.chat.id)
-                let startPayload = ctx.startPayload
+                let payload = ctx.payload
                 let pt = 1
 
-                if (startPayload.includes('2shemdoe')) {
+                if (payload.includes('2shemdoe')) {
                     pt = 2
                 }
 
-                if (startPayload.includes('marikiID-')) {
-                    let ep_doc_id = startPayload.split('marikiID-')[1]
+                if (payload.includes('marikiID-')) {
+                    let ep_doc_id = payload.split('marikiID-')[1]
                     let sp_ch = 'https://t.me/+qocJnbw7VRQyMjc0'
                     let member = await bot.telegram.getChatMember(dt.aliProducts, ctx.chat.id)
 
@@ -104,8 +104,8 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                     }
                 }
 
-                if (startPayload.includes('fromWeb')) {
-                    let msgId = startPayload.split('fromWeb')[1].trim()
+                if (payload.includes('fromWeb')) {
+                    let msgId = payload.split('fromWeb')[1].trim()
 
                     if (msgId.includes('TT')) {
                         let _data = msgId.split('TT')
@@ -136,15 +136,15 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                     }
                 }
 
-                else if (startPayload.includes('shemdoe')) {
-                    if (startPayload.includes('nano_') && !startPayload.includes('nano_AND')) {
-                        let nano = startPayload.split('nano_')[1]
+                else if (payload.includes('shemdoe')) {
+                    if (payload.includes('nano_') && !payload.includes('nano_AND')) {
+                        let nano = payload.split('nano_')[1]
                         nano = nano.split('AND_')[0]
 
                         let drama = await dramasModel.findOneAndUpdate({ nano }, { $inc: { timesLoaded: 30, thisMonth: 29, thisWeek: 29, today: 29 } }, { new: true })
                         console.log(drama.newDramaName + ' updated to ' + drama.timesLoaded)
                     }
-                    let epMsgId = startPayload.split('shemdoe')[1].trim()
+                    let epMsgId = payload.split('shemdoe')[1].trim()
 
                     let ptsUrl = `http://dramastore.net/user/${ctx.chat.id}/boost/`
 
@@ -234,7 +234,7 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                     }
                 }
             }
-            else if (ctx.startPayload && trendingRateLimit.includes(ctx.chat.id)) {
+            else if (ctx.payload && trendingRateLimit.includes(ctx.chat.id)) {
                 await ctx.deleteMessage(message_id)
             }
 
