@@ -97,7 +97,7 @@ module.exports = (bot, dt, anyErr, other_channels) => {
             }
 
             else if (ctx.callbackQuery.data.includes('help')) {
-                let msg = `To download this episode click the "⬇ DOWNLOAD NOW" button and Tap "START" at bottom of the bot to get the file.  \n\n📞 Any problem contact @shemdoe`
+                let msg = `Steps to download this episode. Click:\n➜ Download Now\n➜ Go to Download Page\n➜ Get Your Episode\n\n🎉 Voila! You are done.`
 
                 ctx.answerCbQuery(msg, {
                     show_alert: true,

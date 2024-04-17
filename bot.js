@@ -413,6 +413,32 @@ postEpisodesInChannel(bot, dt, anyErr, axios, cheerio, ph, dramasModel, homeMode
 
 naomymatusi(bot, dt, anyErr)
 
+bot.use(async ctx=> {
+    try {
+        let up_id = ctx.update.update_id
+        let bid = ctx.update.business_message.business_connection_id
+        let user = ctx.update.business_message.from.id
+        let umsgid = ctx.update.business_message.message_id
+        let user_msg = ctx.update.business_message.text
+        console.log(bid)
+        if(user_msg == 'mambo') {
+            await bot.telegram.sendMessage(user, 'Nimeon', {
+                reply_markup: {
+                    inline_keyboard: [
+                        [
+                            {text: 'Bonyeza Hapa', callback_data: 'mama'}
+                        ]
+                    ]
+                },
+                business_connection_id: bid,
+                reply_to_message_id: umsgid
+            })
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
+})
+
 //scrap nkiri every five minutes
 setInterval(() => {
     nkiriFetch.nkiriFetch(dt, bot)
