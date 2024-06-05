@@ -374,6 +374,10 @@ bot.on('chat_join_request', async ctx=> {
             await bot.telegram.sendMessage(userid, 'Request approved. You can now download the episode.\n\nClick the <b>✅ DONE</b> button above to proceed with your download', {parse_mode: 'HTML'})
             await delay(500)
             await bot.telegram.approveChatJoinRequest(chan_id, userid)
+        } else {
+            await bot.telegram.sendMessage(userid, 'Request approved. You can now download Korean Dramas from Our Channel', {parse_mode: 'HTML'})
+            await delay(500)
+            await bot.telegram.approveChatJoinRequest(chan_id, userid)
         }
     } catch (error) {
         console.log(error.message)
