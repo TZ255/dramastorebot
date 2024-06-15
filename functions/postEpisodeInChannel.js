@@ -396,8 +396,8 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                             let up = await vueNewDramaModel.findOneAndUpdate({ newDramaName: cname }, { $set: { chan_id } }, { new: true })
                             let did = await ctx.reply(`drama updated with ${up.chan_id}`)
                             await delay(500)
-                            await ctx.deleteMessage(ctx.chat.id, ctx.channelPost.message_id)
-                            await ctx.deleteMessage(ctx.chat.id, did.message_id)
+                            await ctx.api.deleteMessage(ctx.chat.id, ctx.channelPost.message_id)
+                            await ctx.api.deleteMessage(ctx.chat.id, did.message_id)
                         }
                     }
 

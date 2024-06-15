@@ -14,7 +14,7 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
         let message_id = ctx.message.message_id
         let msg = `Welcome ${name}, Visit Drama Store Website For Korean Series`
         try {
-            if (!ctx.payload) {
+            if (!ctx.match) {
                 await ctx.reply(msg, {
                     parse_mode: 'HTML',
                     reply_markup: {
@@ -26,9 +26,9 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                     }
                 })
             }
-            else if (ctx.payload && !trendingRateLimit.includes(ctx.chat.id)) {
+            else if (ctx.match && !trendingRateLimit.includes(ctx.chat.id)) {
                 trendingRateLimit.push(ctx.chat.id)
-                let payload = ctx.payload
+                let payload = ctx.match
                 let pt = 1
 
                 if (payload.includes('2shemdoe')) {
@@ -68,7 +68,7 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
 
                         //delete episode info
                         setTimeout(() => {
-                            ctx.deleteMessage(ctx.chat.id, epinfo.message_id)
+                            ctx.api.deleteMessage(ctx.chat.id, epinfo.message_id)
                                 .catch((e) => console.log(e.message))
                         }, 30000)
 
@@ -234,8 +234,8 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                     }
                 }
             }
-            else if (ctx.payload && trendingRateLimit.includes(ctx.chat.id)) {
-                await ctx.deleteMessage(ctx.chat.id, message_id)
+            else if (ctx.match && trendingRateLimit.includes(ctx.chat.id)) {
+                await ctx.api.deleteMessage(ctx.chat.id, message_id)
             }
 
         } catch (err) {
