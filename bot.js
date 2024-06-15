@@ -1,12 +1,12 @@
-const { Telegraf } = require('telegraf')
+const { Bot } = require('grammy')
+const { autoRetry } = require("@grammyjs/auto-retry");
 const mongoose = require('mongoose')
 require('dotenv').config()
 const usersModel = require('./models/botusers')
 const dramasModel = require('./models/vue-new-drama')
 const homeModel = require('./models/vue-home-db')
 const { nanoid } = require('nanoid')
-const bot = new Telegraf(process.env.BOT_TOKEN)
-    .catch((err) => console.log(err.message))
+const bot = new Bot(process.env.BOT_TOKEN)
 
 const nkiriFetch = require('./functions/nkiri')
 
@@ -31,14 +31,21 @@ mongoose.connect(`mongodb://${process.env.DUSER}:${process.env.DPASS}@nodetuts-s
         console.log('Bot connected to the database')
     }).catch((err) => {
         console.log(err)
-        bot.telegram.sendMessage(741815228, err.message)
+        bot.api.sendMessage(741815228, err.message)
     })
 
 
 // function to send any err in catch block
 function anyErr(err) {
-    bot.telegram.sendMessage(741815228, err.message)
+    bot.api.sendMessage(741815228, err.message)
 }
+
+//use auto-retry
+bot.api.config.use(autoRetry());
+bot.catch((err) => {
+    const ctx = err.ctx;
+    console.error(`(Dstore): ${err.message}`, err);
+});
 
 // important field
 const dt = {
@@ -100,13 +107,13 @@ bot.command('kenge', async ctx => {
             let ujNid = uj.split('#')
             uj = ujNid[0]
             let rplyId = Number(ujNid[1])
-            bot.telegram.sendMessage(dt.naomy, uj, {
+            bot.api.sendMessage(dt.naomy, uj, {
                 reply_to_message_id: rplyId,
                 parse_mode: 'HTML'
             })
         }
         else {
-            bot.telegram.sendMessage(dt.naomy, uj)
+            bot.api.sendMessage(dt.naomy, uj)
         }
     }
 
@@ -132,10 +139,10 @@ bot.command('unblock', async ctx => {
     await usersModel.updateOne({ userId: id }, { blocked: false })
     ctx.reply(`The user with id ${id} is unblocked successfully`)
     if (id == dt.naomy || id == dt.airt) {
-        bot.telegram.sendMessage(id, "Unabahati @shemdoe kakuombea msamaha 😏... Unaweza kunitumia sasa.")
+        bot.api.sendMessage(id, "Unabahati @shemdoe kakuombea msamaha 😏... Unaweza kunitumia sasa.")
     }
     else {
-        bot.telegram.sendMessage(id, `Good news! You're unblocked from using me, you can now request episodes`)
+        bot.api.sendMessage(id, `Good news! You're unblocked from using me, you can now request episodes`)
     }
 })
 
@@ -253,7 +260,7 @@ bot.command('find_drama', async ctx => {
     }
 })
 
-bot.command('/broadcast', async ctx => {
+bot.command('broadcast', async ctx => {
     let myId = ctx.chat.id
     let txt = ctx.message.text
     let msg_id = Number(txt.split('/broadcast-')[1].trim())
@@ -266,7 +273,7 @@ bot.command('/broadcast', async ctx => {
                     if (index == all_users.length - 1) {
                         ctx.reply('Done sending offers')
                     }
-                    bot.telegram.copyMessage(u.userId, dt.databaseChannel, msg_id, {
+                    bot.api.copyMessage(u.userId, dt.databaseChannel, msg_id, {
                         reply_markup: {
                             inline_keyboard: [
                                 [
@@ -320,12 +327,12 @@ bot.command('add', async ctx => {
 
             if (param == 'e') {
                 let t1 = `Shemdoe just added ${pts} points to you. Your new points balance is ${updt.points} points.`
-                await bot.telegram.sendMessage(id, t1)
+                await bot.api.sendMessage(id, t1)
             }
 
             else if (param == 's') {
                 let t2 = `Shemdoe amekuongezea points ${pts}. Sasa umekuwa na jumla ya points ${updt.points}... Karibu sana! 😉.`
-                await bot.telegram.sendMessage(id, t2)
+                await bot.api.sendMessage(id, t2)
             }
 
             await ctx.reply(`Added, she has now ${updt.points}`)
@@ -336,7 +343,7 @@ bot.command('add', async ctx => {
     }
 })
 
-bot.command('/update_episodes', async ctx => {
+bot.command('update_episodes', async ctx => {
     try {
         let id = ctx.chat.id
         if (id == dt.shd) {
@@ -357,7 +364,7 @@ bot.command('/update_episodes', async ctx => {
 bot.command('admin', async ctx => {
     try {
         if (ctx.chat.id == dt.shd) {
-            await bot.telegram.copyMessage(dt.shd, dt.databaseChannel, 5444)
+            await bot.api.copyMessage(dt.shd, dt.databaseChannel, 5444)
         }
     } catch (err) {
         console.log(err.message)
@@ -371,17 +378,17 @@ bot.on('chat_join_request', async ctx=> {
         let chan_id = ctx.chatJoinRequest.chat.id
         //if is drama updates
         if(chan_id == dt.aliProducts) {
-            await bot.telegram.sendMessage(userid, 'Request approved. You can now download the episode.\n\nClick the <b>✅ DONE</b> button above to proceed with your download', {parse_mode: 'HTML'})
+            await bot.api.sendMessage(userid, 'Request approved. You can now download the episode.\n\nClick the <b>✅ DONE</b> button above to proceed with your download', {parse_mode: 'HTML'})
             await delay(500)
-            await bot.telegram.approveChatJoinRequest(chan_id, userid)
+            await bot.api.approveChatJoinRequest(chan_id, userid)
         } else {
-            await bot.telegram.sendMessage(userid, 'Request approved. You can now download Korean Dramas from Our Channel', {parse_mode: 'HTML'})
+            await bot.api.sendMessage(userid, 'Request approved. You can now download Korean Dramas from Our Channel', {parse_mode: 'HTML'})
             await delay(500)
-            await bot.telegram.approveChatJoinRequest(chan_id, userid)
+            await bot.api.approveChatJoinRequest(chan_id, userid)
         }
     } catch (error) {
         console.log(error.message)
-        await bot.telegram.sendMessage(dt.shd, `Join Error: ${error.message}`)
+        await bot.api.sendMessage(dt.shd, `Join Error: ${error.message}`)
     }
 })
 
@@ -391,7 +398,7 @@ bot.on('chat_join_request', async ctx=> {
 startBot(bot, dt, anyErr, trendingRateLimit)
 
 //help command
-bot.help(ctx => {
+bot.command('help', ctx => {
     let ptsUrl = `http://dramastore.net/user/${ctx.chat.id}/boost/`
     let ptsKeybd = [
         { text: '🥇 My Points', callback_data: 'mypoints' },
@@ -426,7 +433,7 @@ bot.use(async ctx=> {
         let user_msg = ctx.update.business_message.text
         console.log(bid)
         if(user_msg == 'mambo') {
-            await bot.telegram.sendMessage(user, 'Nimeon', {
+            await bot.api.sendMessage(user, 'Nimeon', {
                 reply_markup: {
                     inline_keyboard: [
                         [
@@ -447,13 +454,13 @@ bot.use(async ctx=> {
 setInterval(() => {
     nkiriFetch.nkiriFetch(dt, bot)
         .catch(err => {
-            bot.telegram.sendMessage(-1002079073174, err.message)
+            bot.api.sendMessage(-1002079073174, err.message)
                 .catch(e => console.log(e.message))
         })
 }, 1000 * 60 * 5)
 
 
-bot.launch()
+bot.start()
     .then(() => console.log('Bot started'))
     .catch((err) => console.log(err))
 
@@ -461,7 +468,7 @@ process.once('SIGINT', () => bot.stop('SIGINT'))
 process.once('SIGTERM', () => bot.stop('SIGTERM'))
 
 process.on('unhandledRejection', (reason, promise) => {
-    bot.telegram.sendMessage(1473393723, reason + ' It is an unhandled rejection.')
+    bot.api.sendMessage(1473393723, reason + ' It is an unhandled rejection.')
     console.log(reason)
 })
 
@@ -469,7 +476,7 @@ process.on('unhandledRejection', (reason, promise) => {
 // we removed process.exit() because we dont want bot to terminate the process
 process.on('uncaughtException', (err) => {
     console.log(err.message)
-    bot.telegram.sendMessage(741815228, err.message + ' - It is ana uncaught exception.')
+    bot.api.sendMessage(741815228, err.message + ' - It is ana uncaught exception.')
 })
 
 

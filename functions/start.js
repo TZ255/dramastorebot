@@ -9,7 +9,7 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
 
     let ujumbe3 = 'You got the file and 2 points deducted from your points balance.\n\n<b>You remained with 8 points.</b>'
 
-    bot.start(async (ctx) => {
+    bot.command('start', async (ctx) => {
         let name = ctx.chat.first_name
         let message_id = ctx.message.message_id
         let msg = `Welcome ${name}, Visit Drama Store Website For Korean Series`
@@ -38,7 +38,7 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                 if (payload.includes('marikiID-')) {
                     let ep_doc_id = payload.split('marikiID-')[1]
                     let sp_ch = 'https://t.me/+qocJnbw7VRQyMjc0'
-                    let member = await bot.telegram.getChatMember(dt.aliProducts, ctx.chat.id)
+                    let member = await bot.api.getChatMember(dt.aliProducts, ctx.chat.id)
 
                     //check if joined sponsor
                     if (member.status == 'left') {
@@ -68,7 +68,7 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
 
                         //delete episode info
                         setTimeout(() => {
-                            ctx.deleteMessage(epinfo.message_id)
+                            ctx.deleteMessage(ctx.chat.id, epinfo.message_id)
                                 .catch((e) => console.log(e.message))
                         }, 30000)
 
@@ -112,11 +112,11 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                         let ep_id = Number(_data[1])
                         let sub_id = Number(_data[2])
 
-                        await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, ep_id)
+                        await bot.api.copyMessage(ctx.chat.id, dt.databaseChannel, ep_id)
                         await delay(500)
-                        await bot.telegram.copyMessage(ctx.chat.id, dt.subsDb, sub_id)
+                        await bot.api.copyMessage(ctx.chat.id, dt.subsDb, sub_id)
                     } else {
-                        await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, msgId)
+                        await bot.api.copyMessage(ctx.chat.id, dt.databaseChannel, msgId)
                     }
                     console.log('Episode sent from web by ' + ctx.chat.first_name)
 
@@ -164,11 +164,11 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                             let ep_id = Number(_data[1])
                             let sub_id = Number(_data[2])
 
-                            await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, ep_id)
+                            await bot.api.copyMessage(ctx.chat.id, dt.databaseChannel, ep_id)
                             delay(500)
-                            await bot.telegram.copyMessage(ctx.chat.id, dt.subsDb, sub_id)
+                            await bot.api.copyMessage(ctx.chat.id, dt.subsDb, sub_id)
                         } else {
-                            await bot.telegram.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, {
+                            await bot.api.copyMessage(ctx.chat.id, dt.databaseChannel, epMsgId, {
                                 reply_markup: { inline_keyboard: [ptsKeybd] }
                             })
                         }
@@ -189,7 +189,7 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                         await delay(1500)
                         let re = await ctx.reply(ujumbe3, { parse_mode: 'HTML' })
                         setTimeout(() => {
-                            bot.telegram.deleteMessage(ctx.chat.id, re.message_id)
+                            bot.api.deleteMessage(ctx.chat.id, re.message_id)
                                 .catch((err) => console.log(err.message))
                         }, 7000)
                     }
@@ -212,14 +212,14 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                             if (upd.downloaded >= 32) {
                                 let re50 = await ctx.reply(ujumbe2, { parse_mode: 'HTML' })
                                 setTimeout(() => {
-                                    bot.telegram.deleteMessage(ctx.chat.id, re50.message_id)
+                                    bot.api.deleteMessage(ctx.chat.id, re50.message_id)
                                         .catch((err) => console.log(err.message))
                                 }, 7000)
 
                             } else if (upd.downloaded < 32) {
                                 let re49 = await ctx.reply(ujumbe1, { parse_mode: 'HTML' })
                                 setTimeout(() => {
-                                    bot.telegram.deleteMessage(ctx.chat.id, re49.message_id)
+                                    bot.api.deleteMessage(ctx.chat.id, re49.message_id)
                                         .catch((err) => console.log(err.message))
                                 }, 7000)
 
@@ -235,7 +235,7 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                 }
             }
             else if (ctx.payload && trendingRateLimit.includes(ctx.chat.id)) {
-                await ctx.deleteMessage(message_id)
+                await ctx.deleteMessage(ctx.chat.id, message_id)
             }
 
         } catch (err) {

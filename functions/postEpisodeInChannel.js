@@ -94,7 +94,9 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                             cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}</b>\n\n<i>- This episode has no subtitle. While playing add the subtitle file below.</i>`
                         }
 
-                        await bot.telegram.editMessageCaption(ctx.channelPost.chat.id, msgId, '', cap, { parse_mode: 'HTML' })
+                        await bot.api.editMessageCaption(ctx.channelPost.chat.id, msgId, {
+                            caption: cap, parse_mode: 'HTML'
+                        })
 
                         ctx.reply(`Copy -> <code>uploading_new_episode_${noEp}_S${netSize}_msgId${msgId}_${extraParams}</code>`, { parse_mode: 'HTML' })
                     }
@@ -197,7 +199,7 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
 
                             let option2 = `http://dramastore.net/download/episode/option2/${episode_post._id}/shemdoe`
 
-                            let poll = await bot.telegram.sendPoll(chatId, `${_ep_word}${ep}${totalEps} | ${quality} \n${subs}`, [
+                            let poll = await bot.api.sendPoll(chatId, `${_ep_word}${ep}${totalEps} | ${quality} \n${subs}`, [
                                 '👍 Good',
                                 '👎 Bad'
                             ], {
@@ -215,15 +217,15 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                             })
 
                             let caption = `<b>🎥 ${episode_post.drama_name} - Episode ${episode_post.epno}</b>\n\n🔔 New episode with English subtitles just uploaded 🔥\n\n<b>⬇️ Download this Episode\n<a href="${option2}">https://t.me/download-${epMsgId}</a>\n\n⬇️ Download Full Drama\n<a href="${query.tgChannel}">https://t.me/full-drama-${epMsgId}</a></b>`
-                            await bot.telegram.sendPhoto(dt.aliProducts, query.coverUrl, {parse_mode: 'HTML', caption})
-                            await bot.telegram.deleteMessage(chatId, idToDelete)
+                            await bot.api.sendPhoto(dt.aliProducts, query.coverUrl, { parse_mode: 'HTML', caption })
+                            await bot.api.deleteMessage(chatId, idToDelete)
                             await episodesModel.findByIdAndUpdate(episode_post._id, { $set: { poll_msg_id: poll.message_id } })
                             await usersModel.findOneAndUpdate({ userId: 741815228 }, { $inc: { downloaded: 1 } })
                         }
 
                         else if (txt.includes('post_drama')) {
                             let chid = ctx.channelPost.chat.id
-                            let info = await bot.telegram.getChat(chid)
+                            let info = await bot.api.getChat(chid)
                             let arrs = txt.split('=')
 
                             let invite_link = info.invite_link
@@ -362,7 +364,7 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                                 ujumb = `#UPDATED\n<a href="${telegraph_link}">🇰🇷 </a><u><b>${dramaName}</b></u>`
                             }
 
-                            await bot.telegram.sendMessage(dt.shd, ujumb, {
+                            await bot.api.sendMessage(dt.shd, ujumb, {
                                 parse_mode: 'HTML',
                                 reply_markup: {
                                     inline_keyboard: [
@@ -380,7 +382,7 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                                 }
                             })
                         }
-                        
+
                         else if (txt.includes('update_id')) {
                             let chan_id = ctx.channelPost.chat.id
                             let cname = ctx.channelPost.chat.title
@@ -394,8 +396,8 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                             let up = await vueNewDramaModel.findOneAndUpdate({ newDramaName: cname }, { $set: { chan_id } }, { new: true })
                             let did = await ctx.reply(`drama updated with ${up.chan_id}`)
                             await delay(500)
-                            await ctx.deleteMessage(ctx.channelPost.message_id)
-                            await ctx.deleteMessage(did.message_id)
+                            await ctx.deleteMessage(ctx.chat.id, ctx.channelPost.message_id)
+                            await ctx.deleteMessage(ctx.chat.id, did.message_id)
                         }
                     }
 

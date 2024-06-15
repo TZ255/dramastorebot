@@ -1,5 +1,5 @@
 module.exports = (bot, dt, anyErr) => {
-    bot.on('text', async ctx => {
+    bot.on(':text', async ctx => {
         try {
             if (ctx.message.reply_to_message && ctx.chat.id == dt.htlt) {
                 if (ctx.message.reply_to_message.text) {
@@ -10,7 +10,7 @@ module.exports = (bot, dt, anyErr) => {
                     let userid = Number(ids.split('&mid=')[0])
                     let mid = Number(ids.split('&mid=')[1])
 
-                    await bot.telegram.copyMessage(userid, myid, my_msg_id, { reply_to_message_id: mid })
+                    await bot.api.copyMessage(userid, myid, my_msg_id, { reply_to_message_id: mid })
 
                 } else if (ctx.message.reply_to_message.photo) {
                     let my_msg = ctx.message.text
@@ -19,7 +19,7 @@ module.exports = (bot, dt, anyErr) => {
                     let userid = Number(ids.split('&mid=')[0])
                     let mid = Number(ids.split('&mid=')[1])
 
-                    await bot.telegram.sendMessage(userid, my_msg, { reply_to_message_id: mid })
+                    await bot.api.sendMessage(userid, my_msg, { reply_to_message_id: mid })
                 }
             } else {
                 let userid = ctx.chat.id
@@ -27,7 +27,7 @@ module.exports = (bot, dt, anyErr) => {
                 let username = ctx.chat.first_name
                 let mid = ctx.message.message_id
 
-                await bot.telegram.sendMessage(dt.htlt, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>&mid=${mid}`, { parse_mode: 'HTML', disable_notification: true })
+                await bot.api.sendMessage(dt.htlt, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>&mid=${mid}`, { parse_mode: 'HTML', disable_notification: true })
             }
         } catch (err) {
             console.log(err.message, err)

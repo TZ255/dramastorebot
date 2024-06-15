@@ -19,22 +19,23 @@ module.exports = (bot, dt, anyErr, other_channels) => {
 
                 let sending = await ctx.reply('sending drama to channels....')
 
-                await bot.telegram.copyMessage(dt.ds, ctx.chat.id, callbackMsgId, {
+                await bot.api.copyMessage(dt.ds, ctx.chat.id, callbackMsgId, {
                     reply_markup: shemdoeReplyMarkup
                 })
 
                 other_channels.forEach(ch => {
-                    bot.telegram.copyMessage(ch, ctx.chat.id, callbackMsgId, {
+                    bot.api.copyMessage(ch, ctx.chat.id, callbackMsgId, {
                         reply_markup: shemdoeReplyMarkup
                     })
                 })
 
                 setTimeout(() => {
-                    bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId)
-                    .then(()=> {bot.telegram.deleteMessage(ctx.chat.id, sending.message_id)})
+                    bot.api.deleteMessage(ctx.chat.id, callbackMsgId)
+                    .then(()=> {bot.api.deleteMessage(ctx.chat.id, sending.message_id)})
                     .catch((err) => {
                         if (err.message.includes(`delete`)) {
-                            ctx.answerCbQuery(`Can't close this message.... It's too old, delete it instead.`, {
+                            ctx.answerCallbackQuery({
+                                text: `Can't close this message.... Too old, delete it instead.`,
                                 show_alert: true
                             })
                         }
@@ -61,7 +62,8 @@ module.exports = (bot, dt, anyErr, other_channels) => {
                     console.log('30 times loaded added to - ' + dname)
                 }
 
-                ctx.answerCbQuery('dramastore', {
+                ctx.answerCallbackQuery({
+                    text: 'dramastore',
                     url: `${dt.link}${dParam}${epnoMsgId}`,
                     cache_time: 14400 //4 hours
                 })
@@ -80,15 +82,17 @@ module.exports = (bot, dt, anyErr, other_channels) => {
                 }
 
 
-                ctx.answerCbQuery(txt, {
+                ctx.answerCallbackQuery({
+                    text: txt,
                     show_alert: true,
                     cache_time: 2
                 })
             }
             else if (ctx.callbackQuery.data.includes('closePtsMsg')) {
-                bot.telegram.deleteMessage(ctx.callbackQuery.message.chat.id, ctx.callbackQuery.message.message_id).catch((err) => {
+                bot.api.deleteMessage(ctx.callbackQuery.message.chat.id, ctx.callbackQuery.message.message_id).catch((err) => {
                     if (err.message.includes('delete')) {
-                        ctx.answerCbQuery(`Can't close this message.... It's too old, delete it instead.`, {
+                        ctx.answerCallbackQuery({
+                            text: `Can't close this message.... Too old, delete it instead.`,
                             show_alert: true
                         })
                     }
@@ -99,7 +103,8 @@ module.exports = (bot, dt, anyErr, other_channels) => {
             else if (ctx.callbackQuery.data.includes('help')) {
                 let msg = `Steps to download this episode. Click:\n➜ Download Now\n➜ Go to Download Page\n➜ Get Your Episode\n\n🎉 Voila! You are done.`
 
-                ctx.answerCbQuery(msg, {
+                ctx.answerCallbackQuery({
+                    text: msg,
                     show_alert: true,
                     cache_time: 14400 //4 hours
                 })
@@ -108,7 +113,8 @@ module.exports = (bot, dt, anyErr, other_channels) => {
             else if (ctx.callbackQuery.data.includes('newHbtn')) {
                 let msg = `To download this episode click the "⬇ DOWNLOAD NOW" button and Tap "START" at bottom of the bot to get the file.  \n\n📞 Any problem contact @shemdoe`
 
-                ctx.answerCbQuery(msg, {
+                ctx.answerCallbackQuery({
+                    text: msg,
                     show_alert: true,
                     cache_time: 14400 //4 hours
                 })
@@ -117,7 +123,8 @@ module.exports = (bot, dt, anyErr, other_channels) => {
             else if (ctx.callbackQuery.data.includes('newHbtn2')) {
                 let msg = `- To download this episode click the "⬇ DOWNLOAD NOW" button. \n- Confirm your download in Bot by opening our offer page for 10 seconds  \n\n📞 Any problem contact @shemdoe`
 
-                ctx.answerCbQuery(msg, {
+                ctx.answerCallbackQuery({
+                    text: msg,
                     show_alert: true,
                     cache_time: 14400 //4 hours
                 })
@@ -128,7 +135,8 @@ module.exports = (bot, dt, anyErr, other_channels) => {
                 let epno = data[0].split('epinfo')[1]
                 let msg = `Info About This Episode\n\n▶ Ep. No: ${epno}\n\n💾 Size: ${data[1]}\n\n📸 Quality: ${data[2]}`
 
-                ctx.answerCbQuery(msg, {
+                ctx.answerCallbackQuery({
+                    text: msg,
                     show_alert: true,
                     cache_time: 14400 //4 hours
                 })
@@ -136,13 +144,13 @@ module.exports = (bot, dt, anyErr, other_channels) => {
 
             else if (ctx.callbackQuery.data.includes('niupendo')) {
                 let callbackMsgId = ctx.callbackQuery.message.message_id
-                bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId)
+                bot.api.deleteMessage(ctx.chat.id, callbackMsgId)
                 ctx.reply('Nakupenda pia Zumaridi 😍 zaidi ata ya shemdoe')
             }
 
             else if (ctx.callbackQuery.data.includes('nimekutukana')) {
                 let callbackMsgId = ctx.callbackQuery.message.message_id
-                bot.telegram.deleteMessage(ctx.chat.id, callbackMsgId)
+                bot.api.deleteMessage(ctx.chat.id, callbackMsgId)
                 ctx.reply('😏 Mxeeew! Lione na domo lako kama la Mr. Paul 😭😂😂')
             }
 
@@ -160,7 +168,7 @@ module.exports = (bot, dt, anyErr, other_channels) => {
                 } else {
                     txt = "Korean Drama Store (@dramastore1)"
                 }
-                ctx.answerCbQuery(txt, { show_alert: false })
+                ctx.answerCallbackQuery({text: txt, show_alert: false })
             }
         } catch (err) {
             anyErr(err)
