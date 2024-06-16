@@ -100,7 +100,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 const other_channels = [dt.hotel_del_luna, dt.hotel_king, dt.dr_stranger, dt.romance_book, dt.my_love_from_star, dt.tale, dt.fiery, dt.hwarang, dt.revenge]
 
 
-bot.command('search', async ctx => {
+bot.command(['search', 'Search', 'SEARCH'], async ctx => {
     try {
         await ctx.replyWithChatAction('typing')
         if (ctx.match && !trendingRateLimit.includes(ctx.chat.id)) {
@@ -128,7 +128,7 @@ bot.command('search', async ctx => {
                 console.log(query)
             }
         } else if(!ctx.match && !trendingRateLimit.includes(ctx.chat.id)) {
-            await ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 10662)
+            await ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 10669)
         }
     } catch (error) {
         await ctx.reply(`Oops! An error occurred while processing your searching request. Please forward this message to @shemdoe`)

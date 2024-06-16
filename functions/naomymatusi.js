@@ -24,7 +24,7 @@ module.exports = (bot, dt, anyErr) => {
                 }
 
                 //elekeza kutafuta drama
-                await ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 10662)
+                await ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 10669)
             }
         } catch (err) {
             console.log(err.message, err)
