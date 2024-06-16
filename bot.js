@@ -76,7 +76,7 @@ const dt = {
 }
 
 var trendingRateLimit = []
-setInterval(() => { trendingRateLimit.length = 0 }, 15000) //clear every 10 secs
+setInterval(() => { trendingRateLimit.length = 0 }, 10000) //clear every 10 secs
 
 setInterval(() => {
     let d = new Date()
@@ -99,24 +99,40 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 const other_channels = [dt.hotel_del_luna, dt.hotel_king, dt.dr_stranger, dt.romance_book, dt.my_love_from_star, dt.tale, dt.fiery, dt.hwarang, dt.revenge]
 
-bot.command('kenge', async ctx => {
-    if (ctx.chat.id == dt.shd || ctx.chat.id == dt.htlt) {
-        let txt = ctx.message.text
-        let uj = txt.split('/kenge ')[1]
-        if (txt.includes('#')) {
-            let ujNid = uj.split('#')
-            uj = ujNid[0]
-            let rplyId = Number(ujNid[1])
-            bot.api.sendMessage(dt.naomy, uj, {
-                reply_to_message_id: rplyId,
-                parse_mode: 'HTML'
-            })
-        }
-        else {
-            bot.api.sendMessage(dt.naomy, uj)
-        }
-    }
 
+bot.command('search', async ctx => {
+    try {
+        await ctx.replyWithChatAction('typing')
+        if (ctx.match && !trendingRateLimit.includes(ctx.chat.id)) {
+            trendingRateLimit.push(ctx.chat.id)
+            let domain = `http://www.dramastore.net`
+            let match = ctx.match
+            //replace all special characters with '' and all +white spaces with ' '
+            let query = match.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, ' ').trim()
+            let queryArray = query.split(' ')
+
+            //case-insensitive regular expression from the query
+            // Create a regex that matches all keywords in any order
+            const regex = new RegExp(queryArray.map(kw => `(?=.*${kw})`).join(''), 'i');
+
+            let dramas = await dramasModel.find({ newDramaName: regex }).sort('-timesLoaded').limit(15)
+            let txt = `The following drama were found from your search command "<code>${match}</code>"\n\n`
+            let nodrama = `Oops! No drama found from your search command "<code>${match}</code>".\n\n<u>Here are some tips:</u>\nBefore sending the search command, please google the name of the drama to ensure you provide a <b>valid drama name</b>. If you can't find the drama here, try on our website \n<b>${domain}</b>`
+            if (dramas.length > 0) {
+                for (let [index, d] of dramas.entries()) {
+                    txt = txt + `<b>${index + 1}. ${d.newDramaName} \n${domain}/${d.id}</b>\n\n`
+                }
+                await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
+            } else {
+                await ctx.reply(nodrama, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
+                console.log(query)
+            }
+        } else if(!ctx.match && !trendingRateLimit.includes(ctx.chat.id)) {
+            await ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 10662)
+        }
+    } catch (error) {
+        await ctx.reply(`Oops! An error occurred while processing your searching request. Please forward this message to @shemdoe`)
+    }
 })
 
 
@@ -182,7 +198,7 @@ bot.command('trending_today', async ctx => {
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.today.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
-            await ctx.reply(txt, { parse_mode: 'HTML', disable_web_page_preview: true })
+            await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -204,7 +220,7 @@ bot.command('trending_this_week', async ctx => {
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
-            await ctx.reply(txt, { parse_mode: 'HTML', disable_web_page_preview: true })
+            await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -224,7 +240,7 @@ bot.command('trending_this_month', async ctx => {
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
-            await ctx.reply(txt, { parse_mode: 'HTML', disable_web_page_preview: true })
+            await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -244,7 +260,7 @@ bot.command('all_time', async ctx => {
             todays.forEach((d, i) => {
                 txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.timesLoaded.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
             })
-            await ctx.reply(txt, { parse_mode: 'HTML', disable_web_page_preview: true })
+            await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -254,7 +270,7 @@ bot.command('all_time', async ctx => {
 bot.command('find_drama', async ctx => {
     let txt = `Hey <b>${ctx.chat.first_name}!</b>\n\nYou can find drama on our website here ${dt.dstore_domain} or join our main Telegram channel and use the search filter to find the drama you need\n\n<b>Our Main Channel:</b>\n${dt.main_channel}\n${dt.main_channel}`
     try {
-        await ctx.reply(txt, { parse_mode: 'HTML', disable_web_page_preview: true })
+        await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
     } catch (err) {
         console.log(err.message)
     }
@@ -372,17 +388,17 @@ bot.command('admin', async ctx => {
     }
 })
 
-bot.on('chat_join_request', async ctx=> {
+bot.on('chat_join_request', async ctx => {
     try {
         let userid = ctx.chatJoinRequest.from.id
         let chan_id = ctx.chatJoinRequest.chat.id
         //if is drama updates
-        if(chan_id == dt.aliProducts) {
-            await bot.api.sendMessage(userid, 'Request approved. You can now download the episode.\n\nClick the <b>✅ DONE</b> button above to proceed with your download', {parse_mode: 'HTML'})
+        if (chan_id == dt.aliProducts) {
+            await bot.api.sendMessage(userid, 'Request approved. You can now download the episode.\n\nClick the <b>✅ DONE</b> button above to proceed with your download', { parse_mode: 'HTML' })
             await delay(500)
             await bot.api.approveChatJoinRequest(chan_id, userid)
         } else {
-            await bot.api.sendMessage(userid, 'Request approved. You can now download Korean Dramas from Our Channel', {parse_mode: 'HTML'})
+            await bot.api.sendMessage(userid, 'Request approved. You can now download Korean Dramas from Our Channel', { parse_mode: 'HTML' })
             await delay(500)
             await bot.api.approveChatJoinRequest(chan_id, userid)
         }

@@ -44,7 +44,7 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                     if (member.status == 'left') {
                         await ctx.reply(`⚠ You didn't join our notifications channel. \n\nTo get this episode please join the channel below and then click <b>✅ Done</b> button to proceed.\n\n<b>🔗 Join the Channel: 👇\n${sp_ch}</b>`, {
                             parse_mode: 'HTML',
-                            disable_web_page_preview: true,
+                            link_preview_options: { is_disabled: true },
                             reply_markup: { inline_keyboard: [[{ text: '✅ Done', url: `https://t.me/dramastorebot?start=marikiID-${ep_doc_id}` }]] }
                         })
                     } else {
