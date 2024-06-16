@@ -24,6 +24,7 @@ const sendToDramastore = require('./functions/sendToDramastore')
 const startBot = require('./functions/start')
 const naomymatusi = require('./functions/naomymatusi')
 const trendingFunctions = require('./functions/schedulers')
+const { sendTome, sendToMe } = require('./functions/partials/sendtome')
 
 mongoose.set('strictQuery', false)
 mongoose.connect(`mongodb://${process.env.DUSER}:${process.env.DPASS}@nodetuts-shard-00-00.ngo9k.mongodb.net:27017,nodetuts-shard-00-01.ngo9k.mongodb.net:27017,nodetuts-shard-00-02.ngo9k.mongodb.net:27017/dramastore?ssl=true&replicaSet=atlas-pyxyme-shard-0&authSource=admin&retryWrites=true&w=majority`)
@@ -102,9 +103,11 @@ const other_channels = [dt.hotel_del_luna, dt.hotel_king, dt.dr_stranger, dt.rom
 
 bot.command(['search', 'Search', 'SEARCH'], async ctx => {
     try {
-        await ctx.replyWithChatAction('typing')
-        if (ctx.match && !trendingRateLimit.includes(ctx.chat.id)) {
+        if (ctx.match && !trendingRateLimit.includes(ctx.chat.id) && ctx.chat.type == 'private') {
+            await ctx.replyWithChatAction('typing')
             trendingRateLimit.push(ctx.chat.id)
+            //send her command to me
+            await sendToMe(ctx, dt)
             let domain = `http://www.dramastore.net`
             let match = ctx.match
             //replace all special characters with '' and all +white spaces with ' '
@@ -127,7 +130,7 @@ bot.command(['search', 'Search', 'SEARCH'], async ctx => {
                 await ctx.reply(nodrama, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
                 console.log(query)
             }
-        } else if(!ctx.match && !trendingRateLimit.includes(ctx.chat.id)) {
+        } else if (!ctx.match && !trendingRateLimit.includes(ctx.chat.id) && ctx.chat.type == 'private') {
             await ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 10669)
         }
     } catch (error) {
@@ -470,7 +473,7 @@ process.on('uncaughtException', (err) => {
 })
 
 
-const http = require('http')
+const http = require('http');
 const server = http.createServer((req, res) => {
     res.writeHead(200, { "Content-Type": "text/plain" })
     res.end('Karibu, Dramastorebot')
