@@ -12,19 +12,23 @@ module.exports = (bot, dt, anyErr) => {
 
                 await bot.api.copyMessage(userid, myid, my_msg_id, { reply_parameters: { message_id: mid, allow_sending_without_reply: true } })
             } else {
+                await ctx.replyWithChatAction('typing')
                 let userid = ctx.chat.id
                 let txt = ctx.message.text
                 let username = ctx.chat.first_name
                 let mid = ctx.message.message_id
 
                 if (muhimu.includes(ctx.chat.id)) {
-                    await bot.api.sendMessage(dt.shd, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>&mid=${mid}`, { parse_mode: 'HTML'})
+                    await bot.api.sendMessage(dt.shd, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>&mid=${mid}`, { parse_mode: 'HTML' })
                 } else {
                     await bot.api.sendMessage(dt.htlt, `<b>${txt}</b> \n\nfrom = <code>${username}</code>\nid = <code>${userid}</code>&mid=${mid}`, { parse_mode: 'HTML', disable_notification: true })
                 }
 
                 //elekeza kutafuta drama
-                await ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 10669)
+                setTimeout(() => {
+                    ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 10669)
+                        .catch(e => console.log(e.message))
+                }, 1500)
             }
         } catch (err) {
             console.log(err.message, err)

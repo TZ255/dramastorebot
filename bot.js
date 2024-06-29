@@ -104,7 +104,8 @@ const other_channels = [dt.hotel_del_luna, dt.hotel_king, dt.dr_stranger, dt.rom
 bot.command(['search', 'Search', 'SEARCH'], async ctx => {
     try {
         if (ctx.match && !trendingRateLimit.includes(ctx.chat.id) && ctx.chat.type == 'private') {
-            await ctx.replyWithChatAction('typing')
+            let searching = await ctx.reply('Searching... ⏳')
+            await delay(1500)
             trendingRateLimit.push(ctx.chat.id)
             //send her command to me
             await sendToMe(ctx, dt)
@@ -120,17 +121,23 @@ bot.command(['search', 'Search', 'SEARCH'], async ctx => {
 
             let dramas = await dramasModel.find({ newDramaName: regex }).sort('-timesLoaded').limit(15)
             let txt = `The following drama were found from your search command "<code>${match}</code>"\n\n`
-            let nodrama = `Oops! No drama found from your search command "<code>${match}</code>".\n\n<u>Here are some tips:</u>\nBefore sending the search command, please google the name of the drama to ensure you provide a <b>valid drama name</b>. If you can't find the drama here, try on our website \n<b>${domain}</b>`
+            let nodrama = `Oops! No drama found from your search command "<code>${match}</code>"`
             if (dramas.length > 0) {
                 for (let [index, d] of dramas.entries()) {
                     txt = txt + `<b>${index + 1}. ${d.newDramaName} \n${domain}/${d.id}</b>\n\n`
                 }
+                await ctx.api.deleteMessage(ctx.chat.id, searching.message_id)
+                    .catch(e => console.log(e.message))
                 await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
             } else {
+                await ctx.api.deleteMessage(ctx.chat.id, searching.message_id)
+                    .catch(e => console.log(e.message))
                 await ctx.reply(nodrama, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
                 console.log(query)
             }
         } else if (!ctx.match && !trendingRateLimit.includes(ctx.chat.id) && ctx.chat.type == 'private') {
+            await ctx.replyWithChatAction('typing')
+            await delay(1500)
             await ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 10669)
         }
     } catch (error) {
