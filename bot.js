@@ -101,7 +101,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 const other_channels = [dt.hotel_del_luna, dt.hotel_king, dt.dr_stranger, dt.romance_book, dt.my_love_from_star, dt.tale, dt.fiery, dt.hwarang, dt.revenge]
 
 
-bot.command(['search', 'Search', 'SEARCH', 'find_drama'], async ctx => {
+bot.command(['search', 'Search', 'SEARCH', 'find_drama', 'find'], async ctx => {
     try {
         if (ctx.match && !trendingRateLimit.includes(ctx.chat.id) && ctx.chat.type == 'private') {
             let searching = await ctx.reply('Searching... ⏳')
@@ -124,7 +124,7 @@ bot.command(['search', 'Search', 'SEARCH', 'find_drama'], async ctx => {
             let nodrama = `Oops! No drama found from your search command "<code>${match}</code>"`
             if (dramas.length > 0) {
                 for (let [index, d] of dramas.entries()) {
-                    txt = txt + `<b>${index + 1}. ${d.newDramaName} \n➜ ${d.tgChannel}</b>\n\n`
+                    txt = txt + `<b>${index + 1}. ${d.newDramaName} \n> ${d.tgChannel}</b>\n\n`
                 }
                 await ctx.api.deleteMessage(ctx.chat.id, searching.message_id)
                     .catch(e => console.log(e.message))
@@ -402,7 +402,7 @@ bot.command('migrate', async (ctx) => {
                     let search = `t.me/${ctx.me.username}?start=find_drama`
                     let trending = `t.me/${ctx.me.username}?start=on_trending`
                     let inline_keyboard = new InlineKeyboard()
-                        .url(`📥 DOWNLOAD ALL EPISODES`, chan).row()
+                        .url(`⬇ DOWNLOAD ALL EPISODES`, chan).row()
                         .url(`📊 Trending`, trending).url(`🔍 Find drama`, search).row()
 
                     let link = `<a href="${ph}">📺</a> <u><b>${dName}</b></u>`

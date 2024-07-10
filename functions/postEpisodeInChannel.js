@@ -372,8 +372,8 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                                             { text: '⬇ DOWNLOAD ALL EPISODES', url: invite_link }
                                         ],
                                         [
-                                            { text: '📞 Admin', url: 'https://t.me/shemdoe' },
-                                            { text: '🔍 Find drama', url: 'www.dramastore.net/list-of-dramastore-dramas' }
+                                            { text: '📊 Trending', url: 't.me/dramastorebot?start=on_trending' },
+                                            { text: '🔍 Find drama', url: 't.me/dramastorebot?start=find_drama' }
                                         ],
                                         [
                                             { text: 'Push to dramastore', callback_data: 'push' }
