@@ -101,7 +101,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 const other_channels = [dt.hotel_del_luna, dt.hotel_king, dt.dr_stranger, dt.romance_book, dt.my_love_from_star, dt.tale, dt.fiery, dt.hwarang, dt.revenge]
 
 
-bot.command(['search', 'Search', 'SEARCH', 'find_drama', 'find'], async ctx => {
+bot.command(['search', 'Search', 'SEARCH', 'find_drama', 'find', 'Find', 'FIND'], async ctx => {
     try {
         if (ctx.match && !trendingRateLimit.includes(ctx.chat.id) && ctx.chat.type == 'private') {
             let searching = await ctx.reply('Searching... ⏳')

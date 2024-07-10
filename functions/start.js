@@ -235,7 +235,7 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                 }
 
                 else if (payload.includes('on_trending')) {
-                    await ctx.reply(`To see what is on trending on dramastore. Use the following commands\n\n🤖 /trending_today - daily top 10 trending dramas.\n\n🤖 /trending_this_week - weekly top 10 trending dramas.\n\n🤖 /all_time - most popular dramas on dramastore.`)
+                    await ctx.reply(`To see what is on trending on dramastore. Use the following commands\n\n🤖 /trending_today - daily top 10 trending dramas.\n\n🤖 /trending_this_week - top 10 trending dramas this week.\n\n🤖 /trending_this_month - top 10 trending dramas this month.\n\n🤖 /all_time - most popular dramas on dramastore.`)
                 }
 
                 else if (payload.includes('find_drama')) {
