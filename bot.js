@@ -407,7 +407,7 @@ bot.command('migrate', async (ctx) => {
 
                     let link = `<a href="${ph}">📺</a> <u><b>${dName}</b></u>`
                     setTimeout(() => {
-                        bot.api.sendMessage(1245181784, link, {
+                        bot.api.sendMessage(dt.ds, link, {
                             parse_mode: 'HTML',
                             reply_markup: inline_keyboard,
                             link_preview_options: { prefer_large_media: true },
@@ -415,7 +415,7 @@ bot.command('migrate', async (ctx) => {
                         })
                             .then(() => {
                                 if (index == all.length - 1) {
-                                    bot.api.sendMessage(dt.shd, 'nimemaliza')
+                                    bot.api.sendMessage(dt.shd, 'nimemaliza migration')
                                         .catch((e) => console.log(e.message))
                                 }
                             })
