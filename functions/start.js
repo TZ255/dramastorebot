@@ -233,6 +233,14 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                         }
                     }
                 }
+
+                else if (payload.includes('on_trending')) {
+                    await ctx.reply(`To see what is on trending on dramastore. Use the following commands\n\n🤖 /trending_today - daily top 10 trending dramas.\n\n🤖 /trending_this_week - weekly top 10 trending dramas.\n\n🤖 /all_time - most popular dramas on dramastore.`)
+                }
+
+                else if (payload.includes('find_drama')) {
+                    await ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 10669)
+                }
             }
             else if (ctx.match && trendingRateLimit.includes(ctx.chat.id)) {
                 await ctx.api.deleteMessage(ctx.chat.id, message_id)

@@ -1,4 +1,4 @@
-const { Bot } = require('grammy')
+const { Bot, InlineKeyboard } = require('grammy')
 const { autoRetry } = require("@grammyjs/auto-retry");
 const mongoose = require('mongoose')
 require('dotenv').config()
@@ -101,7 +101,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 const other_channels = [dt.hotel_del_luna, dt.hotel_king, dt.dr_stranger, dt.romance_book, dt.my_love_from_star, dt.tale, dt.fiery, dt.hwarang, dt.revenge]
 
 
-bot.command(['search', 'Search', 'SEARCH'], async ctx => {
+bot.command(['search', 'Search', 'SEARCH', 'find_drama'], async ctx => {
     try {
         if (ctx.match && !trendingRateLimit.includes(ctx.chat.id) && ctx.chat.type == 'private') {
             let searching = await ctx.reply('Searching... ⏳')
@@ -124,7 +124,7 @@ bot.command(['search', 'Search', 'SEARCH'], async ctx => {
             let nodrama = `Oops! No drama found from your search command "<code>${match}</code>"`
             if (dramas.length > 0) {
                 for (let [index, d] of dramas.entries()) {
-                    txt = txt + `<b>${index + 1}. ${d.newDramaName} \n${domain}/${d.id}</b>\n\n`
+                    txt = txt + `<b>${index + 1}. ${d.newDramaName} \n➜ ${d.tgChannel}</b>\n\n`
                 }
                 await ctx.api.deleteMessage(ctx.chat.id, searching.message_id)
                     .catch(e => console.log(e.message))
@@ -206,7 +206,7 @@ bot.command('trending_today', async ctx => {
             let txt = `🔥 <u><b>Trending Today (UTC)</b></u>\n<code>${d}</code>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.today.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
+                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.today.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
             })
             await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
         }
@@ -228,7 +228,7 @@ bot.command('trending_this_week', async ctx => {
             let txt = `🔥 <u><b>On Trending This Week (Day ${d})</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
+                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
             })
             await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
         }
@@ -248,7 +248,7 @@ bot.command('trending_this_month', async ctx => {
             let txt = `🔥 <u><b>On Trending This Month (UTC)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
+                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
             })
             await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
         }
@@ -268,21 +268,12 @@ bot.command('all_time', async ctx => {
             let txt = `🔥 <u><b>Most Popular Dramas (of All Time)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.timesLoaded.toLocaleString('en-US')}</b>\n📥 ${dt.dstore_domain}/${d.id}\n\n\n`
+                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.timesLoaded.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
             })
             await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
         }
     } catch (err) {
         await ctx.reply(err.message)
-    }
-})
-
-bot.command('find_drama', async ctx => {
-    let txt = `Hey <b>${ctx.chat.first_name}!</b>\n\nYou can find drama on our website here ${dt.dstore_domain} or join our main Telegram channel and use the search filter to find the drama you need\n\n<b>Our Main Channel:</b>\n${dt.main_channel}\n${dt.main_channel}`
-    try {
-        await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
-    } catch (err) {
-        console.log(err.message)
     }
 })
 
@@ -395,6 +386,46 @@ bot.command('admin', async ctx => {
     } catch (err) {
         console.log(err.message)
         await ctx.reply(err.message)
+    }
+})
+
+bot.command('migrate', async (ctx) => {
+    try {
+        if (ctx.chat.id == dt.shd) {
+            let all = await dramasModel.find()
+
+            for (let [index, d] of all.entries()) {
+                if (d.telegraph) {
+                    let dName = d.newDramaName
+                    let ph = d.telegraph
+                    let chan = d.tgChannel
+                    let search = `t.me/${ctx.me.username}?start=find_drama`
+                    let trending = `t.me/${ctx.me.username}?start=on_trending`
+                    let inline_keyboard = new InlineKeyboard()
+                        .url(`📥 DOWNLOAD ALL EPISODES`, chan).row()
+                        .url(`📊 Trending`, trending).url(`🔍 Find drama`, search).row()
+
+                    let link = `<a href="${ph}">📺</a> <u><b>${dName}</b></u>`
+                    setTimeout(() => {
+                        bot.api.sendMessage(1245181784, link, {
+                            parse_mode: 'HTML',
+                            reply_markup: inline_keyboard,
+                            link_preview_options: { prefer_large_media: true },
+                            disable_notification: true
+                        })
+                            .then(() => {
+                                if (index == all.length - 1) {
+                                    bot.api.sendMessage(dt.shd, 'nimemaliza')
+                                        .catch((e) => console.log(e.message))
+                                }
+                            })
+                            .catch(e => console.log(e.message))
+                    }, index * 4000)
+                }
+            }
+        }
+    } catch (error) {
+        await ctx.reply(error.message)
     }
 })
 

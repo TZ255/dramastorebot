@@ -31,6 +31,7 @@ const NewDrama = new Schema(
     aired: {type: String, default: "2 episodes per week"},
     status: {type: String, required: false},
     tgChannel: {type: String, required: true},
+    telegraph: {type: String},
     timesLoaded: {type: Number, default: 1},
     chan_id: {type: Number},
     episodes: {type: Array},
