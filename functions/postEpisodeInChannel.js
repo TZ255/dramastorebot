@@ -23,20 +23,12 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                         let extraParams = ''
 
                         //document spillited with dramastore
-                        if (fileName.includes('dramastore.xyz')) {
-                            noEp = fileName.split('[dramastore.xyz] ')[1].substring(0, 3)
-                        }
-                        else if (fileName.includes('dramastore.net') && !fileName.includes('NK.3.')) {
-                            noEp = fileName.split('[dramastore.net] ')[1].substring(0, 3)
-                        }
-                        else if (fileName.toLowerCase().includes('@dramaost')) {
-                            noEp = fileName.toLowerCase().split('@dramaost.')[1].substring(0, 3).toUpperCase()
-                        }
-                        else if (fileName.toLowerCase().includes('nk.3.mkv')) {
-                            noEp = fileName.toLowerCase().split('[dramastore.net]')[1].substring(1, 5).toUpperCase()
-                        }
-                        else if (fileName.toLowerCase().startsWith('e')) {
-                            noEp = fileName.toLowerCase().substring(0, 3).toUpperCase()
+                        if (fileName.includes('[dramastore.net] E')) {
+                            noEp = fileName.split('[dramastore.net] E')[1].substring(0, 2)
+                        } else if (fileName.includes('[dramastore.net] S01E')) {
+                            noEp = fileName.split('[dramastore.net] S01E')[1].substring(0, 2)
+                        } else if (fileName.includes('[dramastore.net] S02E')) {
+                            noEp = fileName.split('[dramastore.net] S02E')[1].substring(0, 2)
                         }
 
                         if (fileName.toLowerCase().includes('480p.web')) {
@@ -61,7 +53,7 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                             extraParams = 'NK'
                         }
 
-                        else if (fileName.toLowerCase().includes('.540p.nk.') && fileName.includes('S02.')) {
+                        else if (fileName.toLowerCase().includes('.540p.nk.') && fileName.includes('S02E')) {
                             capQty = '540P HDTV H.265'
                             muxed = '#English Hard-subbed'
                             extraParams = 'NK_S02'
@@ -85,13 +77,13 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                             extraParams = 'KIMOI'
                         }
 
-                        let cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}\n\n⭐️ Find More K-Dramas at\n<a href="https://t.me/+vfhmLVXO7pIzZThk">@KOREAN_DRAMA_STORE</a></b>`
+                        let cap = `<b>Ep. ${noEp} | ${capQty}  \n${muxed}\n\n⭐️ Find More K-Dramas at\n<a href="https://t.me/+vfhmLVXO7pIzZThk">@KOREAN_DRAMA_STORE</a></b>`
                         if (muxed == '#English Soft-subbed') {
-                            cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}</b>\n\n<i>- This ep. is soft-subbed, use VLC or MX Player to see subtitles</i>`
+                            cap = `<b>Ep. ${noEp} | ${capQty}  \n${muxed}</b>\n\n<i>- This ep. is soft-subbed, use VLC or MX Player to see subtitles</i>`
                         }
 
                         if (extraParams == 'NN=') {
-                            cap = `<b>Ep. ${noEp.substring(1)} | ${capQty}  \n${muxed}</b>\n\n<i>- This episode has no subtitle. While playing add the subtitle file below.</i>`
+                            cap = `<b>Ep. ${noEp} | ${capQty}  \n${muxed}</b>\n\n<i>- This episode has no subtitle. While playing add the subtitle file below.</i>`
                         }
 
                         await bot.api.editMessageCaption(ctx.channelPost.chat.id, msgId, {
@@ -109,7 +101,7 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                         let txt = ctx.channelPost.text
                         if (txt.includes('uploading_new_episode')) {
                             let data = txt.split('_')
-                            let ep = data[3].substring(1)
+                            let ep = data[3]
                             let size = data[4].substring(1) + " MB"
                             let sizeWeb = data[4].substring(1).trim()
                             let epMsgId = data[5].substring(5)
@@ -265,7 +257,7 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                             let country = $('.box-body ul li:nth-child(2)').text().split('Country: ')[1].split('Ranked')[0].trim()
 
                             let page = await ph.createPage(process.env.TOKEN, dramaName, [
-                                { tag: 'img', attrs: { src: highq_img } },
+                                { tag: 'img', attrs: { src: lowq_img } },
                                 { tag: 'h3', children: ['Details'] },
                                 {
                                     tag: 'ul', children: [

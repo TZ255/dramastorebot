@@ -111,8 +111,8 @@ bot.command(['search', 'Search', 'SEARCH', 'find_drama', 'find', 'Find', 'FIND']
             await sendToMe(ctx, dt)
             let domain = `http://www.dramastore.net`
             let match = ctx.match
-            //replace all special characters with '' and all +white spaces with ' '
-            let query = match.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, ' ').trim()
+            //replace all special characters except ' with '' and all +white spaces with ' '
+            let query = match.replace(/[^a-zA-Z0-9\s']/g, '').replace(/\s+/g, ' ').trim()
             let queryArray = query.split(' ')
 
             //case-insensitive regular expression from the query
