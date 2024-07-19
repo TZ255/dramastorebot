@@ -47,7 +47,7 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                             extraParams = '540p_WEBDL'
                         }
 
-                        else if (fileName.toLowerCase().includes('.540p.nk.') && !fileName.includes('S02.')) {
+                        else if (fileName.toLowerCase().includes('.540p.nk.') && !fileName.includes('S02E')) {
                             capQty = '540P HDTV H.265'
                             muxed = '#English Hard-subbed'
                             extraParams = 'NK'
@@ -217,6 +217,11 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
 
                         else if (txt.includes('post_drama')) {
                             let chid = ctx.channelPost.chat.id
+                            let waikiki_id = -1002192201513
+                            //copy and pin H265
+                            let h265 = await ctx.api.copyMessage(chid, waikiki_id, 5)
+                            await ctx.api.pinChatMessage(chid, h265.message_id)
+
                             let info = await bot.api.getChat(chid)
                             let arrs = txt.split('=')
 
@@ -257,7 +262,7 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                             let country = $('.box-body ul li:nth-child(2)').text().split('Country: ')[1].split('Ranked')[0].trim()
 
                             let page = await ph.createPage(process.env.TOKEN, dramaName, [
-                                { tag: 'img', attrs: { src: lowq_img } },
+                                { tag: 'img', attrs: { src: highq_img } },
                                 { tag: 'h3', children: ['Details'] },
                                 {
                                     tag: 'ul', children: [
