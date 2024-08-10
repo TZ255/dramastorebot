@@ -29,6 +29,12 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                             noEp = fileName.split('[dramastore.net] S01E')[1].substring(0, 2)
                         } else if (fileName.includes('[dramastore.net] S02E')) {
                             noEp = fileName.split('[dramastore.net] S02E')[1].substring(0, 2)
+                        } else if (fileName.includes('[dramastore.net] S03E')) {
+                            noEp = fileName.split('[dramastore.net] S03E')[1].substring(0, 2)
+                        } else if (fileName.includes('[dramastore.net] S04E')) {
+                            noEp = fileName.split('[dramastore.net] S04E')[1].substring(0, 2)
+                        } else if (fileName.includes('@dramaost.')) {
+                            noEp = fileName.split('@dramaost.E')[1].split('.')[0]
                         }
 
                         if (fileName.toLowerCase().includes('480p.web')) {
@@ -47,16 +53,10 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                             extraParams = '540p_WEBDL'
                         }
 
-                        else if (fileName.toLowerCase().includes('.540p.nk.') && !fileName.includes('S02E')) {
+                        else if (fileName.toLowerCase().includes('.540p.nk.')) {
                             capQty = '540P HDTV H.265'
                             muxed = '#English Hard-subbed'
                             extraParams = 'NK'
-                        }
-
-                        else if (fileName.toLowerCase().includes('.540p.nk.') && fileName.includes('S02E')) {
-                            capQty = '540P HDTV H.265'
-                            muxed = '#English Hard-subbed'
-                            extraParams = 'NK_S02'
                         }
 
                         else if (fileName.toLowerCase().includes('.540p.nn.')) {
@@ -101,7 +101,7 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                         let txt = ctx.channelPost.text
                         if (txt.includes('uploading_new_episode')) {
                             let data = txt.split('_')
-                            let ep = data[3]
+                            let ep = data[3].replace('E', '') //remove E from E01
                             let size = data[4].substring(1) + " MB"
                             let sizeWeb = data[4].substring(1).trim()
                             let epMsgId = data[5].substring(5)
@@ -150,14 +150,9 @@ module.exports = (bot, dt, anyErr, axios, cheerio, ph, new_drama, homeModel, oth
                                 quality = '540p HDTV H.265'
                                 enc = ''
                             }
-                            else if (txt.includes('NK') && !txt.includes('NK_S02')) {
+                            else if (txt.includes('NK')) {
                                 quality = '540p HDTV H.265'
                                 subs = '#English Hard-subbed'
-                            }
-                            else if (txt.includes('NK_S02')) {
-                                quality = '540p HDTV H.265'
-                                subs = '#English Hard-subbed'
-                                _ep_word = 'S02E'
                             }
                             else if (txt.includes('NN=')) {
                                 quality = '540p HDTV H.265'
