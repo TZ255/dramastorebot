@@ -26,9 +26,17 @@ module.exports = (bot, dt, anyErr) => {
 
                 //elekeza kutafuta drama
                 setTimeout(() => {
-                    ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 10669)
+                    ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 12062, {
+                        reply_markup: {
+                            inline_keyboard: [
+                                [
+                                    {text: '🔍 Find drama here', url:'https://dramastore.net/list/all'}
+                                ]
+                            ]
+                        }
+                    })
                         .catch(e => console.log(e.message))
-                }, 1500)
+                }, 500)
             }
         } catch (err) {
             console.log(err.message, err)

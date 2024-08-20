@@ -1,4 +1,4 @@
-const { Bot, InlineKeyboard } = require('grammy')
+const { Bot, InlineKeyboard, InlineQueryResultBuilder } = require('grammy')
 const { autoRetry } = require("@grammyjs/auto-retry");
 const mongoose = require('mongoose')
 require('dotenv').config()
@@ -101,7 +101,7 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 const other_channels = [dt.hotel_del_luna, dt.hotel_king, dt.dr_stranger, dt.romance_book, dt.my_love_from_star, dt.tale, dt.fiery, dt.hwarang, dt.revenge]
 
 
-bot.command(['search', 'Search', 'SEARCH', 'find_drama', 'find', 'Find', 'FIND'], async ctx => {
+bot.command(['fff'], async ctx => {
     try {
         if (ctx.match && !trendingRateLimit.includes(ctx.chat.id) && ctx.chat.type == 'private') {
             let searching = await ctx.reply('Searching... ⏳')
@@ -144,8 +144,6 @@ bot.command(['search', 'Search', 'SEARCH', 'find_drama', 'find', 'Find', 'FIND']
         await ctx.reply(`Oops! An error occurred while processing your searching request. Please forward this message to @shemdoe`)
     }
 })
-
-
 
 bot.command('block', async ctx => {
     if (ctx.chat.id == dt.shd || ctx.chat.id == dt.htlt) {

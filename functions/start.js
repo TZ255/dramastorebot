@@ -20,7 +20,7 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                     reply_markup: {
                         inline_keyboard: [
                             [
-                                { text: '🌎 OPEN DRAMA STORE', url: 'www.dramastore.net' }
+                                { text: '🌎 OPEN DRAMA STORE', url: 'www.dramastore.net/list/all' }
                             ]
                         ]
                     }
