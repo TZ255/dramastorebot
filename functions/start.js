@@ -41,13 +41,6 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
 
                     //check if joined sponsor
                     if (member.status == 'left') {
-                        //create new invite link
-                        // let new_link = await bot.api.createChatInviteLink(dt.aliProducts, {
-                        //     name: ctx.chat.id,
-                        //     expire_date: ctx.message.date + (60*30), //15 minutes
-                        //     creates_join_request: true
-                        // })
-                        //let sp_ch = new_link.invite_link
                         let sp_ch = 'https://t.me/+waNS0WLblD9lODZk'
                         await ctx.reply(`⚠ You didn't join our notifications channel. \n\nTo get this episode please join the channel through the link below and then click <b>✅ Done</b> button to proceed.\n\n<b>🔗 Join the Channel: 👇\n${sp_ch}\n${sp_ch}</b>\n\n•••`, {
                             parse_mode: 'HTML',

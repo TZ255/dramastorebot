@@ -3,6 +3,7 @@ const { autoRetry } = require("@grammyjs/auto-retry");
 const mongoose = require('mongoose')
 require('dotenv').config()
 const usersModel = require('./models/botusers')
+const inviteModel = require('./models/invitelink')
 const dramasModel = require('./models/vue-new-drama')
 const homeModel = require('./models/vue-home-db')
 const { nanoid } = require('nanoid')
@@ -25,6 +26,7 @@ const startBot = require('./functions/start')
 const naomymatusi = require('./functions/naomymatusi')
 const trendingFunctions = require('./functions/schedulers')
 const { sendTome, sendToMe } = require('./functions/partials/sendtome')
+const { createChatInviteLink } = require('./functions/partials/createLink')
 
 mongoose.set('strictQuery', false)
 mongoose.connect(`mongodb://${process.env.DUSER}:${process.env.DPASS}@nodetuts-shard-00-00.ngo9k.mongodb.net:27017,nodetuts-shard-00-01.ngo9k.mongodb.net:27017,nodetuts-shard-00-02.ngo9k.mongodb.net:27017/dramastore?ssl=true&replicaSet=atlas-pyxyme-shard-0&authSource=admin&retryWrites=true&w=majority`)
@@ -488,12 +490,32 @@ naomymatusi(bot, dt, anyErr)
 
 //scrap nkiri every five minutes
 setInterval(() => {
-    nkiriFetch.nkiriFetch(dt, bot)
-        .catch(err => {
-            bot.api.sendMessage(-1002079073174, err.message)
-                .catch(e => console.log(e.message))
+    //new link on dt.ali every even hours (12 links a day)
+    let d = new Date()
+    let mins = d.getMinutes()
+    let hrs = d.getHours()
+    let secs = d.getSeconds()
+    let stampSeconds = Date.now() / 10000
+
+    if (mins == 13 && hrs % 2 == 0) {
+        let name = `${d.getDate()}/${d.getMonth() + 1} - ${hrs}:${mins}`
+        let expire = stampSeconds + (60 * 60 * 4) //4 hours
+        createChatInviteLink(bot, dt, name, expire).catch(e => console.log(e.message))
+        .then(()=> {
+            bot.api.sendMessage(dt.shd, 'New link created')
+                    .catch(e => console.log(e.message))
         })
-}, 1000 * 60 * 5)
+    }
+
+    //run nkiri
+    if (mins % 5 == 0) {
+        nkiriFetch.nkiriFetch(dt, bot)
+            .catch(err => {
+                bot.api.sendMessage(-1002079073174, err.message)
+                    .catch(e => console.log(e.message))
+            })
+    }
+}, 1000 * 60)
 
 
 bot.start()
