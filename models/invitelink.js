@@ -8,7 +8,7 @@ const linkSchema = new Schema({
     link: {
         type: String
     }
-}, { timestamps: false, strict: false})
+}, { timestamps: true, strict: false})
 
 const model = mongoose.model('backup_invites', linkSchema)
 module.exports = model

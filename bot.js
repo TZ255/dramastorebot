@@ -495,9 +495,9 @@ setInterval(() => {
     let mins = d.getMinutes()
     let hrs = d.getHours()
     let secs = d.getSeconds()
-    let stampSeconds = Date.now() / 10000
+    let stampSeconds = Date.now() / 1000
 
-    if (mins == 13 && hrs % 2 == 0) {
+    if (mins == 27 && hrs % 2 == 0) {
         let name = `${d.getDate()}/${d.getMonth() + 1} - ${hrs}:${mins}`
         let expire = stampSeconds + (60 * 60 * 4) //4 hours
         createChatInviteLink(bot, dt, name, expire).catch(e => console.log(e.message))
