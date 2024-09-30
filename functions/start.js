@@ -37,11 +37,18 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
 
                 if (payload.includes('marikiID-')) {
                     let ep_doc_id = payload.split('marikiID-')[1]
-                    let sp_ch = 'https://t.me/+qocJnbw7VRQyMjc0'
                     let member = await bot.api.getChatMember(dt.aliProducts, ctx.chat.id)
 
                     //check if joined sponsor
                     if (member.status == 'left') {
+                        //create new invite link
+                        // let new_link = await bot.api.createChatInviteLink(dt.aliProducts, {
+                        //     name: ctx.chat.id,
+                        //     expire_date: ctx.message.date + (60*30), //15 minutes
+                        //     creates_join_request: true
+                        // })
+                        //let sp_ch = new_link.invite_link
+                        let sp_ch = 'https://t.me/+waNS0WLblD9lODZk'
                         await ctx.reply(`⚠ You didn't join our notifications channel. \n\nTo get this episode please join the channel through the link below and then click <b>✅ Done</b> button to proceed.\n\n<b>🔗 Join the Channel: 👇\n${sp_ch}\n${sp_ch}</b>\n\n•••`, {
                             parse_mode: 'HTML',
                             link_preview_options: { is_disabled: true },
@@ -239,7 +246,15 @@ module.exports = (bot, dt, anyErr, trendingRateLimit) => {
                 }
 
                 else if (payload.includes('find_drama')) {
-                    await ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 10669)
+                    await ctx.api.copyMessage(ctx.chat.id, dt.databaseChannel, 12062, {
+                        reply_markup: {
+                            inline_keyboard: [
+                                [
+                                    { text: '🔍 Find drama here', url: 'https://dramastore.net/list/all' }
+                                ]
+                            ]
+                        }
+                    })
                 }
             }
             else if (ctx.match && trendingRateLimit.includes(ctx.chat.id)) {

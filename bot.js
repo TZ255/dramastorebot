@@ -73,7 +73,7 @@ const dt = {
     revenge: -1001863956613,
     divineCh: process.env.divineCh,
     link: process.env.BOT_LINK,
-    aliProducts: -1001971329607
+    aliProducts: -1002494520726
 }
 
 var trendingRateLimit = []
@@ -128,7 +128,6 @@ bot.command(['fff'], async ctx => {
                 }
                 await ctx.api.deleteMessage(ctx.chat.id, searching.message_id)
                     .catch(e => console.log(e.message))
-                await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
             } else {
                 await ctx.api.deleteMessage(ctx.chat.id, searching.message_id)
                     .catch(e => console.log(e.message))
@@ -200,13 +199,15 @@ bot.command('trending_today', async ctx => {
             trendingRateLimit.push(id)
             let d = new Date().toUTCString()
 
-            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel today id').sort('-today')
+            let todays = await dramasModel.find().limit(20).select('newDramaName tgChannel today id').sort('-today')
             let txt = `🔥 <u><b>Trending Today (UTC)</b></u>\n<code>${d}</code>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.today.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
+                let link = `<b><a href="http://dramastore.net/open/${d.id}">${i + 1}). ${d.newDramaName}</a></b>`
+                txt = txt + `${link}\n🔥 ${d.today.toLocaleString('en-US')}\n\n`
             })
-            await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
+            let exp = `\n<blockquote>To download: Click the name of the drama\n\n🔥 XXX - means how many times the drama was downloaded</blockquote>`
+            await ctx.reply(txt + exp, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -220,15 +221,17 @@ bot.command('trending_this_week', async ctx => {
         if (!trendingRateLimit.includes(id)) {
             trendingRateLimit.push(id)
 
-            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisWeek id').sort('-thisWeek')
+            let todays = await dramasModel.find().limit(30).select('newDramaName tgChannel thisWeek id').sort('-thisWeek')
             let d = new Date().getDay()
             if (d == 0) { d = 7 }
             let txt = `🔥 <u><b>On Trending This Week (Day ${d})</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisWeek.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
+                let link = `<b><a href="http://dramastore.net/open/${d.id}">${i + 1}). ${d.newDramaName}</a></b>`
+                txt = txt + `${link}\n🔥 ${d.thisWeek.toLocaleString('en-US')}\n\n`
             })
-            await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
+            let exp = `\n<blockquote>To download: Click the name of the drama\n\n🔥 XXX - means how many times the drama was downloaded</blockquote>`
+            await ctx.reply(txt + exp, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -242,13 +245,15 @@ bot.command('trending_this_month', async ctx => {
         if (!trendingRateLimit.includes(id)) {
             trendingRateLimit.push(id)
 
-            let todays = await dramasModel.find().limit(10).select('newDramaName tgChannel thisMonth id').sort('-thisMonth')
+            let todays = await dramasModel.find().limit(35).select('newDramaName tgChannel thisMonth id').sort('-thisMonth')
             let txt = `🔥 <u><b>On Trending This Month (UTC)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.thisMonth.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
+                let link = `<b><a href="http://dramastore.net/open/${d.id}">${i + 1}). ${d.newDramaName}</a></b>`
+                txt = txt + `${link}\n🔥 ${d.thisMonth.toLocaleString('en-US')}\n\n`
             })
-            await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
+            let exp = `\n<blockquote>To download: Click the name of the drama\n\n🔥 XXX - means how many times the drama was downloaded</blockquote>`
+            await ctx.reply(txt + exp, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
         }
     } catch (err) {
         await ctx.reply(err.message)
@@ -262,13 +267,15 @@ bot.command('all_time', async ctx => {
         if (!trendingRateLimit.includes(id)) {
             trendingRateLimit.push(id)
 
-            let todays = await dramasModel.find().limit(25).select('newDramaName tgChannel timesLoaded id').sort('-timesLoaded')
+            let todays = await dramasModel.find().limit(45).select('newDramaName tgChannel timesLoaded id').sort('-timesLoaded')
             let txt = `🔥 <u><b>Most Popular Dramas (of All Time)</b></u>\n\n\n`
 
             todays.forEach((d, i) => {
-                txt = txt + `<b>${i + 1}). ${d.newDramaName}\n🔥 ${d.timesLoaded.toLocaleString('en-US')}</b>\n📥 ${d.tgChannel}\n\n\n`
+                let link = `<b><a href="http://dramastore.net/open/${d.id}">${i + 1}). ${d.newDramaName}</a></b>`
+                txt = txt + `${link}\n🔥 ${d.timesLoaded.toLocaleString('en-US')}\n\n`
             })
-            await ctx.reply(txt, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
+            let exp = `\n<blockquote>To download: Click the name of the drama\n\n🔥 XXX - means how many times the drama was downloaded</blockquote>`
+            await ctx.reply(txt + exp, { parse_mode: 'HTML', link_preview_options: { is_disabled: true } })
         }
     } catch (err) {
         await ctx.reply(err.message)
